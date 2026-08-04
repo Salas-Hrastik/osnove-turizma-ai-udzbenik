@@ -38,10 +38,16 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .summary-button,.primary-button { border:0; border-radius:11px; background:var(--green); color:white; padding:12px 16px; display:flex; align-items:center; gap:8px; cursor:pointer; white-space:nowrap; font-weight:700; box-shadow:0 8px 20px #0c5e5420; }
 .summary-button:hover,.primary-button:hover { background:var(--green-dark); }
 .summary-button svg,.primary-button svg { width:18px; }
-.mode-tabs { max-width:1320px; margin:0 auto 24px; display:grid; grid-template-columns:repeat(5,1fr); background:#e7ece8; padding:5px; border-radius:14px; gap:4px; }
-.mode-tabs button { display:flex; gap:8px; align-items:center; justify-content:center; min-height:46px; border:0; background:transparent; border-radius:10px; color:#637573; font-weight:600; cursor:pointer; }
+.mode-tabs { max-width:1320px; margin:0 auto 10px; display:grid; grid-template-columns:repeat(5,1fr); background:#dce6e0; padding:5px; border-radius:14px; gap:5px; }
+.mode-tabs button { display:flex; gap:8px; align-items:center; justify-content:center; min-height:46px; border:1px solid #ffffff24; background:var(--mode-background); border-radius:10px; color:white; font-weight:700; cursor:pointer; transition:background-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease; }
+.mode-tabs button:nth-child(1) { --mode-background:#0c5e54; }
+.mode-tabs button:nth-child(2) { --mode-background:#17675c; }
+.mode-tabs button:nth-child(3) { --mode-background:#246f64; }
+.mode-tabs button:nth-child(4) { --mode-background:#31766b; }
+.mode-tabs button:nth-child(5) { --mode-background:#3f7d72; }
+.mode-tabs button:not(.active):not(:disabled):hover { transform:translateY(-1px); filter:brightness(.94); box-shadow:0 4px 12px #17362f22; }
 .mode-tabs button svg { width:18px; }
-.mode-tabs button.active { background:white; color:var(--green); box-shadow:0 3px 14px #17362f14; }
+.mode-tabs button.active { border-color:#b8812e; background:#d9aa55; color:var(--green-dark); box-shadow:inset 0 0 0 1px #f4d797,0 4px 14px #70501b38; }
 .mode-tabs button:disabled { opacity:.38; cursor:not-allowed; }
 .content-grid { max-width:1320px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:24px; align-items:start; }
 .content-grid.without-guide { grid-template-columns:minmax(0,1fr); }

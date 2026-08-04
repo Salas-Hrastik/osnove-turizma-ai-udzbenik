@@ -69,7 +69,7 @@ function App() {
 
           <nav className="mode-tabs" aria-label="Načini rada">
             {modes.map(({ name, label, icon: Icon }) => (
-              <button key={name} className={mode === name ? 'active' : ''} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
+              <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
                 <Icon /><span>{label}</span>
               </button>
             ))}
