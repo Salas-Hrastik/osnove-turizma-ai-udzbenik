@@ -5,7 +5,7 @@ export interface ChapterSummary {
   title: string
   pages: string
   outcome: string
-  status: 'pilot' | 'planned' | 'assessment'
+  status: 'available' | 'planned' | 'assessment'
 }
 
 export interface LearningStep {
@@ -54,7 +54,36 @@ export interface SourceLink {
   url?: string
 }
 
-export interface PilotChapter extends ChapterSummary {
+export interface MediaFile {
+  title: string
+  fileName: string
+  url: string
+  duration: string
+  description: string
+}
+
+export interface PresentationSlide {
+  number: number
+  title: string
+  image: string
+  interpretation: string
+}
+
+export interface PresentationFile {
+  title: string
+  fileName: string
+  url: string
+  description: string
+  slides: PresentationSlide[]
+}
+
+export interface ChapterMedia {
+  audio: MediaFile
+  video: MediaFile & { poster: string }
+  presentation: PresentationFile
+}
+
+export interface ChapterContent extends ChapterSummary {
   summary: string
   outcomes: string[]
   keywords: Flashcard[]
@@ -64,4 +93,5 @@ export interface PilotChapter extends ChapterSummary {
   editorialUpdate: EditorialUpdate
   sources: SourceLink[]
   questions: QuizQuestion[]
+  media: ChapterMedia
 }

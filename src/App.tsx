@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, LockKeyhole, Menu, MessageCircle, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
-import { book, chapters, pilot } from './data/book'
+import { book, chapterOne, chapters } from './data/book'
 import type { Mode } from './types'
 
 const modes: Array<{ name: Mode; icon: typeof MessageCircle }> = [
@@ -17,7 +17,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
-  const isPilot = chapterId === 1
+  const hasContent = chapterId === 1
 
   const selectChapter = (id: number) => {
     setChapterId(id)
@@ -48,7 +48,7 @@ function App() {
             {chapters.map((item) => (
               <button key={item.id} className={`chapter-link ${item.id === chapterId ? 'active' : ''}`} onClick={() => selectChapter(item.id)}>
                 <span className="chapter-number">{item.id}</span>
-                <span><strong>{item.title}</strong><small>{item.status === 'pilot' ? 'Pilot dostupan' : item.status === 'assessment' ? 'Završna provjera' : `Str. ${item.pages}`}</small></span>
+                <span><strong>{item.title}</strong><small>{item.status === 'available' ? `Str. ${item.pages} · dostupno` : item.status === 'assessment' ? 'Završna provjera' : `Str. ${item.pages}`}</small></span>
               </button>
             ))}
           </nav>
@@ -68,7 +68,7 @@ function App() {
 
           <nav className="mode-tabs" aria-label="Načini rada">
             {modes.map(({ name, icon: Icon }) => (
-              <button key={name} className={mode === name ? 'active' : ''} onClick={() => setMode(name)} disabled={!isPilot && name !== 'Prouči'}>
+              <button key={name} className={mode === name ? 'active' : ''} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
                 <Icon /><span>{name}</span>
               </button>
             ))}
@@ -76,13 +76,13 @@ function App() {
 
           <div className="content-grid">
             <section className="learning-area">
-              {!isPilot ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <PilotMode mode={mode} />}
+              {!hasContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode mode={mode} />}
             </section>
             <aside className="guide-card">
               <div className="guide-avatar"><Bot /></div>
               <span className="eyebrow">STALNI VODIČ</span>
               <h3>Kako učiti ovu cjelinu?</h3>
-              <p>{guideText(mode, isPilot)}</p>
+              <p>{guideText(mode, hasContent)}</p>
               <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
             </aside>
           </div>
@@ -95,46 +95,46 @@ function App() {
         </main>
       </div>
 
-      {summaryOpen && <SummaryModal isPilot={isPilot} title={chapter.title} summary={isPilot ? pilot.summary : chapter.outcome} outcomes={isPilot ? pilot.outcomes : []} onClose={() => setSummaryOpen(false)} />}
+      {summaryOpen && <SummaryModal hasContent={hasContent} title={chapter.title} summary={hasContent ? chapterOne.summary : chapter.outcome} outcomes={hasContent ? chapterOne.outcomes : []} onClose={() => setSummaryOpen(false)} />}
     </div>
   )
 }
 
-function PilotMode({ mode }: { mode: Mode }) {
+function ChapterMode({ mode }: { mode: Mode }) {
   if (mode === 'Prouči') return <Study />
   if (mode === 'Vježbaj') return <Flashcards />
   if (mode === 'Provjeri') return <Quiz />
   if (mode === 'Razgovaraj') return <ConversationPreview />
-  return <MediaPreview />
+  return <MediaViewer />
 }
 
 function Study() {
   return <>
-    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{pilot.summary}</p></div>
+    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{chapterOne.summary}</p></div>
     <section className="outcome-panel" aria-labelledby="outcomes-title">
       <div><span className="eyebrow">ISHODI UČENJA</span><h3 id="outcomes-title">Nakon ove cjeline moći ćete</h3></div>
-      <ul>{pilot.outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>
+      <ul>{chapterOne.outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>
     </section>
     <div className="steps">
-      {pilot.steps.map((step, index) => <article className="step-card" key={step.title}>
+      {chapterOne.steps.map((step, index) => <article className="step-card" key={step.title}>
         <span className="step-index">{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p><ul>{step.points.map((point) => <li key={point}>{point}</li>)}</ul><p className="step-takeaway"><strong>Zapamtite:</strong> {step.takeaway}</p><small>{step.source}</small></div>
       </article>)}
     </div>
     <section className="data-section" aria-labelledby="data-title">
       <div className="subsection-heading"><span className="eyebrow">SLUŽBENI PODACI · HRVATSKA 2025.</span><h3 id="data-title">Veličina prometa nije cijela slika</h3><p>Podaci se odnose na komercijalni smještaj. Dolasci nisu broj jedinstvenih osoba, a nekomercijalni promet prati se odvojeno.</p></div>
-      <div className="data-grid">{pilot.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change} prema 2024.</small>}</article>)}</div>
+      <div className="data-grid">{chapterOne.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change} prema 2024.</small>}</article>)}</div>
     </section>
     <section className="activity-card" aria-labelledby="activity-title">
       <div className="activity-label"><span>PRIMIJENI</span><strong>01</strong></div>
-      <div><h3 id="activity-title">{pilot.appliedActivity.title}</h3><p>{pilot.appliedActivity.intro}</p><ol>{pilot.appliedActivity.tasks.map((task) => <li key={task}>{task}</li>)}</ol><small>{pilot.appliedActivity.note}</small></div>
+      <div><h3 id="activity-title">{chapterOne.appliedActivity.title}</h3><p>{chapterOne.appliedActivity.intro}</p><ol>{chapterOne.appliedActivity.tasks.map((task) => <li key={task}>{task}</li>)}</ol><small>{chapterOne.appliedActivity.note}</small></div>
     </section>
     <section className="editorial-update" aria-labelledby="editorial-title">
       <Sparkles />
-      <div><span className="eyebrow">UREDNIČKI DODATAK · PROVJERENO {pilot.editorialUpdate.checkedAt.toUpperCase()}</span><h3 id="editorial-title">{pilot.editorialUpdate.title}</h3><p>{pilot.editorialUpdate.body}</p><ul>{pilot.editorialUpdate.implications.map((item) => <li key={item}>{item}</li>)}</ul></div>
+      <div><span className="eyebrow">UREDNIČKI DODATAK · PROVJERENO {chapterOne.editorialUpdate.checkedAt.toUpperCase()}</span><h3 id="editorial-title">{chapterOne.editorialUpdate.title}</h3><p>{chapterOne.editorialUpdate.body}</p><ul>{chapterOne.editorialUpdate.implications.map((item) => <li key={item}>{item}</li>)}</ul></div>
     </section>
     <section className="sources-panel" aria-labelledby="sources-title">
       <span className="eyebrow">IZVORI I PODRIJETLO</span><h3 id="sources-title">Provjerljiva osnova cjeline</h3>
-      <div>{pilot.sources.map((source) => source.url ? <a key={source.label} href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.label}</strong><small>{source.detail}</small></span><ArrowUpRight /></a> : <article key={source.label}><span><strong>{source.label}</strong><small>{source.detail}</small></span><LockKeyhole /></article>)}</div>
+      <div>{chapterOne.sources.map((source) => source.url ? <a key={source.label} href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.label}</strong><small>{source.detail}</small></span><ArrowUpRight /></a> : <article key={source.label}><span><strong>{source.label}</strong><small>{source.detail}</small></span><LockKeyhole /></article>)}</div>
     </section>
   </>
 }
@@ -142,7 +142,7 @@ function Study() {
 function Flashcards() {
   return <>
     <div className="section-heading"><span className="eyebrow">VJEŽBAJ · 10 KARTICA</span><h2>Ključni pojmovi</h2><p>Svih deset pojmova i definicija istodobno je vidljivo. Povežite svaki pojam s primjerom iz vlastitog iskustva.</p></div>
-    <div className="flashcard-grid">{pilot.keywords.map((card, index) => <article className="flashcard open" key={card.term}><span>{String(index + 1).padStart(2, '0')}</span><strong>{card.term}</strong><p>{card.definition}</p></article>)}</div>
+    <div className="flashcard-grid">{chapterOne.keywords.map((card, index) => <article className="flashcard open" key={card.term}><span>{String(index + 1).padStart(2, '0')}</span><strong>{card.term}</strong><p>{card.definition}</p></article>)}</div>
     <div className="practice-prompt"><MessageCircle /><div><span className="eyebrow">BRZA VJEŽBA</span><p>Odaberite tri pojma i objasnite njihovu međusobnu vezu u jednoj rečenici. Primjer: <strong>turist – destinacija – lanac vrijednosti</strong>.</p></div></div>
   </>
 }
@@ -157,60 +157,93 @@ function ConversationPreview() {
     <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · PRIPREMLJENO SUČELJE</span><h2>Razgovor u granicama provjerenih izvora</h2><p>Pisani i glasovni razgovor aktivirat će se nakon zasebnog odobrenja AI konfiguracije. Već sada je definirano što će vodič smjeti koristiti i kako će označavati podrijetlo odgovora.</p></div>
     <div className="conversation-layout">
       <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PRAVILA ODGOVORA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul></section>
-      <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="pilot-question">Vaše pitanje</label><div className="disabled-composer"><input id="pilot-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Aktivacija slijedi tek nakon potvrde modela, izvora, citiranja i zaštite podataka.</small></section>
+      <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="chapter-question">Vaše pitanje</label><div className="disabled-composer"><input id="chapter-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Aktivacija slijedi tek nakon potvrde modela, izvora, citiranja i zaštite podataka.</small></section>
     </div>
   </>
 }
 
-function MediaPreview() {
+function MediaViewer() {
+  const [selection, setSelection] = useState<'audio' | 'video' | 'presentation'>('audio')
+  const [slideIndex, setSlideIndex] = useState(0)
+  const { audio, video, presentation } = chapterOne.media
+  const slide = presentation.slides[slideIndex]
   const media = [
-    { icon: FileAudio, title: 'Audioizvedenica', detail: 'Slušanje cjeline uz jasan zapis trajanja i podrijetla.' },
-    { icon: FileVideo, title: 'Videoizvedenica', detail: 'Video s titlovima i provjerenim sadržajnim uporištem.' },
-    { icon: Presentation, title: 'Prezentacija', detail: 'Slajdovi sa stručnom interpretacijom svakoga prikaza.' },
+    { key: 'audio' as const, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration },
+    { key: 'video' as const, icon: FileVideo, title: 'Video', detail: video.title, meta: video.duration },
+    { key: 'presentation' as const, icon: Presentation, title: 'Prezentacija', detail: presentation.title, meta: `${presentation.slides.length} slajdova` },
   ]
+
   return <>
-    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · MEDIJSKA MJESTA</span><h2>Tri ravnopravna načina praćenja</h2><p>Raspored i ponašanje medijskog prostora spremni su za autorske datoteke. Nijedna privremena ili tuđa poveznica nije ugrađena.</p></div>
-    <div className="media-grid">{media.map(({ icon: Icon, title, detail }, index) => <article key={title}><div><Icon /></div><span>{String(index + 1).padStart(2, '0')}</span><h3>{title}</h3><p>{detail}</p><small>Čeka urednički provjerenu datoteku</small></article>)}</div>
-    <div className="media-note"><LockKeyhole /><div><strong>Samostalna medijska infrastruktura</strong><p>Datoteke će se povezati tek nakon stvaranja zasebnoga spremišta za ovaj projekt i vašeg izričitog odobrenja.</p></div></div>
+    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA 1</span><h2>Odaberite medij</h2><p>Audio, video i prezentacija povezani su s izdvojenim spremnikom ovoga AI udžbenika. Izvorne datoteke ostaju dostupne uz svaki prikaz.</p></div>
+    <div className="media-selector" role="group" aria-label="Odaberite vrstu medija">
+      {media.map(({ key, icon: Icon, title, detail, meta }, index) => <button key={key} className={selection === key ? 'active' : ''} onClick={() => setSelection(key)} aria-pressed={selection === key}>
+        <span className="media-icon"><Icon /></span><span className="media-number">{String(index + 1).padStart(2, '0')}</span><strong>{title}</strong><small>{detail}</small><em>{meta}</em>
+      </button>)}
+    </div>
+
+    {selection === 'audio' && <section className="media-player" aria-labelledby="audio-title">
+      <div className="media-player-heading"><div className="media-player-icon"><FileAudio /></div><div><span className="eyebrow">AUDIO · {audio.duration}</span><h3 id="audio-title">{audio.title}</h3><p>{audio.description}</p></div></div>
+      <audio controls preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio>
+      <a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a>
+    </section>}
+
+    {selection === 'video' && <section className="media-player" aria-labelledby="video-title">
+      <div className="media-player-heading"><div className="media-player-icon"><FileVideo /></div><div><span className="eyebrow">VIDEO · {video.duration}</span><h3 id="video-title">{video.title}</h3><p>{video.description}</p></div></div>
+      <video controls preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video>
+      <a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a>
+    </section>}
+
+    {selection === 'presentation' && <section className="presentation-viewer" aria-labelledby="presentation-title">
+      <div className="presentation-heading"><div><span className="eyebrow">PREZENTACIJA · {presentation.slides.length} SLAJDOVA</span><h3 id="presentation-title">{presentation.title}</h3><p>{presentation.description}</p></div><a className="source-link" href={presentation.url} target="_blank" rel="noreferrer">Otvori izvorni PPTX <ArrowUpRight /></a></div>
+      <figure className="slide-stage"><img src={slide.image} alt={`Slajd ${slide.number}: ${slide.title}`} /><figcaption>Slajd {slide.number} od {presentation.slides.length}</figcaption></figure>
+      <div className="slide-controls">
+        <button onClick={() => setSlideIndex((current) => Math.max(0, current - 1))} disabled={slideIndex === 0}><ChevronLeft /> Prethodni</button>
+        <div className="slide-dots" aria-label="Odaberite slajd">{presentation.slides.map((item, index) => <button key={item.number} className={index === slideIndex ? 'active' : ''} onClick={() => setSlideIndex(index)} aria-label={`Prikaži slajd ${item.number}`} aria-current={index === slideIndex ? 'true' : undefined}>{item.number}</button>)}</div>
+        <button onClick={() => setSlideIndex((current) => Math.min(presentation.slides.length - 1, current + 1))} disabled={slideIndex === presentation.slides.length - 1}>Sljedeći <ChevronRight /></button>
+      </div>
+      <article className="slide-interpretation"><span className="eyebrow">STRUČNA INTERPRETACIJA SLAJDA {slide.number}</span><h4>{slide.title}</h4><p>{slide.interpretation}</p></article>
+    </section>}
+
+    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-01</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
   </>
 }
 
 function Quiz() {
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [submitted, setSubmitted] = useState(false)
-  const score = useMemo(() => pilot.questions.filter((q, i) => answers[i] === q.correct).length, [answers])
+  const score = useMemo(() => chapterOne.questions.filter((q, i) => answers[i] === q.correct).length, [answers])
   const reset = () => { setAnswers({}); setSubmitted(false) }
   return <>
     <div className="section-heading"><span className="eyebrow">PROVJERI · 5 PITANJA</span><h2>Samoprovjera cjeline</h2><p>Odaberite odgovor na svako pitanje. Nakon predaje dobit ćete objašnjenje, ne samo rezultat.</p></div>
-    <div className="quiz-list">{pilot.questions.map((q, qIndex) => <article className="quiz-card" key={q.question}><div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div><div className="answers">{q.options.map((option, optionIndex) => <label key={option} className={submitted ? optionIndex === q.correct ? 'correct' : answers[qIndex] === optionIndex ? 'wrong' : '' : ''}><input type="radio" name={`q-${qIndex}`} checked={answers[qIndex] === optionIndex} onChange={() => !submitted && setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))} />{option}</label>)}</div>{submitted && <p className="explanation"><strong>Objašnjenje:</strong> {q.explanation}</p>}</article>)}</div>
-    <div className="quiz-actions">{submitted ? <><div className="score"><strong>{score} / {pilot.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <button className="primary-button" disabled={Object.keys(answers).length !== pilot.questions.length} onClick={() => setSubmitted(true)}>Predaj odgovore</button>}</div>
+    <div className="quiz-list">{chapterOne.questions.map((q, qIndex) => <article className="quiz-card" key={q.question}><div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div><div className="answers">{q.options.map((option, optionIndex) => <label key={option} className={submitted ? optionIndex === q.correct ? 'correct' : answers[qIndex] === optionIndex ? 'wrong' : '' : ''}><input type="radio" name={`q-${qIndex}`} checked={answers[qIndex] === optionIndex} onChange={() => !submitted && setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))} />{option}</label>)}</div>{submitted && <p className="explanation"><strong>Objašnjenje:</strong> {q.explanation}</p>}</article>)}</div>
+    <div className="quiz-actions">{submitted ? <><div className="score"><strong>{score} / {chapterOne.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <button className="primary-button" disabled={Object.keys(answers).length !== chapterOne.questions.length} onClick={() => setSubmitted(true)}>Predaj odgovore</button>}</div>
   </>
 }
 
 function PlannedChapter({ title, outcome }: { title: string; outcome: string }) {
-  return <ComingSoon icon={<BookOpen />} title={`${title} — sadržaj je planiran`} text={`Potvrđeni ishod: ${outcome} Programska osnova namjerno prvo provjerava cjelinu 1; ostali sadržaji dodaju se tek nakon potvrde pilota.`} />
+  return <ComingSoon icon={<BookOpen />} title={`${title} — sadržaj je planiran`} text={`Potvrđeni ishod: ${outcome} Ova je cjelina dio integralnog projekta i bit će obrađena prema istom potvrđenom obrascu kao cjelina 1.`} />
 }
 
 function ComingSoon({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return <div className="coming-soon"><div className="coming-icon">{icon}</div><span className="eyebrow">PRIPREMLJENA FUNKCIJA</span><h2>{title}</h2><p>{text}</p></div>
 }
 
-function SummaryModal({ title, summary, outcomes, isPilot, onClose }: { title: string; summary: string; outcomes: string[]; isPilot: boolean; onClose: () => void }) {
+function SummaryModal({ title, summary, outcomes, hasContent, onClose }: { title: string; summary: string; outcomes: string[]; hasContent: boolean; onClose: () => void }) {
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && onClose()
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [onClose])
 
-  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{isPilot ? 'Kanonski izvor 1.0' : 'Potvrđena matrica cjelina'}</strong>{isPilot ? 'Stranice 6–11' : 'Sadržaj još nije prenesen u pilot'}</span></div></section></div>
+  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{hasContent ? 'Kanonski izvor 1.0' : 'Potvrđena matrica cjelina'}</strong>{hasContent ? 'Stranice 6–11' : 'Sadržaj cjeline u pripremi'}</span></div></section></div>
 }
 
-function guideText(mode: Mode, isPilot: boolean) {
-  if (!isPilot) return 'Ova je cjelina u potvrđenoj matrici, ali sadržaj još nije prenesen. Vratite se na cjelinu 1 kako biste pregledali funkcionalni pilot.'
+function guideText(mode: Mode, hasContent: boolean) {
+  if (!hasContent) return 'Ova je cjelina dio potvrđene integralne matrice. Njezin puni sadržaj bit će dodan prema obrascu cjeline 1.'
   const copy: Record<Mode, string> = {
     'Razgovaraj': 'Razgovor će odgovarati iz kanonskog teksta i jasno označenih izvora. Trenutačno nije aktiviran.',
     'Prouči': 'Prođite četiri koraka redom. Svaki izravno upućuje na pripadajući dio kanonskog izvora.',
-    'Gledaj i slušaj': 'Audio, video i prezentacija bit će tri ravnopravna izbora, svaki s provjerenim podrijetlom.',
+    'Gledaj i slušaj': 'Odaberite audio, video ili prezentaciju. Uz svaki je medij prikazano trajanje, podrijetlo i izvorna datoteka.',
     'Vježbaj': 'Otvarajte kartice vlastitim redoslijedom. Svi su pojmovi uvijek vidljivi i dostupni.',
     'Provjeri': 'Odgovorite na svih pet pitanja. Objašnjenja će pokazati što treba ponoviti.',
   }
