@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Maximize2, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterOne, chapters } from './data/book'
 import type { Mode } from './types'
@@ -267,12 +267,9 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
 }
 
 function MediaViewer() {
-  const [selection, setSelection] = useState<'audio' | 'video' | 'presentation'>('audio')
   const [slideIndex, setSlideIndex] = useState(0)
-  const [expandedMedia, setExpandedMedia] = useState<'video' | 'presentation' | null>(null)
-  const inlineVideoRef = useRef<HTMLVideoElement>(null)
+  const [expandedMedia, setExpandedMedia] = useState<'audio' | 'video' | 'presentation' | null>(null)
   const { audio, video, presentation } = chapterOne.media
-  const slide = presentation.slides[slideIndex]
   const media = [
     { key: 'audio' as const, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration },
     { key: 'video' as const, icon: FileVideo, title: 'Video', detail: video.title, meta: video.duration },
@@ -280,34 +277,18 @@ function MediaViewer() {
   ]
 
   return <>
-    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA 1</span><h2>Odaberite medij</h2><p>Audio, video i prezentacija povezani su s izdvojenim spremnikom ovoga AI udžbenika. Izvorne datoteke ostaju dostupne uz svaki prikaz.</p></div>
+    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA 1</span><h2>Odaberite medij</h2><p>Pritiskom na Audio, Video ili Prezentaciju odmah se otvara pripadajući skočni prozor. Izvorne datoteke ostaju dostupne u svakom prikazu.</p></div>
     <div className="media-selector" role="group" aria-label="Odaberite vrstu medija">
-      {media.map(({ key, icon: Icon, title, detail, meta }, index) => <button key={key} className={selection === key ? 'active' : ''} onClick={() => setSelection(key)} aria-pressed={selection === key}>
+      {media.map(({ key, icon: Icon, title, detail, meta }, index) => <button key={key} onClick={() => setExpandedMedia(key)} aria-haspopup="dialog">
         <span className="media-icon"><Icon /></span><span className="media-number">{String(index + 1).padStart(2, '0')}</span><strong>{title}</strong><small>{detail}</small><em>{meta}</em>
       </button>)}
     </div>
 
-    {selection === 'audio' && <section className="media-player" aria-labelledby="audio-title">
-      <div className="media-player-heading"><div className="media-player-icon"><FileAudio /></div><div><span className="eyebrow">AUDIO · {audio.duration}</span><h3 id="audio-title">{audio.title}</h3><p>{audio.description}</p></div></div>
-      <audio controls preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio>
-      <a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a>
-    </section>}
-
-    {selection === 'video' && <section className="media-player" aria-labelledby="video-title">
-      <div className="media-player-heading"><div className="media-player-icon"><FileVideo /></div><div><span className="eyebrow">VIDEO · {video.duration}</span><h3 id="video-title">{video.title}</h3><p>{video.description}</p></div></div>
-      <video ref={inlineVideoRef} controls preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video>
-      <div className="media-actions"><button className="expand-button" onClick={() => { inlineVideoRef.current?.pause(); setExpandedMedia('video') }} aria-haspopup="dialog"><Maximize2 /> Otvori veliki prikaz</button><a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a></div>
-    </section>}
-
-    {selection === 'presentation' && <section className="presentation-viewer" aria-labelledby="presentation-title">
-      <div className="presentation-heading"><div><span className="eyebrow">PREZENTACIJA · {presentation.slides.length} SLAJDOVA</span><h3 id="presentation-title">{presentation.title}</h3><p>{presentation.description}</p></div><button className="expand-button" onClick={() => setExpandedMedia('presentation')} aria-haspopup="dialog"><Maximize2 /> Otvori veliki prikaz</button></div>
-      <button className="slide-stage-button" onClick={() => setExpandedMedia('presentation')} aria-label={`Otvori slajd ${slide.number} u velikom prikazu`} aria-haspopup="dialog"><SlideStage slide={slide} slideCount={presentation.slides.length} /></button>
-      <SlideControls slideIndex={slideIndex} slideCount={presentation.slides.length} onChange={setSlideIndex} />
-      <article className="slide-interpretation"><span className="eyebrow">STRUČNA INTERPRETACIJA SLAJDA {slide.number}</span><h4>{slide.title}</h4><p>{slide.interpretation}</p></article>
-      <a className="source-link presentation-source" href={presentation.url} target="_blank" rel="noreferrer">Otvori izvorni PPTX <ArrowUpRight /></a>
-    </section>}
-
     <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-01</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
+
+    {expandedMedia === 'audio' && <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={() => setExpandedMedia(null)}>
+      <div className="expanded-audio"><p>{audio.description}</p><audio controls autoPlay preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio><a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a></div>
+    </MediaModal>}
 
     {expandedMedia === 'video' && <MediaModal title={video.title} label={`VIDEO · ${video.duration}`} onClose={() => setExpandedMedia(null)}>
       <div className="expanded-video"><p>{video.description}</p><video controls autoPlay preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video><a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a></div>
@@ -341,7 +322,7 @@ function MediaModal({ title, label, onClose, children }: { title: string; label:
     }
   }, [onClose])
 
-  return <div className="modal-backdrop media-modal-backdrop" role="presentation" onMouseDown={onClose}><section className="media-modal" role="dialog" aria-modal="true" aria-labelledby="media-modal-title" onMouseDown={(event) => event.stopPropagation()}><header className="media-modal-header"><div><span className="eyebrow">{label}</span><h2 id="media-modal-title">{title}</h2></div><button className="icon-button media-modal-close" onClick={onClose} aria-label="Zatvori veliki prikaz" autoFocus><X /></button></header>{children}</section></div>
+  return createPortal(<div className="modal-backdrop media-modal-backdrop" role="presentation" onMouseDown={onClose}><section className="media-modal" role="dialog" aria-modal="true" aria-labelledby="media-modal-title" onMouseDown={(event) => event.stopPropagation()}><header className="media-modal-header"><div><span className="eyebrow">{label}</span><h2 id="media-modal-title">{title}</h2></div><button className="icon-button media-modal-close" onClick={onClose} aria-label="Zatvori skočni prozor" autoFocus><X /></button></header>{children}</section></div>, document.body)
 }
 
 function PresentationModal({ slideIndex, onSlideChange, onClose }: { slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {

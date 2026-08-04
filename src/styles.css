@@ -215,7 +215,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .media-selector { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
 .media-selector>button { position:relative; min-height:190px; padding:20px; border:1px solid var(--line); border-radius:15px; background:white; color:var(--ink); display:flex; flex-direction:column; align-items:flex-start; text-align:left; cursor:pointer; transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease; }
 .media-selector>button:hover { transform:translateY(-2px); border-color:#9cbeb0; box-shadow:0 12px 30px #163d3520; }
-.media-selector>button.active { border-color:var(--green); box-shadow:inset 0 0 0 1px var(--green),0 12px 30px #163d3520; background:#f6faf7; }
+.media-selector>button:focus-visible { outline:3px solid #d7b97e; outline-offset:3px; border-color:var(--green); }
 .media-icon { width:48px; height:48px; display:grid; place-items:center; border-radius:13px; color:var(--green); background:var(--mint); }
 .media-number { position:absolute; top:20px; right:20px; color:#9aaaa5; font:700 13px Georgia, 'Times New Roman', serif; }
 .media-selector strong { margin:17px 0 5px; font:700 20px Georgia, 'Times New Roman', serif; }
@@ -285,8 +285,9 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .conversation-modal-close { flex:0 0 auto; width:42px; height:42px; border-radius:50%; color:var(--green); background:#e8f0eb; }
 .conversation-modal-content { padding:24px 26px 28px; }
 .conversation-modal-content .voice-conversation { padding:0; border:0; background:transparent; }
-.expanded-video { padding:24px 26px 28px; }
-.expanded-video>p { margin:0 0 16px; color:var(--muted); line-height:1.55; }
+.expanded-audio,.expanded-video { padding:24px 26px 28px; }
+.expanded-audio>p,.expanded-video>p { margin:0 0 16px; color:var(--muted); line-height:1.55; }
+.expanded-audio audio { display:block; width:100%; margin:0 0 16px; }
 .expanded-video video { display:block; width:100%; max-height:calc(100vh - 230px); margin-bottom:16px; border-radius:13px; background:#071f26; }
 .expanded-presentation { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(280px,.7fr); gap:22px; align-items:start; padding:24px 26px 28px; }
 .expanded-slide-column { min-width:0; }
