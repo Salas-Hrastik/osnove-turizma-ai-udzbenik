@@ -44,6 +44,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .mode-tabs button.active { background:white; color:var(--green); box-shadow:0 3px 14px #17362f14; }
 .mode-tabs button:disabled { opacity:.38; cursor:not-allowed; }
 .content-grid { max-width:1320px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:24px; align-items:start; }
+.content-grid.without-guide { grid-template-columns:minmax(0,1fr); }
 .learning-area { min-height:560px; background:var(--cream); border:1px solid var(--line); border-radius:18px; padding:clamp(24px,3.5vw,46px); box-shadow:0 14px 36px #24463d0c; }
 .section-heading { margin-bottom:28px; }
 .section-heading h2 { font:700 29px Georgia, 'Times New Roman', serif; margin:6px 0 8px; }

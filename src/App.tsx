@@ -75,17 +75,17 @@ function App() {
             ))}
           </nav>
 
-          <div className="content-grid">
+          <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
             <section className="learning-area">
               {!hasContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode mode={mode} />}
             </section>
-            <aside className="guide-card">
+            {mode === 'Prouči' && <aside className="guide-card">
               <div className="guide-avatar"><Bot /></div>
               <span className="eyebrow">STALNI VODIČ</span>
               <h3>Kako učiti ovu cjelinu?</h3>
               <p>{guideText(mode, hasContent)}</p>
               <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
-            </aside>
+            </aside>}
           </div>
 
           <div className="chapter-pager">
