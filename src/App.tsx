@@ -58,40 +58,44 @@ function App() {
         {sidebarOpen && <button className="scrim" onClick={() => setSidebarOpen(false)} aria-label="Zatvori izbornik" />}
 
         <main className="main-panel" id="glavni-sadrzaj">
-          <section className="chapter-hero">
-            <div>
-              <span className="eyebrow">CJELINA {chapter.id} · {chapter.status === 'assessment' ? chapter.pages : `STRANICE ${chapter.pages}`}</span>
-              <h1>{chapter.title}</h1>
-              <p>{chapter.outcome}</p>
-            </div>
-            <button className="summary-button" onClick={() => setSummaryOpen(true)}><Sparkles /> Sažetak cjeline</button>
-          </section>
-
-          <nav className="mode-tabs" aria-label="Načini rada">
-            {modes.map(({ name, label, icon: Icon }) => (
-              <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
-                <Icon /><span>{label}</span>
-              </button>
-            ))}
-          </nav>
-
-          <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
-            <section className="learning-area">
-              {!hasContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode mode={mode} />}
+          <div className="chapter-controls">
+            <section className="chapter-hero">
+              <div>
+                <span className="eyebrow">CJELINA {chapter.id} · {chapter.status === 'assessment' ? chapter.pages : `STRANICE ${chapter.pages}`}</span>
+                <h1>{chapter.title}</h1>
+                <p>{chapter.outcome}</p>
+              </div>
+              <button className="summary-button" onClick={() => setSummaryOpen(true)}><Sparkles /> Sažetak cjeline</button>
             </section>
-            {mode === 'Prouči' && <aside className="guide-card">
-              <div className="guide-avatar"><Bot /></div>
-              <span className="eyebrow">STALNI VODIČ</span>
-              <h3>Kako učiti ovu cjelinu?</h3>
-              <p>{guideText(mode, hasContent)}</p>
-              <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
-            </aside>}
+
+            <nav className="mode-tabs" aria-label="Načini rada">
+              {modes.map(({ name, label, icon: Icon }) => (
+                <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
+                  <Icon /><span>{label}</span>
+                </button>
+              ))}
+            </nav>
           </div>
 
-          <div className="chapter-pager">
-            <button disabled={chapterId === 1} onClick={() => selectChapter(chapterId - 1)}><ChevronLeft /> Prethodna</button>
-            <span>{chapterId} / {chapters.length}</span>
-            <button disabled={chapterId === chapters.length} onClick={() => selectChapter(chapterId + 1)}>Sljedeća <ChevronRight /></button>
+          <div className="main-body-scroll">
+            <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
+              <section className="learning-area">
+                {!hasContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode mode={mode} />}
+              </section>
+              {mode === 'Prouči' && <aside className="guide-card">
+                <div className="guide-avatar"><Bot /></div>
+                <span className="eyebrow">STALNI VODIČ</span>
+                <h3>Kako učiti ovu cjelinu?</h3>
+                <p>{guideText(mode, hasContent)}</p>
+                <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
+              </aside>}
+            </div>
+
+            <div className="chapter-pager">
+              <button disabled={chapterId === 1} onClick={() => selectChapter(chapterId - 1)}><ChevronLeft /> Prethodna</button>
+              <span>{chapterId} / {chapters.length}</span>
+              <button disabled={chapterId === chapters.length} onClick={() => selectChapter(chapterId + 1)}>Sljedeća <ChevronRight /></button>
+            </div>
           </div>
         </main>
       </div>
