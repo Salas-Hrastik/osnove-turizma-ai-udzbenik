@@ -141,10 +141,28 @@ function Study() {
 }
 
 function Flashcards() {
+  const [openCards, setOpenCards] = useState<Set<string>>(new Set())
+
+  const toggleCard = (term: string) => {
+    setOpenCards((current) => {
+      const next = new Set(current)
+      if (next.has(term)) next.delete(term)
+      else next.add(term)
+      return next
+    })
+  }
+
   return <>
-    <div className="section-heading"><span className="eyebrow">VJEŽBAJ · 10 KARTICA</span><h2>Ključni pojmovi</h2><p>Svih deset pojmova i definicija istodobno je vidljivo. Povežite svaki pojam s primjerom iz vlastitog iskustva.</p></div>
-    <div className="flashcard-grid">{chapterOne.keywords.map((card, index) => <article className="flashcard open" key={card.term}><span>{String(index + 1).padStart(2, '0')}</span><strong>{card.term}</strong><p>{card.definition}</p></article>)}</div>
-    <div className="practice-prompt"><MessageCircle /><div><span className="eyebrow">BRZA VJEŽBA</span><p>Odaberite tri pojma i objasnite njihovu međusobnu vezu u jednoj rečenici. Primjer: <strong>turist – destinacija – lanac vrijednosti</strong>.</p></div></div>
+    <div className="section-heading"><span className="eyebrow">VJEŽBAJ · 10 KARTICA</span><h2>Ključni pojmovi</h2><p><strong>Pritisnite željeni pojam kako biste prikazali njegovo objašnjenje.</strong> Ponovnim pritiskom objašnjenje možete sakriti.</p></div>
+    <div className="flashcard-grid">{chapterOne.keywords.map((card, index) => {
+      const isOpen = openCards.has(card.term)
+      const definitionId = `definition-${index + 1}`
+      return <button className={`flashcard ${isOpen ? 'open' : ''}`} key={card.term} type="button" aria-expanded={isOpen} aria-controls={definitionId} onClick={() => toggleCard(card.term)}>
+        <span className="flashcard-number">{String(index + 1).padStart(2, '0')}</span>
+        <strong>{card.term}</strong>
+        {isOpen ? <span className="flashcard-definition" id={definitionId}>{card.definition}</span> : <small>Pritisnite za objašnjenje</small>}
+      </button>
+    })}</div>
   </>
 }
 
@@ -352,7 +370,7 @@ function guideText(mode: Mode, hasContent: boolean) {
     'Razgovaraj': 'Razgovor će odgovarati iz kanonskog teksta i jasno označenih izvora. Trenutačno nije aktiviran.',
     'Prouči': 'Prođite četiri koraka redom. Svaki izravno upućuje na pripadajući dio kanonskog izvora.',
     'Gledaj i slušaj': 'Odaberite audio, video ili prezentaciju. Uz svaki je medij prikazano trajanje, podrijetlo i izvorna datoteka.',
-    'Vježbaj': 'Otvarajte kartice vlastitim redoslijedom. Svi su pojmovi uvijek vidljivi i dostupni.',
+    'Vježbaj': 'Pritisnite pojam kako biste prikazali njegovo objašnjenje. Ponovnim pritiskom karticu možete zatvoriti.',
     'Provjeri': 'Odgovorite na svih pet pitanja. Objašnjenja će pokazati što treba ponoviti.',
   }
   return copy[mode]

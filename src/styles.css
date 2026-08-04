@@ -113,15 +113,14 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .guide-source span { display:flex; flex-direction:column; font-size:11px; color:#a9cac1; }
 .guide-source strong { color:white; font-size:12px; }
 .flashcard-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-.flashcard { min-height:160px; text-align:left; border:1px solid #d9d1e8; border-radius:14px; background:var(--violet); padding:18px; color:var(--ink); }
-.flashcard span { font-size:11px; font-weight:700; color:#8065a0; }
+.flashcard { min-height:118px; text-align:left; border:1px solid #d9d1e8; border-radius:14px; background:var(--violet); padding:18px; color:var(--ink); cursor:pointer; transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
+.flashcard:hover { border-color:#a995c3; box-shadow:0 8px 18px #5b3f7620; transform:translateY(-1px); }
+.flashcard:focus-visible { outline:3px solid #c89b3c; outline-offset:3px; }
+.flashcard-number { font-size:11px; font-weight:700; color:#8065a0; }
 .flashcard strong { display:block; font:700 19px Georgia, 'Times New Roman', serif; margin:7px 0; }
-.flashcard p { margin:0; color:#756985; font-size:13px; line-height:1.5; font-weight:600; }
-.flashcard.open { background:white; border-color:#b8a9d0; }
-.flashcard.open p { color:#536064; font-weight:400; }
-.practice-prompt { display:grid; grid-template-columns:34px 1fr; gap:14px; margin-top:18px; padding:18px; border-radius:12px; background:#eee9f7; color:#594b67; }
-.practice-prompt>svg { color:#735590; }
-.practice-prompt p { margin:4px 0 0; line-height:1.55; }
+.flashcard small { display:block; margin-top:12px; color:#735590; font-size:12px; font-weight:700; }
+.flashcard-definition { display:block; margin:0; color:#536064; font-size:13px; line-height:1.5; font-weight:400; }
+.flashcard.open { min-height:160px; background:white; border-color:#b8a9d0; }
 .quiz-list { display:grid; gap:16px; }
 .quiz-card { padding:22px; border:1px solid var(--line); border-radius:14px; background:white; }
 .quiz-title { display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; }
