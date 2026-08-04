@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Maximize2, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
+import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterOne, chapters } from './data/book'
 import type { Mode } from './types'
 
-const modes: Array<{ name: Mode; icon: typeof MessageCircle }> = [
-  { name: 'Razgovaraj', icon: MessageCircle },
-  { name: 'Prouči', icon: BookOpen },
-  { name: 'Gledaj i slušaj', icon: Headphones },
-  { name: 'Vježbaj', icon: RotateCcw },
-  { name: 'Provjeri', icon: CircleHelp },
+const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
+  { name: 'Prouči', label: 'Prouči', icon: BookOpen },
+  { name: 'Gledaj i slušaj', label: 'Gledaj i slušaj', icon: Headphones },
+  { name: 'Razgovaraj', label: 'Razgovaraj', icon: MessageCircle },
+  { name: 'Vježbaj', label: 'Vježba', icon: RotateCcw },
+  { name: 'Provjeri', label: 'Provjeri', icon: CircleHelp },
 ]
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
       <a className="skip-link" href="#glavni-sadrzaj">Preskoči na glavni sadržaj</a>
       <header className="topbar">
         <button className="icon-button mobile-only" onClick={() => setSidebarOpen(true)} aria-label="Otvori sadržaj"><Menu /></button>
-        <div className="brand-mark"><BookOpen /></div>
+        <div className="baltazar-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></div>
         <div className="brand-copy">
           <span className="eyebrow">AI UDŽBENIK</span>
           <strong>{book.title}</strong>
@@ -67,9 +68,9 @@ function App() {
           </section>
 
           <nav className="mode-tabs" aria-label="Načini rada">
-            {modes.map(({ name, icon: Icon }) => (
+            {modes.map(({ name, label, icon: Icon }) => (
               <button key={name} className={mode === name ? 'active' : ''} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
-                <Icon /><span>{name}</span>
+                <Icon /><span>{label}</span>
               </button>
             ))}
           </nav>
