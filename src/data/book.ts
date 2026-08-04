@@ -11,7 +11,7 @@ export const book = {
 export const chapters: ChapterSummary[] = [
   { id: 1, title: 'Uvod u turizam i ugostiteljstvo', pages: '6–11', outcome: 'Definirati temeljne pojmove, razlikovati statističke kategorije putnika te objasniti odnos turizma i ugostiteljstva.', status: 'available' },
   { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
-  { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'planned' },
+  { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
   { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'planned' },
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'planned' },
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'planned' },
@@ -24,6 +24,7 @@ export const chapters: ChapterSummary[] = [
 
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
 const mediaBaseUrlTwo = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-02'
+const mediaBaseUrlThree = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-03'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -453,7 +454,235 @@ export const chapterTwo: ChapterContent = {
   },
 }
 
+export const chapterThree: ChapterContent = {
+  ...chapters[2],
+  summary: 'Poglavlje objašnjava zašto ljudi putuju, kako unutarnje potrebe postaju motivi i kako se među mogućim odredištima oblikuje konkretan izbor. Maslowljev, Cromptonov i Plogov model povezuju se sa sociološkim pojmovima turističkog pogleda i autentičnosti te s pet faza procesa odlučivanja.',
+  outcomes: [
+    'razlikovati potrebu, motiv putovanja i izbor konkretnog odredišta',
+    'primijeniti Maslowljev, Cromptonov i Plogov model na turističke proizvode',
+    'objasniti utjecaj turističkog pogleda, autentičnosti i društvene uloge turista',
+    'analizirati proces odlučivanja i prevesti motiv odabranog segmenta u marketinšku poruku',
+  ],
+  keywords: [
+    { term: 'Motivacija', definition: 'Unutarnje stanje napetosti koje nastaje kada pojedinac uoči razliku između postojećeg i željenog stanja.' },
+    { term: 'Faktori guranja (push)', definition: 'Unutarnje socio-psihološke potrebe, poput bijega od svakodnevice, odmora, prestiža ili samoistraživanja, koje pokreću odluku o putovanju.' },
+    { term: 'Faktori privlačenja (pull)', definition: 'Obilježja odredišta, poput klime, prirode, baštine, gastronomije, cijene, dostupnosti i sigurnosti, koja usmjeravaju konkretan izbor.' },
+    { term: 'Psihocentrični turist', definition: 'Turist sklon poznatom, sigurnom, organiziranom i razvijenom odredištu te predvidljivim uslugama.' },
+    { term: 'Alocentrični turist', definition: 'Turist sklon novom, manje istraženom odredištu, samostalnom kretanju i lokalnim iskustvima.' },
+    { term: 'Psihografska segmentacija', definition: 'Razvrstavanje potrošača prema motivima, vrijednostima, interesima, životnom stilu i odnosu prema riziku, a ne samo prema dobi ili prihodu.' },
+    { term: 'Turistički pogled', definition: 'Društveno oblikovan način gledanja na odredište, pod utjecajem medija, fotografija i očekivanja o tome što vrijedi vidjeti.' },
+    { term: 'Inscenirana autentičnost', definition: 'Prikaz navodno izvornog lokalnog života koji je unaprijed pripremljen za pogled i očekivanja posjetitelja.' },
+    { term: 'Percipirani rizik', definition: 'Subjektivna procjena mogućeg gubitka pri kupnji neopipljive turističke usluge koju nije moguće potpuno provjeriti prije putovanja.' },
+    { term: 'Neslaganje očekivanja i doživljaja', definition: 'Odnos između obećanog ili očekivanog iskustva i stvarnog doživljaja, koji određuje oduševljenje, zadovoljstvo ili nezadovoljstvo.' },
+  ],
+  steps: [
+    {
+      title: 'Razlikuj potrebu, motiv i turistički izbor',
+      body: 'Demografska obilježja pomažu objasniti mogućnost putovanja, ali ne i zašto osobe slične dobi, obrazovanja i prihoda biraju posve različita iskustva. Za razumijevanje izbora potreban je psihografski pogled.',
+      points: [
+        'Potreba je uočena razlika između postojećeg i željenog stanja.',
+        'Motiv je sila koja napetost pretvara u namjeru i ponašanje.',
+        'Isto putovanje može istodobno zadovoljiti odmor, pripadanje, status i osobni rast.',
+        'Segment postaje marketinški uporabljiv tek kada se motiv poveže s proizvodom i porukom.',
+      ],
+      takeaway: 'Dob i prihod govore tko može putovati; motivi i vrijednosti bolje objašnjavaju što će izabrati.',
+      source: 'Kanonski izvor 1.0, str. 17–18',
+    },
+    {
+      title: 'Primijeni tri psihološka modela',
+      body: 'Maslow povezuje putovanje s razinama potreba, Crompton razdvaja unutarnji poticaj od obilježja odredišta, a Plog objašnjava različitu sklonost poznatom i nepoznatom.',
+      points: [
+        'Maslowljev okvir povezuje odmor, sigurnost, pripadanje, poštovanje i samoostvarenje s turističkim proizvodima.',
+        'Push faktori objašnjavaju zašto osoba želi putovati prije nego što izabere odredište.',
+        'Pull faktori objašnjavaju zašto je među mogućim odredištima odabrano upravo određeno.',
+        'Plogov kontinuum proteže se od psihocentričnih prema alocentričnim turistima, dok se većina nalazi u sredini.',
+      ],
+      takeaway: 'Modeli nisu zakoni, nego različite analitičke leće koje zajedno daju potpuniju sliku potražnje.',
+      source: 'Kanonski izvor 1.0, str. 18–19; Maslow, 1943.; Crompton, 1979.; Plog, 1974./2001.',
+    },
+    {
+      title: 'Uključi društveni pogled i autentičnost',
+      body: 'Turizam nije samo individualna psihološka odluka nego i društvena praksa. Mediji i očekivanja oblikuju što turist smatra vrijednim gledanja, fotografiranja i dijeljenja.',
+      points: [
+        'Cohen razlikuje uloge turista prema odnosu prema poznatom i nepoznatom.',
+        'MacCannell pokazuje da potraga za autentičnošću često završava unaprijed pripremljenim prizorom.',
+        'Urryjev turistički pogled objašnjava kako mediji određuju ono što posjetitelj očekuje vidjeti.',
+        'Nesklad između objavljene slike i stvarnosti povećava rizik nezadovoljstva nakon dolaska.',
+      ],
+      takeaway: 'Promidžbena slika nije samo komunikacija o proizvodu — ona postaje dio očekivanoga proizvoda.',
+      source: 'Kanonski izvor 1.0, str. 19; Cohen, 1972.; MacCannell, 1976.; Urry, 1990.',
+    },
+    {
+      title: 'Analiziraj odluku i izvedi marketinšku implikaciju',
+      body: 'Turistička se usluga ne može potpuno provjeriti prije kupnje, pa gost traži informacije, uspoređuje alternative i upravlja rizikom. Proces završava tek poslijekupovnim vrednovanjem i dijeljenjem iskustva.',
+      points: [
+        'Pet faza su prepoznavanje potrebe, traženje informacija, vrednovanje alternativa, odluka i rezervacija te poslijekupovno vrednovanje.',
+        'Doživljaj iznad očekivanja donosi oduševljenje; podudaranje donosi zadovoljstvo; slabiji doživljaj nezadovoljstvo.',
+        'Starenje emitivnih tržišta povećava važnost pristupačnosti, sigurnosti i putovanja izvan glavne sezone.',
+        'Mlađi segmenti očekuju vizualno informiranje, digitalnu samouslugu i provjerljive dokaze održivosti.',
+      ],
+      takeaway: 'Zadovoljstvo se gradi kvalitetom izvedbe i preciznošću obećanja; pretjerano obećanje može poništiti objektivno dobru uslugu.',
+      source: 'Kanonski izvor 1.0, str. 19–21',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Maslowljev okvir', value: '5 razina', change: 'potrebe se u turizmu mogu preklapati' },
+    { label: 'Cromptonov model', value: 'push + pull', change: 'poticaj putovanju i izbor odredišta' },
+    { label: 'Plogova tipologija', value: 'kontinuum', change: 'od psihocentričnih do alocentričnih turista' },
+    { label: 'Odluka o putovanju', value: '5 faza', change: 'od potrebe do vrednovanja doživljaja' },
+  ],
+  appliedActivity: {
+    title: 'Od motiva segmenta do poruke kampanje',
+    intro: 'Vodite marketing kontinentalne destinacije. Odaberite jedan konkretan segment kojemu odredište može ponuditi relevantno iskustvo izvan glavne sezone.',
+    tasks: [
+      'Opišite segment prema motivima, vrijednostima i odnosu prema riziku, a ne samo prema dobi i zemlji podrijetla.',
+      'Izdvojite tri push faktora i tri pull obilježja koja povezuju segment s odredištem.',
+      'Oblikujte jednu poruku kampanje koja aktivira motiv bez oslanjanja na generičku fotografiju krajolika.',
+    ],
+    note: 'Didaktički zadatak — marketinšku poruku povežite s određenom fazom procesa odluke i objasnite koje očekivanje stvara.',
+  },
+  editorialUpdate: {
+    title: 'Digitalni trag ne ukida motiv — čini ga vidljivijim',
+    checkedAt: '4. kolovoza 2026.',
+    body: 'Društvene mreže, recenzije i platforme istodobno su izvori informacija, društveni dokazi i mjesta na kojima se iskustvo naknadno vrednuje. Zato se put korisnika više ne može promatrati kao jednostavan pravac od oglasa do rezervacije, ali temeljna razlika između unutarnjeg motiva i vanjskog obilježja odredišta ostaje analitički korisna.',
+    implications: [
+      'Povežite sadržaj s motivom i fazom odluke, a ne samo s demografskom oznakom publike.',
+      'Uskladite fotografije, opis, uvjete rezervacije i stvarnu izvedbu kako biste upravljali očekivanjima.',
+      'Generacijske obrasce prikazujte kao promjenjive nalaze uz godinu i provjerljiv izvor, a ne kao trajne stereotipe.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 17–21' },
+    { label: 'John L. Crompton', detail: 'Motivations for pleasure vacation, Annals of Tourism Research, 1979.' },
+    { label: 'Stanley C. Plog', detail: 'Why destination areas rise and fall in popularity, 2001.' },
+    { label: 'John Urry i Jonas Larsen', detail: 'The Tourist Gaze 3.0, 2011.' },
+  ],
+  questions: [
+    { question: 'Koja je razlika između push i pull faktora?', options: ['Push opisuje cijenu, a pull dohodak turista', 'Push pokreće želju za putovanjem, a pull usmjerava izbor odredišta', 'Push djeluje nakon putovanja, a pull prije putovanja', 'Među njima nema analitičke razlike'], correct: 1, explanation: 'Push faktori su unutarnje potrebe koje pokreću putovanje, dok pull faktori predstavljaju obilježja koja privlače turista određenom odredištu.' },
+    { question: 'Kako Plog opisuje alocentričnog turista?', options: ['Traži poznato odredište i potpuno organiziran program', 'Izbjegava lokalnu hranu i samostalne aktivnosti', 'Sklon je novim, manje istraženim odredištima i samostalnom otkrivanju', 'Putuje isključivo radi poslovnih obveza'], correct: 2, explanation: 'Alocentrični turist prihvaća veću neizvjesnost, traži novo i češće bira lokalna iskustva te samostalne aktivnosti.' },
+    { question: 'Što znači pojam turističkog pogleda?', options: ['Medicinski pregled prije putovanja', 'Neutralno opažanje prostora bez utjecaja kulture', 'Društveno oblikovan način gledanja na odredište pod utjecajem medija i očekivanja', 'Mjerenje broja posjetitelja na atrakciji'], correct: 2, explanation: 'Turistički pogled nije neutralan: mediji, fotografije i društvena očekivanja usmjeravaju ono što posjetitelj smatra vrijednim vidjeti.' },
+    { question: 'Koji je točan redoslijed prvih triju faza odluke o putovanju?', options: ['Rezervacija — potreba — traženje informacija', 'Potreba — traženje informacija — vrednovanje alternativa', 'Vrednovanje — doživljaj — potreba', 'Traženje informacija — poslijekupovno vrednovanje — rezervacija'], correct: 1, explanation: 'Proces započinje prepoznavanjem potrebe, nastavlja se traženjem informacija i zatim vrednovanjem dostupnih alternativa.' },
+    { question: 'Kada prema modelu neslaganja nastaje oduševljenje?', options: ['Kada je doživljaj slabiji od očekivanja', 'Kada su očekivanja potpuno neodređena', 'Kada doživljaj nadmaši očekivanja', 'Kada turist ne uspoređuje alternative'], correct: 2, explanation: 'Oduševljenje nastaje kada stvarni doživljaj nadmaši prethodno oblikovana očekivanja.' },
+  ],
+  media: {
+    audio: {
+      title: 'Što nas zapravo tjera na putovanje?',
+      fileName: 'Sto_nas_zapravo_tjera_na.mp3',
+      url: `${mediaBaseUrlThree}/Sto_nas_zapravo_tjera_na.mp3`,
+      duration: '33:38',
+      description: 'Audioizvedenica povezuje unutarnje potrebe, motive i obilježja odredišta s ponašanjem turističke potražnje.',
+    },
+    video: {
+      title: 'Dekodiranje motivacije',
+      fileName: 'Dekodiranje_motivacije.mp4',
+      url: `${mediaBaseUrlThree}/Dekodiranje_motivacije.mp4`,
+      duration: '11:00',
+      description: 'Videoizvedenica pokazuje kako se motivi pretvaraju u izbor odredišta, proces odlučivanja i očekivanje turističkog doživljaja.',
+      poster: '/media/cjelina-03/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Turistički motivi i ponašanje potražnje',
+      fileName: 'Tourist_Behavior_Strategy.pptx',
+      url: `${mediaBaseUrlThree}/Tourist_Behavior_Strategy.pptx`,
+      description: 'Petnaest slajdova povezuje psihološke i sociološke modele s oblikovanjem turističkog proizvoda i upravljanjem očekivanjima.',
+      slides: [
+        {
+          number: 1,
+          title: 'Turistički motivi i ponašanje potražnje',
+          image: '/media/cjelina-03/slides/slide-1.webp',
+          interpretation: 'Uvodni slajd postavlja središnje pitanje cjeline: zašto ljudi putuju, kako među mogućnostima biraju konkretno odredište i kako se ta spoznaja prevodi u turistički proizvod. Koncentrični krugovi vizualno naglašavaju da ponašanje nije posljedica jednoga uzroka, nego međudjelovanja potreba, iskustva, društvenog okruženja i obilježja ponude.',
+        },
+        {
+          number: 2,
+          title: 'Demografija objašnjava mogućnost, a psihografija izbor',
+          image: '/media/cjelina-03/slides/slide-2.webp',
+          interpretation: 'Dvije osobe jednake dobi, prihoda i obrazovanja mogu izabrati posve različita putovanja. Demografija zato pomaže procijeniti tko može putovati, ali motivi, vrijednosti, životni stil i odnos prema riziku bolje objašnjavaju kamo će osoba otići i kakvo će iskustvo tražiti.',
+        },
+        {
+          number: 3,
+          title: 'Maslowljeva hijerarhija kao jezik turističkih potreba',
+          image: '/media/cjelina-03/slides/slide-3.webp',
+          interpretation: 'Maslowljev okvir povezuje fiziološke potrebe, sigurnost, pripadanje, poštovanje i samoostvarenje s različitim turističkim proizvodima. Važno je čitati ga kao operativni jezik, a ne kao strogi redoslijed: jedno putovanje može istodobno nuditi odmor, sigurnost, status, pripadanje i osobni rast.',
+        },
+        {
+          number: 4,
+          title: 'Faktori guranja i privlačenja',
+          image: '/media/cjelina-03/slides/slide-4.webp',
+          interpretation: 'Push faktori nastaju u osobi i objašnjavaju zašto se javlja želja za putovanjem, dok pull faktori pripadaju odredištu i usmjeravaju konkretan izbor. Marketing koji prikazuje samo plažu ili znamenitost natječe se s mnogim sličnim porukama; razlikovanje nastaje kada ponuda jasno odgovori na unutarnje stanje gosta.',
+        },
+        {
+          number: 5,
+          title: 'Plogova matrica turističkog izbora',
+          image: '/media/cjelina-03/slides/slide-5.webp',
+          interpretation: 'Plogov kontinuum uspoređuje psihocentrične turiste, koji preferiraju poznato, organizirano i predvidljivo, s alocentričnima, koji traže novo, samostalno i lokalno iskustvo. Model nije trajna etiketa osobe, nego praktičan način procjene prihvatljivog rizika i oblikovanja proizvoda, komunikacije i distribucije.',
+        },
+        {
+          number: 6,
+          title: 'Životni ciklus odredišta',
+          image: '/media/cjelina-03/slides/slide-6.webp',
+          interpretation: 'Odredište u početku otkrivaju gosti otvoreniji prema nepoznatom, zatim ga šira srednja skupina popularizira, a u zreloj fazi ono privlači turiste sklonije sigurnosti i standardizaciji. Rast popularnosti pritom može smanjivati jedinstvenost, pa upravljanje razvojem mora čuvati vrijednost zbog koje je odredište uopće postalo privlačno.',
+        },
+        {
+          number: 7,
+          title: 'Turistički pogled oblikuje očekivanja',
+          image: '/media/cjelina-03/slides/slide-7.webp',
+          interpretation: 'Turistički pogled nije neutralan: mediji, fotografije i društvene mreže unaprijed određuju što gost očekuje vidjeti i zabilježiti. Objavljena slika zato postaje dio obećanoga proizvoda, a velik nesklad između slike i stvarnosti povećava vjerojatnost nezadovoljstva nakon dolaska.',
+        },
+        {
+          number: 8,
+          title: 'Inscenirana autentičnost',
+          image: '/media/cjelina-03/slides/slide-8.webp',
+          interpretation: 'Slajd razlikuje prednju pozornicu, pripremljenu za pogled posjetitelja, od zadnje pozornice svakodnevnoga života lokalne zajednice. Upravljanje autentičnošću traži ravnotežu: iskustvo mora biti razumljivo i dostupno gostu, ali ne smije svesti lokalnu kulturu na kulisu ili narušiti privatnost i dostojanstvo stanovnika.',
+        },
+        {
+          number: 9,
+          title: 'Odluka o putovanju u pet faza',
+          image: '/media/cjelina-03/slides/slide-9.webp',
+          interpretation: 'Proces započinje prepoznavanjem potrebe, nastavlja se traženjem informacija i usporedbom alternativa, zatim prelazi u rezervaciju te završava poslijekupovnim vrednovanjem. Percepcija rizika raste prema trenutku odluke jer se turistička usluga ne može potpuno isprobati prije kupnje; zato su pouzdane informacije, recenzije i jasni uvjeti otkaza presudni.',
+        },
+        {
+          number: 10,
+          title: 'Očekivanja, doživljaj i zadovoljstvo',
+          image: '/media/cjelina-03/slides/slide-10.webp',
+          interpretation: 'Zadovoljstvo ovisi o odnosu očekivanoga i doživljenoga. Kada izvedba nadmaši očekivanja nastaje oduševljenje, kada im odgovara zadovoljstvo, a kada zaostane nezadovoljstvo. Upravljanje obećanjem zato je jednako važno kao kvaliteta usluge: pretjerana promidžba može umanjiti ocjenu objektivno dobroga iskustva.',
+        },
+        {
+          number: 11,
+          title: 'Starenje tržišta i digitalne generacije',
+          image: '/media/cjelina-03/slides/slide-11.webp',
+          interpretation: 'Starenje važnih europskih emitivnih tržišta povećava važnost pristupačnosti, sigurnosti, zdravlja i putovanja izvan vrhunca sezone. Mlađi segmenti istodobno očekuju vizualne informacije, digitalnu samouslugu i vjerodostojne dokaze održivosti. Generacijske razlike treba koristiti kao provjerljive tržišne nalaze, a ne kao nepromjenjive stereotipe.',
+        },
+        {
+          number: 12,
+          title: 'Segmentacija prema motivima, ne putovnici',
+          image: '/media/cjelina-03/slides/slide-12.webp',
+          interpretation: 'Zemlja podrijetla korisna je za jezik, distribuciju i logistiku, ali sama po sebi slabo objašnjava ponašanje. Gost iz Njemačke koji bira kamp može imati više zajedničkoga s poljskim kampistom nego s njemačkim gostom butik-hotela. Segment treba graditi oko motiva, vrijednosti i traženog iskustva.',
+        },
+        {
+          number: 13,
+          title: 'Izvansezonski proizvod počinje unutarnjim motivom',
+          image: '/media/cjelina-03/slides/slide-13.webp',
+          interpretation: 'Izvan glavne sezone odredište ne može računati na svoje najjače ljetne pull atribute. Proizvod zato treba graditi oko unutarnjih potreba gosta — mira, bijega od stresa, oporavka, zdravlja, aktivnosti i lokalne gastronomije — a zatim te potrebe povezati s vjerodostojnim sadržajima koji su stvarno dostupni tijekom cijele godine.',
+        },
+        {
+          number: 14,
+          title: 'Jedinstveni model ponašanja turista',
+          image: '/media/cjelina-03/slides/slide-14.webp',
+          interpretation: 'Model povezuje unutarnji motiv, proces odluke, privlačne atribute odredišta, turistički pogled i konačno zadovoljstvo. Povratne veze podsjećaju da put nije strogo linearan: informacije mijenjaju očekivanja, iskustvo preoblikuje buduće motive, a poslijekupovne objave postaju novi izvor utjecaja na druge turiste.',
+        },
+        {
+          number: 15,
+          title: 'Strateški imperativi upravljanja proizvodom',
+          image: '/media/cjelina-03/slides/slide-15.webp',
+          interpretation: 'Završna sinteza prevodi teoriju u upravljanje: segmentirajte prema motivu, izvansezonsku ponudu temeljite na push faktorima i upravljajte očekivanjima jednako pažljivo kao samom izvedbom. Time se psihologija i sociologija turista pretvaraju u konkretne odluke o proizvodu, komunikaciji i kvaliteti doživljaja.',
+        },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
+  3: chapterThree,
 }

@@ -116,7 +116,26 @@ function ChapterMode({ mode, content }: { mode: Mode; content: ChapterContent })
 }
 
 function Study({ content }: { content: ChapterContent }) {
-  const isHistoricalChapter = content.id === 2
+  const dataPresentation = content.id === 2
+    ? {
+        eyebrow: 'RAZVOJNE PREKRETNICE',
+        title: 'Od privilegije do dostupnog putovanja',
+        description: 'Odabrane godine označuju promjene u organizaciji, dostupnosti i posredovanju koje su širile turističko tržište.',
+        appendComparison: false,
+      }
+    : content.id === 3
+      ? {
+          eyebrow: 'ANALITIČKI MODELI',
+          title: 'Četiri pogleda na ponašanje potražnje',
+          description: 'Svaki okvir odgovara na drugo pitanje: koja se potreba aktivira, što pokreće putovanje, kakav rizik turist prihvaća i kako donosi konačnu odluku.',
+          appendComparison: false,
+        }
+      : {
+          eyebrow: 'SLUŽBENI PODACI · HRVATSKA 2025.',
+          title: 'Veličina prometa nije cijela slika',
+          description: 'Podaci se odnose na komercijalni smještaj. Dolasci nisu broj jedinstvenih osoba, a nekomercijalni promet prati se odvojeno.',
+          appendComparison: true,
+        }
   return <>
     <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{content.summary}</p></div>
     <section className="outcome-panel" aria-labelledby="outcomes-title">
@@ -129,8 +148,8 @@ function Study({ content }: { content: ChapterContent }) {
       </article>)}
     </div>
     <section className="data-section" aria-labelledby="data-title">
-      <div className="subsection-heading"><span className="eyebrow">{isHistoricalChapter ? 'RAZVOJNE PREKRETNICE' : 'SLUŽBENI PODACI · HRVATSKA 2025.'}</span><h3 id="data-title">{isHistoricalChapter ? 'Od privilegije do dostupnog putovanja' : 'Veličina prometa nije cijela slika'}</h3><p>{isHistoricalChapter ? 'Odabrane godine označuju promjene u organizaciji, dostupnosti i posredovanju koje su širile turističko tržište.' : 'Podaci se odnose na komercijalni smještaj. Dolasci nisu broj jedinstvenih osoba, a nekomercijalni promet prati se odvojeno.'}</p></div>
-      <div className="data-grid">{content.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change}{isHistoricalChapter ? '' : ' prema 2024.'}</small>}</article>)}</div>
+      <div className="subsection-heading"><span className="eyebrow">{dataPresentation.eyebrow}</span><h3 id="data-title">{dataPresentation.title}</h3><p>{dataPresentation.description}</p></div>
+      <div className="data-grid">{content.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change}{dataPresentation.appendComparison ? ' prema 2024.' : ''}</small>}</article>)}</div>
     </section>
     <section className="activity-card" aria-labelledby="activity-title">
       <div className="activity-label"><span>PRIMIJENI</span><strong>01</strong></div>
@@ -176,15 +195,23 @@ function Flashcards({ content }: { content: ChapterContent }) {
 function ConversationPreview({ content }: { content: ChapterContent }) {
   const [conversationType, setConversationType] = useState<'written' | 'voice' | null>(null)
   const [voiceScope, setVoiceScope] = useState<'topic' | 'chapter' | 'book'>('topic')
-  const prompts = content.id === 2 ? [
-    'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
-    'Usporedi Grand Tour i suvremeni Erasmus+ program.',
-    'Kako bi Opatija mogla suvremeno koristiti svoj lječilišni identitet?',
-  ] : [
-    'Objasni razliku između turista i izletnika na novom primjeru.',
-    'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',
-    'Zašto broj noćenja nije dovoljan pokazatelj uspjeha?',
-  ]
+  const prompts = content.id === 2
+    ? [
+        'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
+        'Usporedi Grand Tour i suvremeni Erasmus+ program.',
+        'Kako bi Opatija mogla suvremeno koristiti svoj lječilišni identitet?',
+      ]
+    : content.id === 3
+      ? [
+          'Objasni razliku između push i pull faktora na primjeru odmora u Baranji.',
+          'Kako se psihocentrični i alocentrični turist razlikuju pri izboru odredišta?',
+          'Zašto pretjerano obećanje može stvoriti nezadovoljstvo i kod dobre usluge?',
+        ]
+      : [
+          'Objasni razliku između turista i izletnika na novom primjeru.',
+          'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',
+          'Zašto broj noćenja nije dovoljan pokazatelj uspjeha?',
+        ]
   const voiceScopes = [
     {
       key: 'topic' as const,
