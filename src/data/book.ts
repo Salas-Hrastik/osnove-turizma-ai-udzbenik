@@ -10,7 +10,7 @@ export const book = {
 
 export const chapters: ChapterSummary[] = [
   { id: 1, title: 'Uvod u turizam i ugostiteljstvo', pages: '6–11', outcome: 'Definirati temeljne pojmove, razlikovati statističke kategorije putnika te objasniti odnos turizma i ugostiteljstva.', status: 'available' },
-  { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'planned' },
+  { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
   { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'planned' },
   { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'planned' },
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'planned' },
@@ -22,7 +22,8 @@ export const chapters: ChapterSummary[] = [
   { id: 11, title: 'Završna samoprovjera znanja', pages: '30 pitanja', outcome: 'Integrirati znanje iz svih deset cjelina i prepoznati područja koja treba ponoviti.', status: 'assessment' },
 ]
 
-const mediaBaseUrl = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
+const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
+const mediaBaseUrlTwo = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-02'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -137,14 +138,14 @@ export const chapterOne: ChapterContent = {
     audio: {
       title: 'Što se zapravo krije iza brojki?',
       fileName: 'Sto_se_zapravo_krije_iza_brojki.mp3',
-      url: `${mediaBaseUrl}/Sto_se_zapravo_krije_iza_brojki.mp3`,
+      url: `${mediaBaseUrlOne}/Sto_se_zapravo_krije_iza_brojki.mp3`,
       duration: '29:11',
       description: 'Audioizvedenica cjeline povezuje statističke pokazatelje s njihovim stvarnim značenjem za turistički sustav.',
     },
     video: {
       title: 'Granice turizma 2025.',
       fileName: 'Granice_turizma_2025_.mp4',
-      url: `${mediaBaseUrl}/Granice_turizma_2025_.mp4`,
+      url: `${mediaBaseUrlOne}/Granice_turizma_2025_.mp4`,
       duration: '9:09',
       description: 'Videoizvedenica objašnjava kada mobilnost postaje turizam te kako se granice pojma primjenjuju na podatke za 2025.',
       poster: '/media/cjelina-01/video-poster.jpg',
@@ -152,7 +153,7 @@ export const chapterOne: ChapterContent = {
     presentation: {
       title: 'Arhitektura turističkog sustava',
       fileName: 'Tourism_System_Architecture.pptx',
-      url: `${mediaBaseUrl}/Tourism_System_Architecture.pptx`,
+      url: `${mediaBaseUrlOne}/Tourism_System_Architecture.pptx`,
       description: 'Jedanaest slajdova vodi od temeljnih definicija do strateških implikacija podataka za 2025. godinu.',
       slides: [
         {
@@ -224,4 +225,235 @@ export const chapterOne: ChapterContent = {
       ],
     },
   },
+}
+
+export const chapterTwo: ChapterContent = {
+  ...chapters[1],
+  summary: 'Poglavlje prati razvoj putovanja od antike do postmasovnog doba i pokazuje kako slobodno vrijeme, raspoloživi dohodak te prometna i sigurnosna infrastruktura zajedno stvaraju uvjete za turizam. Povijesne prekretnice povezuju se s današnjim imidžem destinacija, očekivanjima gostiju i razvojem turizma u Hrvatskoj od 1844. godine.',
+  outcomes: [
+    'objasniti tri nužna preduvjeta razvoja turizma',
+    'razlikovati preturizam, masovni i postmasovni turizam',
+    'protumačiti doprinos Grand Toura, industrijske revolucije i Thomasa Cooka',
+    'povezati povijesne slojeve s današnjim razvojnim odlukama destinacije',
+  ],
+  keywords: [
+    { term: 'Preturizam', definition: 'Razdoblje prije industrijske revolucije u kojem su putovanja rijetka, opasna i dostupna eliti ili uzrokovana nuždom.' },
+    { term: 'Hodočašće', definition: 'Religijski motivirano putovanje na sveta mjesta i jedan od najstarijih oblika organiziranog putovanja.' },
+    { term: 'Grand Tour', definition: 'Dugotrajno obrazovno putovanje europske aristokracije 17. i 18. stoljeća kroz Francusku, Švicarsku i osobito Italiju.' },
+    { term: 'Klimatsko lječilište', definition: 'Rano moderno odredište koje svoj razvoj temelji na zdravstvenim motivima, klimi i organiziranom boravku gostiju.' },
+    { term: 'Slobodno vrijeme', definition: 'Vrijeme izvan rada i zadovoljavanja osnovnih životnih potreba koje pojedinac može namijeniti putovanju.' },
+    { term: 'Raspoloživi dohodak', definition: 'Dio dohotka koji ostaje nakon pokrivanja osnovnih troškova i omogućuje turističku potrošnju.' },
+    { term: 'Paket-aranžman', definition: 'Unaprijed sastavljena kombinacija najmanje dviju turističkih usluga koja se prodaje po jedinstvenoj cijeni.' },
+    { term: 'Masovni turizam', definition: 'Razdoblje standardiziranih paket-aranžmana, velikih obujama i izražene sezonalnosti, osobito nakon 1950. godine.' },
+    { term: 'Postmasovni turizam', definition: 'Faza individualizacije, fleksibilnosti, digitalizacije te povećanih zahtjeva za održivošću i autentičnošću.' },
+    { term: 'Platformizacija', definition: 'Premještanje turističkog posredovanja i dijela ponude na digitalne platforme koje povezuju pružatelje i korisnike.' },
+  ],
+  steps: [
+    {
+      title: 'Prepoznaj uvjete nastanka turizma',
+      body: 'Povijest turizma nije samo kronologija. Ona pokazuje zašto se turistička kretanja pojavljuju tek kada se istodobno susretnu vrijeme, novac i mogućnost sigurnoga putovanja.',
+      points: [
+        'Slobodno vrijeme omogućuje putovanje izvan radnih i životnih obveza.',
+        'Raspoloživi dohodak omogućuje podmirenje troškova prijevoza, boravka i doživljaja.',
+        'Prometna i sigurnosna infrastruktura smanjuje vrijeme, trošak i rizik putovanja.',
+        'Povijesni imidž i prostorni obrasci i danas usmjeravaju razvoj destinacije.',
+      ],
+      takeaway: 'Nijedan od triju preduvjeta nije dovoljan sam za sebe; turizam nastaje tek njihovim povezivanjem.',
+      source: 'Kanonski izvor 1.0, str. 12–13',
+    },
+    {
+      title: 'Prati put od antike do Grand Toura',
+      body: 'Antičke ceste, termalna središta, srednjovjekovna hodočašća i Grand Tour postupno stvaraju infrastrukturu, motive i kulturne obrasce na kojima će se razviti moderni turizam.',
+      points: [
+        'Rimske ceste i postaje za odmor omogućile su sigurnije i predvidljivije kretanje.',
+        'Hodočašća su potaknula razvoj svratišta, hospicija i samostanskoga gostoprimstva.',
+        'Grand Tour učvrstio je putovanje kao obrazovanje, status i kulturnu potrošnju.',
+        'Putni vodiči, suveniri i javno predstavljanje putovanja imaju korijene u toj fazi.',
+      ],
+      takeaway: 'Mnogi suvremeni turistički obrasci imaju povijesne prethodnike, iako ih danas ubrzavaju tehnologija i šira dostupnost.',
+      source: 'Kanonski izvor 1.0, str. 13–14',
+    },
+    {
+      title: 'Objasni nastanak organiziranoga i masovnog turizma',
+      body: 'Industrijska revolucija povezala je željeznicu, parobrode, rast građanske klase i pravo na slobodno vrijeme. Thomas Cook pretvorio je te uvjete u organizirani turistički proizvod.',
+      points: [
+        'Željeznica i parobrodi radikalno su snizili trošak i vrijeme putovanja.',
+        'Cookovo putovanje iz 1841. povezalo je više usluga u jednu cijenu i jedan organizacijski rizik.',
+        'Plaćeni godišnji odmor i poslijeratni rast dohotka proširili su turizam na radničku i srednju klasu.',
+        'Masovni turizam donio je rast, ali i sezonalnost, standardizaciju te pritisak na prostor i zajednicu.',
+      ],
+      takeaway: 'Masovni turizam nije nastao jednom inovacijom, nego spojem tehnologije, društvenih prava, dohotka i organizirane prodaje.',
+      source: 'Kanonski izvor 1.0, str. 14–15',
+    },
+    {
+      title: 'Poveži postmasovno doba i hrvatski razvoj',
+      body: 'Od 1990-ih turistička se ponuda individualizira i digitalizira, a gosti traže autentičnost, fleksibilnost i dokazivu održivost. Hrvatski razvoj pokazuje kako povijesni identitet i prometna dostupnost dugoročno oblikuju destinacije.',
+      points: [
+        'Villa Angiolina iz 1844. simbolički označuje početak organiziranog turizma na hrvatskoj obali.',
+        'Opatija, Hvar, Crikvenica, Lošinj i Dubrovnik razvijali su lječilišni i klimatski identitet.',
+        'Hotelski kompleksi, kampovi i Jadranska magistrala od 1960-ih uključuju Hrvatsku u europski masovni turizam.',
+        'Digitalne platforme, Schengen i euro mijenjaju dostupnost, distribuciju i strukturu suvremene potražnje.',
+      ],
+      takeaway: 'Povijesni identitet može biti razvojni resurs samo kada ga destinacija prevede u relevantan suvremeni doživljaj.',
+      source: 'Kanonski izvor 1.0, str. 15–16',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Thomas Cook', value: '1841.', change: 'prvo organizirano željezničko putovanje' },
+    { label: 'Villa Angiolina', value: '1844.', change: 'simbolički početak turizma u Opatiji' },
+    { label: 'Plaćeni godišnji odmor', value: '1936.', change: 'Konvencija MOR-a br. 52' },
+    { label: 'Platformizacija', value: '1996.–2008.', change: 'Booking.com i Airbnb' },
+  ],
+  appliedActivity: {
+    title: 'Može li Opatija obnoviti zimski identitet?',
+    intro: 'Opatija je u 19. stoljeću bila poznata kao zimovalište i klimatsko lječilište, dok je hrvatska obala danas izrazito usmjerena na ljetnu sezonu.',
+    tasks: [
+      'Razlučite kako su klima, prometna tehnologija i društvene navike promijenile sezonski položaj Opatije.',
+      'Predložite suvremeni turistički proizvod koji koristi lječilišnu tradiciju bez površne muzeifikacije.',
+      'Odredite ciljni segment, potrebne partnere i najveći tržišni rizik takva proizvoda.',
+    ],
+    note: 'Raspravu utemeljite na povijesnim činjenicama iz kanonskog izvora i jasno odvojite vlastiti razvojni prijedlog.',
+  },
+  editorialUpdate: {
+    title: 'Povijest je aktivan razvojni kapital',
+    checkedAt: '4. kolovoza 2026.',
+    body: 'Povijesni sloj destinacije nije sam po sebi turistički proizvod. Vrijednost nastaje kada se vjerodostojna baština poveže sa suvremenom dostupnošću, kvalitetnom interpretacijom i potrebama jasno određenog segmenta, uz očuvanje života lokalne zajednice.',
+    implications: [
+      'Povijesni identitet koristite kao osnovu diferencijacije, a ne kao dekoraciju.',
+      'Uspoređujte obećanu autentičnost s dokazivim podrijetlom priče i lokalnom koristi.',
+      'Digitalnu distribuciju povežite s fizičkom kvalitetom prostora, usluge i interpretacije.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 12–16' },
+    { label: 'Boris Vukonić', detail: 'Povijest hrvatskog turizma, Prometej, 2005.' },
+    { label: 'John K. Walton (ur.)', detail: 'Histories of Tourism: Representation, Identity and Conflict, 2005.' },
+  ],
+  questions: [
+    { question: 'Koja tri preduvjeta zajedno omogućuju razvoj turizma?', options: ['Klima, more i hoteli', 'Slobodno vrijeme, raspoloživi dohodak te prometna i sigurnosna infrastruktura', 'Marketing, suveniri i vodiči', 'Granice, valute i putovnice'], correct: 1, explanation: 'Turizam se pojavljuje kada ljudi istodobno imaju vrijeme, novac i mogućnost razumno sigurnoga putovanja.' },
+    { question: 'Što je Grand Tour?', options: ['Prvi čarter-let preko Atlantika', 'Hodočasnička ruta prema Santiagu', 'Obrazovno putovanje europske aristokracije u 17. i 18. stoljeću', 'Poslijeratni paket-aranžman'], correct: 2, explanation: 'Grand Tour bio je dugotrajno obrazovno i statusno putovanje europske aristokracije, osobito kroz Francusku i Italiju.' },
+    { question: 'Koji je doprinos Thomasa Cooka razvoju turizma?', options: ['Uveo je zrakoplovni promet', 'Povezao je više usluga u organizirano putovanje po jedinstvenoj cijeni', 'Otvorio je prvi hotel u Opatiji', 'Osnovao je Airbnb'], correct: 1, explanation: 'Cook je 1841. organizirao skupno željezničko putovanje s prijevozom i osvježenjem uključenima u jedinstvenu cijenu.' },
+    { question: 'Koja je osobina tipična za postmasovni turizam?', options: ['Potpuna standardizacija', 'Pasivna uloga gosta', 'Individualizacija, digitalizacija i zahtjev za autentičnošću', 'Isključiva ovisnost o velikim turoperatorima'], correct: 2, explanation: 'Postmasovno doba obilježavaju fleksibilniji proizvodi, aktivniji gosti, digitalne platforme i veća očekivanja održivosti i autentičnosti.' },
+    { question: 'Koji događaj simbolički označuje početak organiziranog turizma na hrvatskoj obali?', options: ['Otvaranje Jadranske magistrale', 'Izgradnja Ville Angioline u Opatiji 1844.', 'Ulazak Hrvatske u EU', 'Uvođenje boravišne dozvole za digitalne nomade'], correct: 1, explanation: 'Villa Angiolina iz 1844. uzima se kao simbolički početak razvoja Opatije kao zimovališta i lječilišta.' },
+  ],
+  media: {
+    audio: {
+      title: 'Od rimskih cesta do digitalnih nomada',
+      fileName: 'Od_rimskih_cesta_do_digitalnih_nomada.m4a',
+      url: `${mediaBaseUrlTwo}/Od_rimskih_cesta_do_digitalnih_nomada.m4a`,
+      duration: '19:37',
+      description: 'Audioizvedenica prati povijesne slojeve turizma od antičke mobilnosti i hodočašća do platformizacije, rada na daljinu i digitalnih nomada.',
+    },
+    video: {
+      title: 'Povijesni razvoj turizma',
+      fileName: 'Povijesni_razvoj_turizma.mp4',
+      url: `${mediaBaseUrlTwo}/Povijesni_razvoj_turizma.mp4`,
+      duration: '8:16',
+      description: 'Video sažima ključne prekretnice i objašnjava kako su promet, dohodak i društvene promjene postupno demokratizirali putovanje.',
+      poster: '/media/cjelina-02/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Strateška topografija turizma',
+      fileName: 'Strategic_Tourism_Topography.pptx',
+      url: `${mediaBaseUrlTwo}/Strategic_Tourism_Topography.pptx`,
+      description: 'Petnaest slajdova povezuje povijesne faze turizma s današnjim upravljanjem destinacijom, granicama rasta i hrvatskim razvojnim iskustvom.',
+      slides: [
+        {
+          number: 1,
+          title: 'Strateška topografija turizma',
+          image: '/media/cjelina-02/slides/slide-1.webp',
+          interpretation: 'Naslovni slajd postavlja povijest kao stratešku kartu, a ne kao popis datuma. Povijesni slojevi istodobno oblikuju identitet destinacije, fizički prostor i obrasce ponašanja putnika, pa njihovo razumijevanje postaje osnova suvremenoga upravljanja.',
+        },
+        {
+          number: 2,
+          title: 'Zašto menadžer turizma mora poznavati povijest?',
+          image: '/media/cjelina-02/slides/slide-2.webp',
+          interpretation: 'Tri su menadžerska razloga za povijesni pogled: naslijeđeni imidž usmjerava pozicioniranje, stare odluke određuju današnje prostorne mogućnosti, a ponavljanje kritika rasta otkriva dugotrajne sistemske napetosti. Povijest zato pomaže prepoznati i razvojni kapital i ograničenja destinacije.',
+        },
+        {
+          number: 3,
+          title: 'Formula aktivacije turizma',
+          image: '/media/cjelina-02/slides/slide-3.webp',
+          interpretation: 'Vennov prikaz pokazuje da turizam nastaje samo u presjeku slobodnog vremena, raspoloživog dohotka te prometne i sigurnosne infrastrukture. Ako nedostaje bilo koji element, motiv za putovanje ne može se pretvoriti u stvarnu i tržišno održivu potražnju.',
+        },
+        {
+          number: 4,
+          title: 'Evolucijska matrica putovanja',
+          image: '/media/cjelina-02/slides/slide-4.webp',
+          interpretation: 'Matrica uspoređuje faze prema motivima, nositeljima i dostupnosti. Vidljiv je prijelaz od rijetkih putovanja elite i hodočasnika prema globalnoj mobilnosti, dok se dominantni motiv pomiče od nužde i statusa prema doživljaju, autentičnosti i samorazvoju.',
+        },
+        {
+          number: 5,
+          title: 'Doba preturizma: od carskih cesta do hodočašća',
+          image: '/media/cjelina-02/slides/slide-5.webp',
+          interpretation: 'Antika daje cestovnu i termalnu infrastrukturu, a srednji vijek mrežu prihvata nastalu uz hodočašća. Iako putovanje još nije masovno ni tržišno organizirano u današnjem smislu, već postoje zdravstveni, religijski i sportski motivi te rani oblici gostoprimstva.',
+        },
+        {
+          number: 6,
+          title: 'Anatomija statusnog putovanja',
+          image: '/media/cjelina-02/slides/slide-6.webp',
+          interpretation: 'Grand Tour povezuje obrazovanje, društveni status, putne vodiče i suvenire. Usporedba s kulturom društvenih mreža pokazuje kontinuitet: putovanje nije samo osobno iskustvo nego i javni signal identiteta, pripadnosti i simboličkog kapitala.',
+        },
+        {
+          number: 7,
+          title: 'Tehnološki skok i rađanje moderne mobilnosti',
+          image: '/media/cjelina-02/slides/slide-7.webp',
+          interpretation: 'Željeznica i parobrodi smanjuju trošak, vrijeme i neizvjesnost putovanja, dok rast građanske klase i pravo na slobodno vrijeme stvaraju novu potražnju. Moderna mobilnost nastaje tek kada se tehnološka inovacija spoji s društvenom promjenom.',
+        },
+        {
+          number: 8,
+          title: 'Dekonstrukcija prvog paket-aranžmana',
+          image: '/media/cjelina-02/slides/slide-8.webp',
+          interpretation: 'Cookov model iz 1841. objedinjuje prijevoz, osvježenje, organizatora i jedinstvenu cijenu. Ključna inovacija nije samo skupno putovanje, nego preuzimanje koordinacije i rizika, iz čega se razvijaju vaučeri, provizijska prodaja, kružne ture i putnički instrumenti plaćanja.',
+        },
+        {
+          number: 9,
+          title: 'Industrijalizacija odmora',
+          image: '/media/cjelina-02/slides/slide-9.webp',
+          interpretation: 'Plaćeni godišnji odmor i masovni zračni promet pretvaraju putovanje iz privilegije u široko dostupan potrošački proizvod. Model „sunce i more” temelji se na standardizaciji, velikom obujmu i sezonalnosti, ali često smanjuje kontakt gosta s lokalnom zajednicom.',
+        },
+        {
+          number: 10,
+          title: 'Granice rasta i točka zasićenja',
+          image: '/media/cjelina-02/slides/slide-10.webp',
+          interpretation: 'Rast volumena turista donosi korist samo do točke u kojoj pritisci počinju smanjivati kvalitetu života lokalne zajednice. Betonizacija, onečišćenje, otpor stanovnika i odljev prihoda iz 1970-ih i 1980-ih izravni su prethodnici današnje rasprave o prekomjernom turizmu.',
+        },
+        {
+          number: 11,
+          title: 'Masovni i postmasovni turizam',
+          image: '/media/cjelina-02/slides/slide-11.webp',
+          interpretation: 'Promjena paradigme vidljiva je u cijelom lancu: standardizirani paket postaje modularan proizvod, pasivni gost aktivni sudionik, a eksploatacija resursa ustupa mjesto zahtjevu za dokazivom održivošću. Velike turoperatore dopunjuju izravne rezervacije i digitalne platforme.',
+        },
+        {
+          number: 12,
+          title: 'Doba platformizacije i globalni prekid',
+          image: '/media/cjelina-02/slides/slide-12.webp',
+          interpretation: 'Schengen uklanja dio graničnih prepreka, platforme reorganiziraju distribuciju, a pandemija 2020. pokazuje osjetljivost globalnoga sustava. Oporavak prometa ne znači povratak na potpuno istu strukturu: rad na daljinu, digitalni nomadi i regulacija kratkoročnog najma ostaju trajne promjene.',
+        },
+        {
+          number: 13,
+          title: 'Evolucija turizma u Hrvatskoj',
+          image: '/media/cjelina-02/slides/slide-13.webp',
+          interpretation: 'Hrvatska vremenska crta povezuje lječilišne početke Opatije i Hvara, hotelijerski razvoj, masovni turizam Jadranske magistrale, ratni prekid te integraciju u EU, Schengen i europodručje. Svaka etapa mijenja dostupnost, tržišta i prostornu strukturu ponude.',
+        },
+        {
+          number: 14,
+          title: 'Arhitektura destinacije: paradoks Opatije',
+          image: '/media/cjelina-02/slides/slide-14.webp',
+          interpretation: 'Metafora ledenog brijega suprotstavlja današnju ljetnu tržišnu sliku dubokom zimskom i lječilišnom nasljeđu. Strateško pitanje nije može li se povijest kopirati, nego kako njezinu vjerodostojnost pretvoriti u suvremeni proizvod, dulju sezonu i diferenciran identitet.',
+        },
+        {
+          number: 15,
+          title: 'Povijest se ponavlja: ciklična priroda turizma',
+          image: '/media/cjelina-02/slides/slide-15.webp',
+          interpretation: 'Završni slajd povezuje antičke toplice i wellness, dubrovačku karantenu i pandemijsku regulaciju te rane kritike putovanja i suvremeni otpor prekomjernom turizmu. Učenje povijesti omogućuje prepoznavanje ponavljajućih obrazaca i ranije uočavanje budućih pritisaka.',
+        },
+      ],
+    },
+  },
+}
+
+export const chapterContents: Partial<Record<number, ChapterContent>> = {
+  1: chapterOne,
+  2: chapterTwo,
 }

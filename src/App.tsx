@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
-import { book, chapterOne, chapters } from './data/book'
-import type { Mode } from './types'
+import { book, chapterContents, chapters } from './data/book'
+import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
@@ -19,7 +19,8 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
-  const hasContent = chapterId === 1
+  const chapterContent = chapterContents[chapterId]
+  const hasContent = Boolean(chapterContent)
 
   const selectChapter = (id: number) => {
     setChapterId(id)
@@ -81,7 +82,7 @@ function App() {
           <div className="main-body-scroll">
             <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
               <section className="learning-area">
-                {!hasContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode mode={mode} />}
+                {!chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
               {mode === 'Prouči' && <aside className="guide-card">
                 <div className="guide-avatar"><Bot /></div>
@@ -101,51 +102,52 @@ function App() {
         </main>
       </div>
 
-      {summaryOpen && <SummaryModal hasContent={hasContent} title={chapter.title} summary={hasContent ? chapterOne.summary : chapter.outcome} outcomes={hasContent ? chapterOne.outcomes : []} onClose={() => setSummaryOpen(false)} />}
+      {summaryOpen && <SummaryModal title={chapter.title} pages={chapter.pages} summary={chapterContent?.summary ?? chapter.outcome} outcomes={chapterContent?.outcomes ?? []} hasContent={hasContent} onClose={() => setSummaryOpen(false)} />}
     </div>
   )
 }
 
-function ChapterMode({ mode }: { mode: Mode }) {
-  if (mode === 'Prouči') return <Study />
-  if (mode === 'Vježbaj') return <Flashcards />
-  if (mode === 'Provjeri') return <Quiz />
-  if (mode === 'Razgovaraj') return <ConversationPreview />
-  return <MediaViewer />
+function ChapterMode({ mode, content }: { mode: Mode; content: ChapterContent }) {
+  if (mode === 'Prouči') return <Study content={content} />
+  if (mode === 'Vježbaj') return <Flashcards content={content} />
+  if (mode === 'Provjeri') return <Quiz content={content} />
+  if (mode === 'Razgovaraj') return <ConversationPreview content={content} />
+  return <MediaViewer content={content} />
 }
 
-function Study() {
+function Study({ content }: { content: ChapterContent }) {
+  const isHistoricalChapter = content.id === 2
   return <>
-    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{chapterOne.summary}</p></div>
+    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{content.summary}</p></div>
     <section className="outcome-panel" aria-labelledby="outcomes-title">
       <div><span className="eyebrow">ISHODI UČENJA</span><h3 id="outcomes-title">Nakon ove cjeline moći ćete</h3></div>
-      <ul>{chapterOne.outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>
+      <ul>{content.outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>
     </section>
     <div className="steps">
-      {chapterOne.steps.map((step, index) => <article className="step-card" key={step.title}>
+      {content.steps.map((step, index) => <article className="step-card" key={step.title}>
         <span className="step-index">{index + 1}</span><div><h3>{step.title}</h3><p>{step.body}</p><ul>{step.points.map((point) => <li key={point}>{point}</li>)}</ul><p className="step-takeaway"><strong>Zapamtite:</strong> {step.takeaway}</p><small>{step.source}</small></div>
       </article>)}
     </div>
     <section className="data-section" aria-labelledby="data-title">
-      <div className="subsection-heading"><span className="eyebrow">SLUŽBENI PODACI · HRVATSKA 2025.</span><h3 id="data-title">Veličina prometa nije cijela slika</h3><p>Podaci se odnose na komercijalni smještaj. Dolasci nisu broj jedinstvenih osoba, a nekomercijalni promet prati se odvojeno.</p></div>
-      <div className="data-grid">{chapterOne.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change} prema 2024.</small>}</article>)}</div>
+      <div className="subsection-heading"><span className="eyebrow">{isHistoricalChapter ? 'RAZVOJNE PREKRETNICE' : 'SLUŽBENI PODACI · HRVATSKA 2025.'}</span><h3 id="data-title">{isHistoricalChapter ? 'Od privilegije do dostupnog putovanja' : 'Veličina prometa nije cijela slika'}</h3><p>{isHistoricalChapter ? 'Odabrane godine označuju promjene u organizaciji, dostupnosti i posredovanju koje su širile turističko tržište.' : 'Podaci se odnose na komercijalni smještaj. Dolasci nisu broj jedinstvenih osoba, a nekomercijalni promet prati se odvojeno.'}</p></div>
+      <div className="data-grid">{content.dataSnapshot.map((item) => <article key={item.label}><span>{item.label}</span><strong>{item.value}</strong>{item.change && <small>{item.change}{isHistoricalChapter ? '' : ' prema 2024.'}</small>}</article>)}</div>
     </section>
     <section className="activity-card" aria-labelledby="activity-title">
       <div className="activity-label"><span>PRIMIJENI</span><strong>01</strong></div>
-      <div><h3 id="activity-title">{chapterOne.appliedActivity.title}</h3><p>{chapterOne.appliedActivity.intro}</p><ol>{chapterOne.appliedActivity.tasks.map((task) => <li key={task}>{task}</li>)}</ol><small>{chapterOne.appliedActivity.note}</small></div>
+      <div><h3 id="activity-title">{content.appliedActivity.title}</h3><p>{content.appliedActivity.intro}</p><ol>{content.appliedActivity.tasks.map((task) => <li key={task}>{task}</li>)}</ol><small>{content.appliedActivity.note}</small></div>
     </section>
     <section className="editorial-update" aria-labelledby="editorial-title">
       <Sparkles />
-      <div><span className="eyebrow">UREDNIČKI DODATAK · PROVJERENO {chapterOne.editorialUpdate.checkedAt.toUpperCase()}</span><h3 id="editorial-title">{chapterOne.editorialUpdate.title}</h3><p>{chapterOne.editorialUpdate.body}</p><ul>{chapterOne.editorialUpdate.implications.map((item) => <li key={item}>{item}</li>)}</ul></div>
+      <div><span className="eyebrow">UREDNIČKI DODATAK · PROVJERENO {content.editorialUpdate.checkedAt.toUpperCase()}</span><h3 id="editorial-title">{content.editorialUpdate.title}</h3><p>{content.editorialUpdate.body}</p><ul>{content.editorialUpdate.implications.map((item) => <li key={item}>{item}</li>)}</ul></div>
     </section>
     <section className="sources-panel" aria-labelledby="sources-title">
       <span className="eyebrow">IZVORI I PODRIJETLO</span><h3 id="sources-title">Provjerljiva osnova cjeline</h3>
-      <div>{chapterOne.sources.map((source) => source.url ? <a key={source.label} href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.label}</strong><small>{source.detail}</small></span><ArrowUpRight /></a> : <article key={source.label}><span><strong>{source.label}</strong><small>{source.detail}</small></span><LockKeyhole /></article>)}</div>
+      <div>{content.sources.map((source) => source.url ? <a key={source.label} href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.label}</strong><small>{source.detail}</small></span><ArrowUpRight /></a> : <article key={source.label}><span><strong>{source.label}</strong><small>{source.detail}</small></span><LockKeyhole /></article>)}</div>
     </section>
   </>
 }
 
-function Flashcards() {
+function Flashcards({ content }: { content: ChapterContent }) {
   const [openCards, setOpenCards] = useState<Set<string>>(new Set())
 
   const toggleCard = (term: string) => {
@@ -159,7 +161,7 @@ function Flashcards() {
 
   return <>
     <div className="section-heading"><span className="eyebrow">VJEŽBAJ · 10 KARTICA</span><h2>Ključni pojmovi</h2><p><strong>Pritisnite željeni pojam kako biste prikazali njegovo objašnjenje.</strong> Ponovnim pritiskom objašnjenje možete sakriti.</p></div>
-    <div className="flashcard-grid">{chapterOne.keywords.map((card, index) => {
+    <div className="flashcard-grid">{content.keywords.map((card, index) => {
       const isOpen = openCards.has(card.term)
       const definitionId = `definition-${index + 1}`
       return <button className={`flashcard ${isOpen ? 'open' : ''}`} key={card.term} type="button" aria-expanded={isOpen} aria-controls={definitionId} onClick={() => toggleCard(card.term)}>
@@ -171,10 +173,14 @@ function Flashcards() {
   </>
 }
 
-function ConversationPreview() {
+function ConversationPreview({ content }: { content: ChapterContent }) {
   const [conversationType, setConversationType] = useState<'written' | 'voice' | null>(null)
   const [voiceScope, setVoiceScope] = useState<'topic' | 'chapter' | 'book'>('topic')
-  const prompts = [
+  const prompts = content.id === 2 ? [
+    'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
+    'Usporedi Grand Tour i suvremeni Erasmus+ program.',
+    'Kako bi Opatija mogla suvremeno koristiti svoj lječilišni identitet?',
+  ] : [
     'Objasni razliku između turista i izletnika na novom primjeru.',
     'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',
     'Zašto broj noćenja nije dovoljan pokazatelj uspjeha?',
@@ -190,9 +196,9 @@ function ConversationPreview() {
     {
       key: 'chapter' as const,
       label: 'Cijela cjelina',
-      title: 'Uvod u turizam i ugostiteljstvo',
-      description: 'Vodič povezuje sva četiri nastavna koraka, pojmove, podatke i urednički dodatak cjeline 1.',
-      source: 'Kanonski izvor 1.0 · str. 6–11',
+      title: content.title,
+      description: `Vodič povezuje sva četiri nastavna koraka, pojmove, podatke i urednički dodatak cjeline ${content.id}.`,
+      source: `Kanonski izvor 1.0 · str. ${content.pages}`,
     },
     {
       key: 'book' as const,
@@ -218,7 +224,7 @@ function ConversationPreview() {
 
     {conversationType && <ConversationModal type={conversationType} onClose={() => setConversationType(null)}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
-        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina 1</strong></span></div></section>
+        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
         <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="chapter-question">Vaše pitanje</label><div className="disabled-composer"><input id="chapter-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Sučelje je prototipski dovršeno. AI usluga aktivirat će se nakon zasebne potvrde modela, citiranja i zaštite podataka.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
         <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odabir možete promijeniti prije svakoga razgovora. Širi opseg omogućuje povezivanje više dijelova knjige, ali odgovor i dalje mora pokazati iz kojega je sloja izveden.</p></div><div className="voice-status"><Mic /><span><small>Status veze</small><strong>Još nije aktivirana</strong></span></div></div>
@@ -266,10 +272,11 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
   </div>, document.body)
 }
 
-function MediaViewer() {
+function MediaViewer({ content }: { content: ChapterContent }) {
   const [slideIndex, setSlideIndex] = useState(0)
   const [expandedMedia, setExpandedMedia] = useState<'audio' | 'video' | 'presentation' | null>(null)
-  const { audio, video, presentation } = chapterOne.media
+  if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedija je prenesena" text="Izvorne datoteke nalaze se u samostalnom Supabase spremniku. Njihovi točni nazivi još se povezuju s ovim prikazom." />
+  const { audio, video, presentation } = content.media
   const media = [
     { key: 'audio' as const, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration },
     { key: 'video' as const, icon: FileVideo, title: 'Video', detail: video.title, meta: video.duration },
@@ -277,14 +284,14 @@ function MediaViewer() {
   ]
 
   return <>
-    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA 1</span><h2>Odaberite medij</h2><p>Pritiskom na Audio, Video ili Prezentaciju odmah se otvara pripadajući skočni prozor. Izvorne datoteke ostaju dostupne u svakom prikazu.</p></div>
+    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Odaberite medij</h2><p>Pritiskom na Audio, Video ili Prezentaciju odmah se otvara pripadajući skočni prozor. Izvorne datoteke ostaju dostupne u svakom prikazu.</p></div>
     <div className="media-selector" role="group" aria-label="Odaberite vrstu medija">
       {media.map(({ key, icon: Icon, title, detail, meta }, index) => <button key={key} onClick={() => setExpandedMedia(key)} aria-haspopup="dialog">
         <span className="media-icon"><Icon /></span><span className="media-number">{String(index + 1).padStart(2, '0')}</span><strong>{title}</strong><small>{detail}</small><em>{meta}</em>
       </button>)}
     </div>
 
-    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-01</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
+    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-{String(content.id).padStart(2, '0')}</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
 
     {expandedMedia === 'audio' && <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={() => setExpandedMedia(null)}>
       <div className="expanded-audio"><p>{audio.description}</p><audio controls autoPlay preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio><a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a></div>
@@ -294,11 +301,11 @@ function MediaViewer() {
       <div className="expanded-video"><p>{video.description}</p><video controls autoPlay preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video><a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a></div>
     </MediaModal>}
 
-    {expandedMedia === 'presentation' && <PresentationModal slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setExpandedMedia(null)} />}
+    {expandedMedia === 'presentation' && <PresentationModal presentation={presentation} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setExpandedMedia(null)} />}
   </>
 }
 
-function SlideStage({ slide, slideCount }: { slide: typeof chapterOne.media.presentation.slides[number]; slideCount: number }) {
+function SlideStage({ slide, slideCount }: { slide: PresentationSlide; slideCount: number }) {
   return <figure className="slide-stage"><img src={slide.image} alt={`Slajd ${slide.number}: ${slide.title}`} /><figcaption>Slajd {slide.number} od {slideCount}</figcaption></figure>
 }
 
@@ -325,8 +332,7 @@ function MediaModal({ title, label, onClose, children }: { title: string; label:
   return createPortal(<div className="modal-backdrop media-modal-backdrop" role="presentation" onMouseDown={onClose}><section className="media-modal" role="dialog" aria-modal="true" aria-labelledby="media-modal-title" onMouseDown={(event) => event.stopPropagation()}><header className="media-modal-header"><div><span className="eyebrow">{label}</span><h2 id="media-modal-title">{title}</h2></div><button className="icon-button media-modal-close" onClick={onClose} aria-label="Zatvori skočni prozor" autoFocus><X /></button></header>{children}</section></div>, document.body)
 }
 
-function PresentationModal({ slideIndex, onSlideChange, onClose }: { slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {
-  const { presentation } = chapterOne.media
+function PresentationModal({ presentation, slideIndex, onSlideChange, onClose }: { presentation: PresentationFile; slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {
   const slide = presentation.slides[slideIndex]
 
   useEffect(() => {
@@ -346,15 +352,15 @@ function PresentationModal({ slideIndex, onSlideChange, onClose }: { slideIndex:
   </MediaModal>
 }
 
-function Quiz() {
+function Quiz({ content }: { content: ChapterContent }) {
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [submitted, setSubmitted] = useState(false)
-  const score = useMemo(() => chapterOne.questions.filter((q, i) => answers[i] === q.correct).length, [answers])
+  const score = useMemo(() => content.questions.filter((q, i) => answers[i] === q.correct).length, [answers, content.questions])
   const reset = () => { setAnswers({}); setSubmitted(false) }
   return <>
     <div className="section-heading"><span className="eyebrow">PROVJERI · 5 PITANJA</span><h2>Samoprovjera cjeline</h2><p>Odaberite odgovor na svako pitanje. Nakon predaje dobit ćete objašnjenje, ne samo rezultat.</p></div>
-    <div className="quiz-list">{chapterOne.questions.map((q, qIndex) => <article className="quiz-card" key={q.question}><div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div><div className="answers">{q.options.map((option, optionIndex) => <label key={option} className={submitted ? optionIndex === q.correct ? 'correct' : answers[qIndex] === optionIndex ? 'wrong' : '' : ''}><input type="radio" name={`q-${qIndex}`} checked={answers[qIndex] === optionIndex} onChange={() => !submitted && setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))} />{option}</label>)}</div>{submitted && <p className="explanation"><strong>Objašnjenje:</strong> {q.explanation}</p>}</article>)}</div>
-    <div className="quiz-actions">{submitted ? <><div className="score"><strong>{score} / {chapterOne.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <button className="primary-button" disabled={Object.keys(answers).length !== chapterOne.questions.length} onClick={() => setSubmitted(true)}>Predaj odgovore</button>}</div>
+    <div className="quiz-list">{content.questions.map((q, qIndex) => <article className="quiz-card" key={q.question}><div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div><div className="answers">{q.options.map((option, optionIndex) => <label key={option} className={submitted ? optionIndex === q.correct ? 'correct' : answers[qIndex] === optionIndex ? 'wrong' : '' : ''}><input type="radio" name={`q-${content.id}-${qIndex}`} checked={answers[qIndex] === optionIndex} onChange={() => !submitted && setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))} />{option}</label>)}</div>{submitted && <p className="explanation"><strong>Objašnjenje:</strong> {q.explanation}</p>}</article>)}</div>
+    <div className="quiz-actions">{submitted ? <><div className="score"><strong>{score} / {content.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <button className="primary-button" disabled={Object.keys(answers).length !== content.questions.length} onClick={() => setSubmitted(true)}>Predaj odgovore</button>}</div>
   </>
 }
 
@@ -366,14 +372,14 @@ function ComingSoon({ icon, title, text }: { icon: React.ReactNode; title: strin
   return <div className="coming-soon"><div className="coming-icon">{icon}</div><span className="eyebrow">PRIPREMLJENA FUNKCIJA</span><h2>{title}</h2><p>{text}</p></div>
 }
 
-function SummaryModal({ title, summary, outcomes, hasContent, onClose }: { title: string; summary: string; outcomes: string[]; hasContent: boolean; onClose: () => void }) {
+function SummaryModal({ title, pages, summary, outcomes, hasContent, onClose }: { title: string; pages: string; summary: string; outcomes: string[]; hasContent: boolean; onClose: () => void }) {
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && onClose()
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [onClose])
 
-  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{hasContent ? 'Kanonski izvor 1.0' : 'Potvrđena matrica cjelina'}</strong>{hasContent ? 'Stranice 6–11' : 'Sadržaj cjeline u pripremi'}</span></div></section></div>
+  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{hasContent ? 'Kanonski izvor 1.0' : 'Potvrđena matrica cjelina'}</strong>{hasContent ? `Stranice ${pages}` : 'Sadržaj cjeline u pripremi'}</span></div></section></div>
 }
 
 function guideText(mode: Mode, hasContent: boolean) {

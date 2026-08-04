@@ -93,5 +93,5 @@ export interface ChapterContent extends ChapterSummary {
   editorialUpdate: EditorialUpdate
   sources: SourceLink[]
   questions: QuizQuestion[]
-  media: ChapterMedia
+  media?: ChapterMedia
 }
