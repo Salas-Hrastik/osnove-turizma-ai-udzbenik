@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Maximize2, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterOne, chapters } from './data/book'
@@ -207,11 +208,11 @@ function ConversationPreview() {
     <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pismeni ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
 
     <div className="conversation-mode-selector" role="group" aria-label="Odaberite način razgovora">
-      <button onClick={() => setConversationType('written')} aria-haspopup="dialog">
-        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Upišite pitanje i primite strukturiran odgovor s oznakom izvora.</small></span>
+      <button type="button" onClick={() => setConversationType('written')} aria-haspopup="dialog" aria-label="Otvori objašnjenje pismenog razgovora u skočnom prozoru">
+        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Otvara objašnjenje u skočnom prozoru</small></span>
       </button>
-      <button onClick={() => setConversationType('voice')} aria-haspopup="dialog">
-        <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Razgovarajte prirodnim glasom i unaprijed odaberite širinu izvora.</small></span>
+      <button type="button" onClick={() => setConversationType('voice')} aria-haspopup="dialog" aria-label="Otvori objašnjenje usmenog razgovora u skočnom prozoru">
+        <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Otvara objašnjenje u skočnom prozoru</small></span>
       </button>
     </div>
 
@@ -254,7 +255,7 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
   }, [onClose])
 
   const isWritten = type === 'written'
-  return <div className="modal-backdrop conversation-modal-backdrop" role="presentation" onMouseDown={onClose}>
+  return createPortal(<div className="modal-backdrop conversation-modal-backdrop" role="presentation" onMouseDown={onClose}>
     <section className="conversation-modal" role="dialog" aria-modal="true" aria-labelledby="conversation-modal-title" onMouseDown={(event) => event.stopPropagation()}>
       <header className="conversation-modal-header">
         <div><span className="eyebrow">RAZGOVARAJ · {isWritten ? 'PISMENI NAČIN' : 'USMENI NAČIN'}</span><h2 id="conversation-modal-title">{isWritten ? 'Pismeni razgovor' : 'Usmeni razgovor'}</h2></div>
@@ -262,7 +263,7 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
       </header>
       <div className="conversation-modal-content">{children}</div>
     </section>
-  </div>
+  </div>, document.body)
 }
 
 function MediaViewer() {

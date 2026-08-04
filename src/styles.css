@@ -149,7 +149,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .conversation-mode-selector>button:hover { transform:translateY(-2px); border-color:#9cbeb0; box-shadow:0 12px 28px #163d3518; }
 .conversation-mode-icon { width:54px; height:54px; display:grid; place-items:center; border-radius:15px; background:#e9f2ed; color:var(--green); }
 .conversation-mode-selector strong { display:block; margin-bottom:5px; font:700 20px Georgia, 'Times New Roman', serif; }
-.conversation-mode-selector small { display:block; color:var(--muted); font-size:12px; line-height:1.45; }
+.conversation-mode-selector small { display:block; color:var(--green); font-size:12px; line-height:1.45; font-weight:700; }
 .conversation-layout { display:grid; grid-template-columns:minmax(240px,.75fr) 1.25fr; gap:18px; }
 .conversation-rules,.prompt-preview { border:1px solid var(--line); border-radius:15px; padding:24px; background:white; }
 .conversation-icon { width:50px; height:50px; display:grid; place-items:center; border-radius:14px; margin-bottom:16px; color:#f5c979; background:var(--green-dark); }
