@@ -144,12 +144,10 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .coming-icon svg { width:32px; height:32px; }
 .coming-soon h2 { font:700 30px Georgia, 'Times New Roman', serif; margin:7px 0 10px; }
 .coming-soon p { color:var(--muted); line-height:1.65; max-width:580px; }
-.conversation-mode-selector { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.conversation-mode-selector { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
 .conversation-mode-selector>button { min-width:0; display:grid; grid-template-columns:54px 1fr; gap:15px; align-items:center; padding:18px; border:1px solid var(--line); border-radius:15px; background:white; color:var(--ink); text-align:left; cursor:pointer; transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease; }
 .conversation-mode-selector>button:hover { transform:translateY(-2px); border-color:#9cbeb0; box-shadow:0 12px 28px #163d3518; }
-.conversation-mode-selector>button.active { border-color:var(--green); background:#f3f8f5; box-shadow:inset 0 0 0 1px var(--green),0 12px 28px #163d3518; }
 .conversation-mode-icon { width:54px; height:54px; display:grid; place-items:center; border-radius:15px; background:#e9f2ed; color:var(--green); }
-.conversation-mode-selector>button.active .conversation-mode-icon { background:var(--green); color:white; }
 .conversation-mode-selector strong { display:block; margin-bottom:5px; font:700 20px Georgia, 'Times New Roman', serif; }
 .conversation-mode-selector small { display:block; color:var(--muted); font-size:12px; line-height:1.45; }
 .conversation-layout { display:grid; grid-template-columns:minmax(240px,.75fr) 1.25fr; gap:18px; }
@@ -280,6 +278,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .media-modal-header { position:sticky; top:0; z-index:2; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:22px 26px 18px; border-bottom:1px solid var(--line); background:#fbfcf8f2; backdrop-filter:blur(12px); }
 .media-modal-header h2 { margin:5px 0 0; font:700 27px Georgia, 'Times New Roman', serif; }
 .media-modal-close { flex:0 0 auto; width:42px; height:42px; border-radius:50%; color:var(--green); background:#e8f0eb; }
+.conversation-modal-backdrop { z-index:60; }
+.conversation-modal { width:min(1180px,100%); max-height:calc(100vh - 40px); overflow:auto; background:var(--cream); border-radius:20px; box-shadow:0 30px 90px #001b1770; }
+.conversation-modal-header { position:sticky; top:0; z-index:2; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:22px 26px 18px; border-bottom:1px solid var(--line); background:#fbfcf8f2; backdrop-filter:blur(12px); }
+.conversation-modal-header h2 { margin:5px 0 0; font:700 27px Georgia, 'Times New Roman', serif; }
+.conversation-modal-close { flex:0 0 auto; width:42px; height:42px; border-radius:50%; color:var(--green); background:#e8f0eb; }
+.conversation-modal-content { padding:24px 26px 28px; }
+.conversation-modal-content .voice-conversation { padding:0; border:0; background:transparent; }
 .expanded-video { padding:24px 26px 28px; }
 .expanded-video>p { margin:0 0 16px; color:var(--muted); line-height:1.55; }
 .expanded-video video { display:block; width:100%; max-height:calc(100vh - 230px); margin-bottom:16px; border-radius:13px; background:#071f26; }
@@ -351,6 +356,11 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .media-modal { width:100%; height:100%; max-height:none; border-radius:0; }
   .media-modal-header { padding:17px 16px 14px; }
   .media-modal-header h2 { font-size:21px; }
+  .conversation-modal-backdrop { padding:0; }
+  .conversation-modal { width:100%; height:100%; max-height:none; border-radius:0; }
+  .conversation-modal-header { padding:17px 16px 14px; }
+  .conversation-modal-header h2 { font-size:21px; }
+  .conversation-modal-content { padding:16px; }
   .expanded-video,.expanded-presentation { padding:16px; }
   .expanded-video video { max-height:calc(100vh - 220px); }
   .slide-controls { grid-template-columns:1fr 1fr; }
