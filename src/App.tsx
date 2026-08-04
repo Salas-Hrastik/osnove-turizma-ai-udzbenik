@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, LockKeyhole, Maximize2, Menu, MessageCircle, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Maximize2, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { book, chapterOne, chapters } from './data/book'
 import type { Mode } from './types'
 
@@ -148,17 +148,71 @@ function Flashcards() {
 }
 
 function ConversationPreview() {
+  const [conversationType, setConversationType] = useState<'written' | 'voice'>('written')
+  const [voiceScope, setVoiceScope] = useState<'topic' | 'chapter' | 'book'>('topic')
   const prompts = [
     'Objasni razliku između turista i izletnika na novom primjeru.',
     'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',
     'Zašto broj noćenja nije dovoljan pokazatelj uspjeha?',
   ]
+  const voiceScopes = [
+    {
+      key: 'topic' as const,
+      label: 'Odabrana tema',
+      title: 'Pitanje u užem kontekstu',
+      description: 'Vodič koristi aktualnu temu, pripadajuće pojmove i neposredno povezane odlomke.',
+      source: 'Najprecizniji i najbrži odgovor',
+    },
+    {
+      key: 'chapter' as const,
+      label: 'Cijela cjelina',
+      title: 'Uvod u turizam i ugostiteljstvo',
+      description: 'Vodič povezuje sva četiri nastavna koraka, pojmove, podatke i urednički dodatak cjeline 1.',
+      source: 'Kanonski izvor 1.0 · str. 6–11',
+    },
+    {
+      key: 'book' as const,
+      label: 'Cijeli udžbenik',
+      title: 'Svih 10 nastavnih cjelina',
+      description: 'Vodič traži poveznice u cijelom kanonskom tekstu te u jasno označenim uredničkim dodatcima.',
+      source: 'Najširi unutarnji izvor znanja',
+    },
+  ]
+  const selectedScope = voiceScopes.find((scope) => scope.key === voiceScope) ?? voiceScopes[0]
+
   return <>
-    <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · PRIPREMLJENO SUČELJE</span><h2>Razgovor u granicama provjerenih izvora</h2><p>Pisani i glasovni razgovor aktivirat će se nakon zasebnog odobrenja AI konfiguracije. Već sada je definirano što će vodič smjeti koristiti i kako će označavati podrijetlo odgovora.</p></div>
-    <div className="conversation-layout">
-      <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PRAVILA ODGOVORA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul></section>
-      <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="chapter-question">Vaše pitanje</label><div className="disabled-composer"><input id="chapter-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Aktivacija slijedi tek nakon potvrde modela, izvora, citiranja i zaštite podataka.</small></section>
+    <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pismeni ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
+
+    <div className="conversation-mode-selector" role="tablist" aria-label="Odaberite način razgovora">
+      <button className={conversationType === 'written' ? 'active' : ''} onClick={() => setConversationType('written')} role="tab" aria-selected={conversationType === 'written'} aria-controls="written-conversation">
+        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Upišite pitanje i primite strukturiran odgovor s oznakom izvora.</small></span>
+      </button>
+      <button className={conversationType === 'voice' ? 'active' : ''} onClick={() => setConversationType('voice')} role="tab" aria-selected={conversationType === 'voice'} aria-controls="voice-conversation">
+        <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Razgovarajte prirodnim glasom i unaprijed odaberite širinu izvora.</small></span>
+      </button>
     </div>
+
+    {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation" role="tabpanel">
+      <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina 1</strong></span></div></section>
+      <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="chapter-question">Vaše pitanje</label><div className="disabled-composer"><input id="chapter-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Sučelje je prototipski dovršeno. AI usluga aktivirat će se nakon zasebne potvrde modela, citiranja i zaštite podataka.</small></section>
+    </div> : <section className="voice-conversation" id="voice-conversation" role="tabpanel">
+      <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odabir možete promijeniti prije svakoga razgovora. Širi opseg omogućuje povezivanje više dijelova knjige, ali odgovor i dalje mora pokazati iz kojega je sloja izveden.</p></div><div className="voice-status"><Mic /><span><small>Status veze</small><strong>Još nije aktivirana</strong></span></div></div>
+
+      <div className="voice-scope-selector" role="radiogroup" aria-label="Odaberite opseg izvora za usmeni razgovor">
+        {voiceScopes.map((scope, index) => <button key={scope.key} className={voiceScope === scope.key ? 'active' : ''} onClick={() => setVoiceScope(scope.key)} role="radio" aria-checked={voiceScope === scope.key}>
+          <span className="scope-number">{String(index + 1).padStart(2, '0')}</span><span><strong>{scope.label}</strong><em>{scope.title}</em><small>{scope.description}</small><b>{scope.source}</b></span><CheckCircle2 />
+        </button>)}
+      </div>
+
+      <div className="voice-console">
+        <div className="voice-orb"><Mic /></div>
+        <div className="voice-console-copy"><span className="eyebrow">ODABRANI OPSEG</span><h3>{selectedScope.label}</h3><p>{selectedScope.description}</p><div className="voice-source-layers"><span><BookOpen />Kanonski tekst 1.0</span><span><Sparkles />Datirani urednički dodatci</span></div></div>
+        <div className="voice-action"><button disabled><Mic /> Pokreni usmeni razgovor</button><small>Glasovna veza OpenAI Realtime/WebRTC bit će uključena nakon tehničke i podatkovne konfiguracije.</small></div>
+      </div>
+
+      <div className="voice-state-preview" aria-label="Predviđena stanja usmenog razgovora"><span><i>1</i>Slušam</span><ChevronRight /><span><i>2</i>Razmišljam</span><ChevronRight /><span><i>3</i>Govorim</span></div>
+      <p className="conversation-boundary"><LockKeyhole /><span><strong>Granica odgovora ostaje vidljiva.</strong> Vanjski izvori ne uključuju se automatski. Ako vlastiti izvori nisu dovoljni, vodič to mora jasno reći i zatražiti dopuštenje prije vanjskog pretraživanja.</span></p>
+    </section>}
   </>
 }
 
