@@ -7,6 +7,9 @@ Samostalna studentska platforma temeljena na kanonskom izvoru 1.0 autora prof. d
 - konfigurabilni profil knjige s 10 nastavnih cjelina i završnom samoprovjerom
 - generičko sučelje cjeline s načinima rada Razgovaraj, Prouči, Gledaj i slušaj, Vježbaj i Provjeri
 - funkcionalni sadržajni pilot cjeline 1
+- puna obrada pilota kroz četiri proširena nastavna koraka, ishode, službene pokazatelje, primijenjeni zadatak i urednički dodatak
+- deset istodobno vidljivih kartica te funkcionalna provjera s pet pitanja i objašnjenjima
+- pripremljena, ali namjerno nepovezana sučelja za AI razgovor i zasebni multimedijski paket
 - jasna razlika između kanonskog teksta i budućih izvedenih ili uredničkih slojeva
 - bez ovisnosti o drugim projektima, bazama i medijskim spremnicima
 

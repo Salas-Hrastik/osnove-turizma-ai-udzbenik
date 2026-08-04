@@ -11,6 +11,8 @@ export interface ChapterSummary {
 export interface LearningStep {
   title: string
   body: string
+  points: string[]
+  takeaway: string
   source: string
 }
 
@@ -26,9 +28,40 @@ export interface QuizQuestion {
   explanation: string
 }
 
+export interface DataPoint {
+  label: string
+  value: string
+  change?: string
+}
+
+export interface AppliedActivity {
+  title: string
+  intro: string
+  tasks: string[]
+  note: string
+}
+
+export interface EditorialUpdate {
+  title: string
+  checkedAt: string
+  body: string
+  implications: string[]
+}
+
+export interface SourceLink {
+  label: string
+  detail: string
+  url?: string
+}
+
 export interface PilotChapter extends ChapterSummary {
   summary: string
+  outcomes: string[]
   keywords: Flashcard[]
   steps: LearningStep[]
+  dataSnapshot: DataPoint[]
+  appliedActivity: AppliedActivity
+  editorialUpdate: EditorialUpdate
+  sources: SourceLink[]
   questions: QuizQuestion[]
 }
