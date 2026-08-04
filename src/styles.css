@@ -38,7 +38,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .summary-button,.primary-button { border:0; border-radius:11px; background:var(--green); color:white; padding:12px 16px; display:flex; align-items:center; gap:8px; cursor:pointer; white-space:nowrap; font-weight:700; box-shadow:0 8px 20px #0c5e5420; }
 .summary-button:hover,.primary-button:hover { background:var(--green-dark); }
 .summary-button svg,.primary-button svg { width:18px; }
-.mode-tabs { max-width:1320px; margin:0 auto 10px; display:grid; grid-template-columns:repeat(5,1fr); background:#dce6e0; padding:5px; border-radius:14px; gap:5px; }
+.mode-tabs { max-width:1320px; margin:0 auto 4px; display:grid; grid-template-columns:repeat(5,1fr); background:#dce6e0; padding:5px; border-radius:14px; gap:5px; }
 .mode-tabs button { display:flex; gap:8px; align-items:center; justify-content:center; min-height:46px; border:1px solid #ffffff24; background:var(--mode-background); border-radius:10px; color:white; font-weight:700; cursor:pointer; transition:background-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease; }
 .mode-tabs button:nth-child(1) { --mode-background:#0c5e54; }
 .mode-tabs button:nth-child(2) { --mode-background:#17675c; }
@@ -51,7 +51,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .mode-tabs button:disabled { opacity:.38; cursor:not-allowed; }
 .content-grid { max-width:1320px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:24px; align-items:start; }
 .content-grid.without-guide { grid-template-columns:minmax(0,1fr); }
-.learning-area { min-height:560px; background:var(--cream); border:1px solid var(--line); border-radius:18px; padding:clamp(24px,3.5vw,46px); box-shadow:0 14px 36px #24463d0c; }
+.learning-area { min-height:560px; background:var(--cream); border:1px solid var(--line); border-radius:18px; padding:26px clamp(24px,3.5vw,46px) clamp(24px,3.5vw,46px); box-shadow:0 14px 36px #24463d0c; }
 .section-heading { margin-bottom:28px; }
 .section-heading h2 { font:700 29px Georgia, 'Times New Roman', serif; margin:6px 0 8px; }
 .section-heading p { color:var(--muted); line-height:1.65; margin:0; max-width:850px; }
