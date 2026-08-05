@@ -12,7 +12,7 @@ export const chapters: ChapterSummary[] = [
   { id: 1, title: 'Uvod u turizam i ugostiteljstvo', pages: '6–11', outcome: 'Definirati temeljne pojmove, razlikovati statističke kategorije putnika te objasniti odnos turizma i ugostiteljstva.', status: 'available' },
   { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
   { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
-  { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'planned' },
+  { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'planned' },
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'planned' },
   { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'planned' },
@@ -25,6 +25,7 @@ export const chapters: ChapterSummary[] = [
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
 const mediaBaseUrlTwo = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-02'
 const mediaBaseUrlThree = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-03'
+const mediaBaseUrlFour = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-04'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -681,8 +682,230 @@ export const chapterThree: ChapterContent = {
   },
 }
 
+export const chapterFour: ChapterContent = {
+  ...chapters[3],
+  summary: 'Poglavlje sistematizira raznolikost suvremenog turizma prema prostornom obuhvatu, trajanju, dinamici, dobu godine, organizaciji i dominantnom motivu. Uspoređuje obalni i kontinentalni turizam u Hrvatskoj, razrađuje selektivne oblike te pokazuje da specijalizacija destinacije mora proizlaziti iz resursa, sezonske komplementarnosti i kompatibilnosti ciljnih segmenata.',
+  outcomes: [
+    'primijeniti temeljne kriterije klasifikacije turizma',
+    'usporediti obilježja obalnog i kontinentalnog turizma u Hrvatskoj',
+    'razlikovati glavne selektivne oblike turizma',
+    'procijeniti opravdanost specijalizacije destinacije prema resursima, sezoni i segmentima',
+  ],
+  keywords: [
+    { term: 'Selektivni turizam', definition: 'Skup specijaliziranih oblika turizma usmjerenih prema užim segmentima s izraženim posebnim interesom.' },
+    { term: 'Kulturni turizam', definition: 'Putovanje motivirano baštinom, umjetnošću, tradicijom i kreativnim sadržajima odredišta.' },
+    { term: 'Ekoturizam', definition: 'Odgovorno putovanje u prirodna područja koje čuva okoliš, doprinosi lokalnoj zajednici te uključuje tumačenje i obrazovanje.' },
+    { term: 'Zdravstveni turizam', definition: 'Putovanja radi očuvanja i unapređenja zdravlja, uključujući lječilišni, wellness i medicinski turizam.' },
+    { term: 'MICE', definition: 'Poslovni turizam koji obuhvaća sastanke, poticajna putovanja, konferencije i izložbe.' },
+    { term: 'Ruralni turizam', definition: 'Sve turističke aktivnosti koje se odvijaju u ruralnom prostoru i oslanjaju se na njegova prirodna, kulturna i društvena obilježja.' },
+    { term: 'Agroturizam', definition: 'Uži oblik ruralnog turizma povezan s poljoprivrednim gospodarstvom i vlastitom proizvodnjom.' },
+    { term: 'Nautički turizam', definition: 'Plovidba i boravak na plovilima te korištenje povezane lučke, čarterske i destinacijske infrastrukture.' },
+    { term: 'Sezonska komplementarnost', definition: 'Sposobnost novog proizvoda da stvara potražnju u razdoblju kada postojeća ponuda posluje slabije.' },
+    { term: 'Resursna utemeljenost', definition: 'Pravilo prema kojem specijalizacija mora proizlaziti iz stvarnih i razvojno održivih resursa destinacije.' },
+  ],
+  steps: [
+    {
+      title: 'Klasificiraj radi upravljanja',
+      body: 'Turistička klasifikacija nije konačan opis osobe, nego alat za planiranje kapaciteta, oblikovanje proizvoda, mjerenje učinaka i usmjeravanje javnih poticaja. Jedan gost može istodobno pripadati većem broju kategorija.',
+      points: [
+        'Prema prostornom obuhvatu razlikuju se domaći, receptivni i emitivni turizam.',
+        'Prema trajanju razlikuju se izletnički, vikend, kraći i dulji odmor.',
+        'Dinamika, doba godine i organizacija dodatno razlikuju stacionarni i mobilni, ljetni i zimski te individualni i organizirani turizam.',
+        'Za tržišno pozicioniranje najvažniji je dominantni motiv koji privlači gosta, a ne popis svih aktivnosti koje obavlja.',
+      ],
+      takeaway: 'Istu osobu možemo razvrstati na više načina; svrha klasifikacije određuje kriterij koji je u određenoj odluci najkorisniji.',
+      source: 'Kanonski izvor 1.0, str. 22–23',
+    },
+    {
+      title: 'Usporedi obalni i kontinentalni turizam',
+      body: 'Hrvatski je turizam prostorno i sezonski snažno koncentriran na Jadranu. Kontinentalne regije imaju znatno manji promet, ali ravnomjerniju sezonu i povoljniju relativnu dinamiku rasta.',
+      points: [
+        'Jadranska regija ostvarila je 2025. godine 94,3 % svih noćenja, a kontinentalne regije zajedno 5,7 %.',
+        'Obalni turizam obilježavaju dulji odmorišni boravci, kampovi i izrazit vrhunac u srpnju i kolovozu.',
+        'Kontinentalni turizam češće se oslanja na kraće boravke, kulturu, posao, gastronomiju, zdravlje i tranzit.',
+        'Obala upravlja preopterećenjem u vrhuncu, dok kontinent mora povećati prepoznatljivost i prometnu dostupnost.',
+      ],
+      takeaway: 'Mala baza i viša stopa rasta nisu isto što i velik tržišni udio; prostornu ravnotežu treba mjeriti i apsolutnim i relativnim pokazateljima.',
+      source: 'Kanonski izvor 1.0, str. 23; DZS, 2026.',
+    },
+    {
+      title: 'Razlikuj selektivne oblike',
+      body: 'Selektivni oblici polaze od dominantnoga interesa gosta i zahtijevaju specifične resurse, stručnost, infrastrukturu i način upravljanja. Naziv proizvoda sam po sebi nije dokaz njegove kvalitete ili održivosti.',
+      points: [
+        'Kulturni turizam pretvara materijalnu i nematerijalnu baštinu u razumljivu priču i iskustvo.',
+        'Ekoturizam traži ograničavanje opterećenja, mjerljiv doprinos zaštiti i uključenost lokalne zajednice.',
+        'Zdravstveni i MICE turizam imaju snažan potencijal cjelogodišnjega poslovanja.',
+        'Ruralni, agroturistički, nautički, vjerski, sportski i gastronomski proizvodi razlikuju se prema resursu, motivu i načinu stvaranja vrijednosti.',
+      ],
+      takeaway: 'Svaki boravak u prirodi nije ekoturizam, kao što svaki boravak na selu nije agroturizam; naziv mora odgovarati stvarnoj izvedbi.',
+      source: 'Kanonski izvor 1.0, str. 23–24',
+    },
+    {
+      title: 'Izaberi održivu specijalizaciju',
+      body: 'Destinacija ne mora birati samo jedan oblik turizma. Ona gradi usklađen portfelj proizvoda oko zajedničke jezgre identiteta, vodeći računa o resursima, godišnjoj raspodjeli potražnje i međusobnom odnosu segmenata.',
+      points: [
+        'Resursna utemeljenost: proizvod mora proizlaziti iz onoga što destinacija stvarno ima i može kvalitetno održavati.',
+        'Sezonska komplementarnost: novi oblik najviše vrijedi kada aktivira neiskorištene kapacitete izvan vrhunca.',
+        'Kompatibilnost segmenata: različita očekivanja moraju se moći ostvariti u istom prostoru bez međusobnog poništavanja.',
+        'Specijalizacija smanjuje izravnu cjenovnu konkurenciju, ali povećava ovisnost o užem segmentu i zato traži upravljanje rizikom.',
+      ],
+      takeaway: 'Dobra specijalizacija nije pomodna oznaka, nego dokazivo podudaranje resursa, tržišne potrebe, vremena korištenja i nosivosti prostora.',
+      source: 'Kanonski izvor 1.0, str. 24–25',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Udio Jadranske regije', value: '94,3 %', change: 'svih noćenja u 2025.' },
+    { label: 'Udio kontinenta', value: '5,7 %', change: 'Zagreb, Panonska i Sjeverna Hrvatska' },
+    { label: 'Popunjenost hotela', value: '18,2–97,3 %', change: 'siječanj – kolovoz' },
+    { label: 'Popunjenost kampova', value: '2,6–81,7 %', change: 'veljača – kolovoz' },
+  ],
+  appliedActivity: {
+    title: 'Od resursa do selektivnog proizvoda',
+    intro: 'Odaberite hrvatsku destinaciju i predložite jedan novi selektivni oblik turizma koji može ojačati njezino poslovanje izvan glavne sezone.',
+    tasks: [
+      'Navedite stvarne resurse na kojima se prijedlog temelji i objasnite zašto ih ciljni segment smatra vrijednima.',
+      'Procijenite u kojim mjesecima proizvod stvara dodatnu potražnju i koje postojeće kapacitete aktivira.',
+      'Provjerite kompatibilnost s postojećim gostima te navedite najmanje jedan tržišni, društveni ili okolišni rizik.',
+    ],
+    note: 'Primijenjeni zadatak — prijedlog obrazložite kroz tri pravila specijalizacije: resursnu utemeljenost, sezonsku komplementarnost i kompatibilnost segmenata.',
+  },
+  editorialUpdate: {
+    title: 'Portfelj proizvoda važniji je od jedne etikete',
+    checkedAt: '5. kolovoza 2026.',
+    body: 'Suvremeni putnik gotovo uvijek spaja više interesa, pa destinacijski proizvod treba oblikovati oko zajedničke jezgre identiteta, a ne oko krutih administrativnih kategorija. Selektivni oblik postaje strateški vrijedan tek kada aktivira stvarne resurse, doprinosi cjelogodišnjem poslovanju i ne prelazi nosivost prostora.',
+    implications: [
+      'Klasificirajte prema upravljačkom pitanju koje rješavate, a ne radi same oznake.',
+      'Učinak specijalizacije mjerite izvansezonskom potražnjom, lokalnom vrijednošću i opterećenjem prostora.',
+      'Prije ulaganja provjerite mogu li ciljni segmenti dijeliti isti prostor i infrastrukturu bez sukoba očekivanja.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 22–25' },
+    { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025., objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/2025/hr/97093' },
+    { label: 'Marina Novelli (ur.)', detail: 'Niche Tourism: Contemporary Issues, Trends and Cases, 2005.' },
+    { label: 'Srećko Geić', detail: 'Menadžment selektivnih oblika turizma, 2011.' },
+  ],
+  questions: [
+    { question: 'Zašto se turistička klasifikacija smatra upravljačkim alatom?', options: ['Jer svaki turist mora pripadati samo jednoj skupini', 'Jer služi planiranju, oblikovanju proizvoda, mjerenju i usmjeravanju poticaja', 'Jer zamjenjuje istraživanje tržišta', 'Jer vrijedi samo za službenu statistiku'], correct: 1, explanation: 'Klasifikacija pojednostavljuje složenu stvarnost radi konkretne odluke; ista osoba pritom može pripadati većem broju kategorija.' },
+    { question: 'Koja je ključna razlika između ruralnog turizma i agroturizma?', options: ['Ruralni turizam moguć je samo ljeti', 'Agroturizam je vezan uz poljoprivredno gospodarstvo i vlastitu proizvodnju', 'Ruralni turizam ne uključuje noćenje', 'Agroturizam se odvija samo na obali'], correct: 1, explanation: 'Ruralni turizam obuhvaća sve turističke aktivnosti u ruralnom prostoru, dok je agroturizam njegov uži oblik povezan s poljoprivrednim gospodarstvom.' },
+    { question: 'Koje tri podskupine čine zdravstveni turizam?', options: ['Kulturni, sportski i ruralni', 'Lječilišni, wellness i medicinski', 'Nautički, kongresni i izletnički', 'Zimski, ljetni i cjelogodišnji'], correct: 1, explanation: 'Kanonski izvor razlikuje lječilišni, wellness i medicinski turizam prema svrsi, nadzoru i vrsti usluge.' },
+    { question: 'Koje pravilo specijalizacije provjerava popunjava li proizvod slabiji dio godine?', options: ['Prostorni obuhvat', 'Kompatibilnost segmenata', 'Sezonska komplementarnost', 'Organizacija putovanja'], correct: 2, explanation: 'Sezonska komplementarnost procjenjuje stvara li novi oblik potražnju kada postojeći kapaciteti posluju slabije.' },
+    { question: 'Koja tvrdnja najbolje opisuje dobru destinacijsku specijalizaciju?', options: ['Treba slijediti najpopularniji trend bez obzira na resurse', 'Treba se osloniti na jedan segment i ukloniti sve ostale', 'Treba povezati stvarne resurse, sezonu i kompatibilne segmente', 'Treba povećavati broj posjetitelja u vrhuncu sezone'], correct: 2, explanation: 'Opravdana specijalizacija počiva na resursnoj utemeljenosti, sezonskoj komplementarnosti i kompatibilnosti segmenata.' },
+  ],
+  media: {
+    audio: {
+      title: 'Tko zapravo zarađuje?',
+      fileName: 'Tko_zapravo_zaradjuje.m4a',
+      url: `${mediaBaseUrlFour}/Tko_zapravo_zaradjuje.m4a`,
+      duration: '22:40',
+      description: 'Audioizvedenica povezuje klasifikaciju turističkih oblika sa sezonalnošću, lokalno zadržanom vrijednošću i izborom održivoga destinacijskog portfelja.',
+    },
+    video: {
+      title: 'Klasifikacija u turizmu',
+      fileName: 'Klasifikacija_u_turizmu.mp4',
+      url: `${mediaBaseUrlFour}/Klasifikacija_u_turizmu.mp4`,
+      duration: '9:42',
+      description: 'Videoizvedenica objašnjava zašto se turizam razvrstava prema različitim kriterijima i kako se klasifikacija koristi u upravljanju destinacijom.',
+      poster: '/media/cjelina-04/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Arhitektura suvremenog turizma',
+      fileName: 'The_Destination_Blueprint.pptx',
+      url: `${mediaBaseUrlFour}/The_Destination_Blueprint.pptx`,
+      description: 'Četrnaest slajdova vodi od klasifikacije turističkog sustava do resursno utemeljenoga, sezonski komplementarnoga i otpornoga destinacijskog portfelja.',
+      slides: [
+        {
+          number: 1,
+          title: 'Arhitektura suvremenog turizma',
+          image: '/media/cjelina-04/slides/slide-1.webp',
+          interpretation: 'Uvodni slajd postavlja strateški prijelaz od pukoga upravljanja masovnim kapacitetima prema oblikovanju selektivnog destinacijskog portfelja. Karta Hrvatske naglašava da se taj portfelj mora razvijati prostorno diferencirano: ista formula ne odgovara obali, velikom gradu i ruralnom području.',
+        },
+        {
+          number: 2,
+          title: 'Klasifikacijski paradoks i stvarni gost',
+          image: '/media/cjelina-04/slides/slide-2.webp',
+          interpretation: 'Gost koji boravi na agroturizmu, vozi bicikl, posjećuje baštinu i kuša vino istodobno pripada većem broju kategorija. Zato klasifikacija nije potpuna preslika stvarnosti, nego upravljački alat za planiranje kapaciteta, oblikovanje proizvoda, mjerenje učinaka i usmjeravanje javnih poticaja.',
+        },
+        {
+          number: 3,
+          title: 'Šest dimenzija turističkog sustava',
+          image: '/media/cjelina-04/slides/slide-3.webp',
+          interpretation: 'Turizam se može razvrstati prema prostornom obuhvatu, trajanju boravka, dinamici kretanja, dobu godine, organizaciji i dominantnom motivu. Ista se pojava time promatra iz različitih kutova, a izbor kriterija mora odgovarati konkretnoj odluci koju destinacija ili poduzeće donosi.',
+        },
+        {
+          number: 4,
+          title: 'Prostorna dihotomija hrvatskog turizma',
+          image: '/media/cjelina-04/slides/slide-4.webp',
+          interpretation: 'Jadranska regija ostvarila je 2025. čak 94,3 % komercijalnih noćenja, uz snažan ljetni vrhunac i izazov preopterećenja. Kontinentalne regije imaju znatno manji udio, ali ravnomjerniju sezonu i drukčije motive; njihov razvoj traži veću prepoznatljivost, dostupnost i povezivanje sadržaja.',
+        },
+        {
+          number: 5,
+          title: 'Zamka ljetnog vrhunca i neiskorišteni kapaciteti',
+          image: '/media/cjelina-04/slides/slide-5.webp',
+          interpretation: 'Mjesečna popunjenost pokazuje koliko se opterećenje koncentrira u kolovozu: hoteli dosežu 97,3 %, a kampovi 81,7 %, dok su izvan vrhunca mnogi kapaciteti slabo iskorišteni. Problem nije samo sezonalnost potražnje nego i skupa infrastruktura koja se dimenzionira za kratak vrhunac, a najveći dio godine stvara premalo vrijednosti.',
+        },
+        {
+          number: 6,
+          title: 'Evolucija prema selektivnim oblicima',
+          image: '/media/cjelina-04/slides/slide-6.webp',
+          interpretation: 'Selektivni oblici razlažu opći proizvod mora i sunca na ponude usmjerene posebnim interesima: kulturi, prirodi, zdravlju, poslovnim događanjima, nautici i ruralnom prostoru. Njihova vrijednost nije u množenju etiketa, nego u privlačenju preciznije odabranih segmenata i aktiviranju resursa izvan glavne sezone.',
+        },
+        {
+          number: 7,
+          title: 'Kultura i ekologija kao narativni izazovi',
+          image: '/media/cjelina-04/slides/slide-7.webp',
+          interpretation: 'Kulturni turizam ne završava posjetom spomeniku: baštinu treba protumačiti i pretvoriti u razumljivu, doživljajnu priču. Ekoturizam također nije običan boravak u prirodi; zahtijeva upravljanje brojem posjetitelja, obrazovanje, zaštitu resursa i mjerljiv doprinos lokalnoj zajednici, inače ostaje samo zelena marketinška oznaka.',
+        },
+        {
+          number: 8,
+          title: 'Cjelogodišnji motori destinacije: zdravlje i MICE',
+          image: '/media/cjelina-04/slides/slide-8.webp',
+          interpretation: 'Zdravstveni i poslovni turizam mogu puniti kapacitete u proljeće, jesen i zimu. MICE donosi višu potrošnju i dugoročnije planiranje, ali traži kongresnu infrastrukturu i dobru zračnu povezanost; zdravstveni turizam traži stručnost, sigurnost i jasno razlikovanje lječilišnih, wellness i medicinskih usluga.',
+        },
+        {
+          number: 9,
+          title: 'Modeli utjecaja na prostor i zajednicu',
+          image: '/media/cjelina-04/slides/slide-9.webp',
+          interpretation: 'Ruralni i agroturizam mogu zadržavati stanovništvo, čuvati krajolik i valorizirati vlastitu proizvodnju, ali često ih ograničavaju radna snaga i distribucija. Nautički turizam stvara visoku vrijednost, no nosi pritiske na more i osjetljiva sidrišta; kružna putovanja dodatno koncentriraju opterećenje u gradskim jezgrama uz relativno mali lokalni prihod po izletniku.',
+        },
+        {
+          number: 10,
+          title: 'Dugi rep turističkih niša',
+          image: '/media/cjelina-04/slides/slide-10.webp',
+          interpretation: 'Osim najpoznatijih selektivnih oblika postoji dugi niz užih niša: vjerska, sportska, filmska, kreativna, mračna te gastronomska i vinska iskustva. Njihov potencijal proizlazi iz povezivanja specifičnog motiva s autentičnim lokalnim resursom, a ne iz same neobičnosti naziva.',
+        },
+        {
+          number: 11,
+          title: 'Stvarnost preklapanja i izgradnja portfelja',
+          image: '/media/cjelina-04/slides/slide-11.webp',
+          interpretation: 'Selektivni oblici u praksi se preklapaju: cikloturist na vinskoj cesti istodobno može biti sportski, gastronomski i ruralni turist. Destinacija zato ne bira samo jedan oblik, nego gradi međusobno usklađen portfelj proizvoda oko zajedničke jezgre identiteta koja gostu daje prepoznatljivu cjelinu.',
+        },
+        {
+          number: 12,
+          title: 'Tri pravila destinacijske specijalizacije',
+          image: '/media/cjelina-04/slides/slide-12.webp',
+          interpretation: 'Uspješna specijalizacija počiva na trima provjerama: proizvod mora proizlaziti iz stvarnih resursa, popunjavati vremensko razdoblje u kojemu kapaciteti stoje prazni i biti kompatibilan s drugim ciljanim segmentima. Pad jednog od tih stupova pretvara privlačnu ideju u neodrživu investiciju ili izvor sukoba u prostoru.',
+        },
+        {
+          number: 13,
+          title: 'Strateške implikacije za ključne dionike',
+          image: '/media/cjelina-04/slides/slide-13.webp',
+          interpretation: 'Za destinaciju diversifikacija smanjuje sezonalnost i ovisnost o jednom tržištu. Javna politika može poticajima jačati cjelogodišnje oblike i stalnu zaposlenost, dok poduzeće specijalizacijom smanjuje izravnu cjenovnu konkurenciju, ali istodobno povećava rizik ovisnosti o užem segmentu.',
+        },
+        {
+          number: 14,
+          title: 'Nacrt otporne destinacije',
+          image: '/media/cjelina-04/slides/slide-14.webp',
+          interpretation: 'Završni slajd sažima cijelu cjelinu: otpornost se ne gradi stihijskim povećavanjem sirovih kapaciteta, nego kuriranjem uravnoteženoga portfelja. Sunce i more ostaju važna jezgra, ali zdravlje, MICE, kultura i ekoturizam povećavaju cjelogodišnju vrijednost samo kada su resursno utemeljeni i međusobno usklađeni.',
+        },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
   3: chapterThree,
+  4: chapterFour,
 }
