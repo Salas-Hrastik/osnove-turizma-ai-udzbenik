@@ -16,6 +16,7 @@ const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = 
 ]
 
 function App() {
+  const [showCover, setShowCover] = useState(true)
   const [chapterId, setChapterId] = useState(1)
   const [mode, setMode] = useState<Mode>('Prouči')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -28,6 +29,7 @@ function App() {
   const hasContent = Boolean(chapterContent)
 
   const selectChapter = (id: number) => {
+    setShowCover(false)
     setChapterId(id)
     setMode('Prouči')
     setSelectedMedia(null)
@@ -45,7 +47,8 @@ function App() {
     setSelectedMedia(media)
   }
 
-  const goToHome = () => {
+  const openBook = () => {
+    setShowCover(false)
     setChapterId(1)
     setMode('Prouči')
     setSelectedMedia(null)
@@ -56,12 +59,22 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const goToCover = () => {
+    setShowCover(true)
+    setSelectedMedia(null)
+    setSidebarOpen(false)
+    setSummaryOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  if (showCover) return <BookCover onOpen={openBook} />
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#glavni-sadrzaj">Preskoči na glavni sadržaj</a>
       <header className="topbar">
         <button className="icon-button mobile-only" onClick={() => setSidebarOpen(true)} aria-label="Otvori sadržaj"><Menu /></button>
-        <a className="brand-home" href="/" onClick={(event) => { event.preventDefault(); goToHome() }} aria-label="Povratak na naslovnicu" title="Povratak na naslovnicu">
+        <a className="brand-home" href="/" onClick={(event) => { event.preventDefault(); goToCover() }} aria-label="Povratak na korice AI udžbenika" title="Povratak na korice AI udžbenika">
           <span className="baltazar-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></span>
           <span className="brand-copy">
             <span className="eyebrow">AI UDŽBENIK</span>
@@ -137,6 +150,27 @@ function App() {
       {selectedMedia && chapterContent?.media && <SelectedMediaModal media={selectedMedia} content={chapterContent} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setSelectedMedia(null)} />}
     </div>
   )
+}
+
+function BookCover({ onOpen }: { onOpen: () => void }) {
+  return <main className="book-cover-page" id="glavni-sadrzaj">
+    <section className="book-cover" aria-labelledby="book-cover-title">
+      <div className="book-cover-brand">
+        <span className="book-cover-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></span>
+        <span><strong>Veleučilište Baltazar</strong><small>AI udžbenik</small></span>
+      </div>
+      <div className="book-cover-title">
+        <span>AI UDŽBENIK · KANONSKI IZVOR v{book.canonicalVersion}</span>
+        <h1 id="book-cover-title">{book.title}</h1>
+        <p>Interaktivni prostor za proučavanje, gledanje i slušanje, razgovor, vježbu i samoprovjeru znanja.</p>
+      </div>
+      <div className="book-cover-footer">
+        <div><span>Autor</span><strong>{book.author}</strong></div>
+        <div><span>Izdavač</span><strong>{book.publisher}</strong></div>
+        <button type="button" className="cover-open-button" onClick={onOpen}><BookOpen /> Otvori udžbenik</button>
+      </div>
+    </section>
+  </main>
 }
 
 function ChapterMode({ mode, content }: { mode: Mode; content: ChapterContent }) {
