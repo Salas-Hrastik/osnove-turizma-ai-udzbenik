@@ -12,7 +12,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .book-cover::after { content:""; position:absolute; z-index:-1; width:260px; height:260px; right:-105px; top:205px; border:1px solid #ffffff45; border-radius:50%; }
 .book-cover-brand { flex:0 0 auto; display:flex; align-items:center; gap:clamp(10px,1.8vh,14px); }
 .book-cover-logo { width:clamp(48px,8vh,62px); height:clamp(48px,8vh,62px); overflow:hidden; border-radius:12px; background:#f7f9fa; box-shadow:0 0 0 1px #ffffff38; }
-.book-cover-logo img { display:block; width:auto; height:clamp(64px,10.7vh,83px); max-width:none; transform:translate(-19%,-12%); }
+.book-cover-logo img { display:block; width:auto; height:clamp(64px,10.7vh,83px); max-width:none; transform:translate(clamp(-12px,-1.45vh,-9px),clamp(-10px,-1.2vh,-7px)); }
 .book-cover-brand>span:last-child { display:flex; flex-direction:column; gap:3px; }
 .book-cover-brand strong { font-size:15px; }
 .book-cover-brand small { color:#b8d8cf; font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
