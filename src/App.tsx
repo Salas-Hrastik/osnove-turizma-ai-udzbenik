@@ -142,6 +142,13 @@ function Study({ content }: { content: ChapterContent }) {
           description: 'Svaki okvir odgovara na drugo pitanje: koja se potreba aktivira, što pokreće putovanje, kakav rizik turist prihvaća i kako donosi konačnu odluku.',
           appendComparison: false,
         }
+      : content.id === 6
+        ? {
+            eyebrow: 'OPERATIVNI PRIMJER',
+            title: 'Pokazatelji jednoga hotelskog dana',
+            description: 'Svi su pokazatelji izračunani na istom didaktičkom primjeru: 120 raspoloživih soba, 90 prodanih soba, 13 500 € prihoda od smještaja i 4 800 € bruto operativne dobiti.',
+            appendComparison: false,
+          }
       : {
           eyebrow: 'SLUŽBENI PODACI · HRVATSKA 2025.',
           title: 'Veličina prometa nije cijela slika',
@@ -219,6 +226,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
           'Kako se psihocentrični i alocentrični turist razlikuju pri izboru odredišta?',
           'Zašto pretjerano obećanje može stvoriti nezadovoljstvo i kod dobre usluge?',
         ]
+      : content.id === 6
+        ? [
+            'Izračunaj OCC, ADR i RevPAR za hotel sa 120 soba, 90 prodanih soba i 13 500 € prihoda.',
+            'Usporedi neovisni hotel, franšizu i ugovor o upravljanju.',
+            'Kako oporavak usluge i tehnologija mogu zajedno smanjiti trud gosta?',
+          ]
       : [
           'Objasni razliku između turista i izletnika na novom primjeru.',
           'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',

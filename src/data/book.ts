@@ -14,7 +14,7 @@ export const chapters: ChapterSummary[] = [
   { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
   { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
-  { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'planned' },
+  { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
   { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'planned' },
   { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'planned' },
   { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'planned' },
@@ -27,6 +27,7 @@ const mediaBaseUrlTwo = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/obj
 const mediaBaseUrlThree = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-03'
 const mediaBaseUrlFour = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-04'
 const mediaBaseUrlFive = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-05'
+const mediaBaseUrlSix = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-06'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -1133,10 +1134,236 @@ export const chapterFive: ChapterContent = {
   },
 }
 
+export const chapterSix: ChapterContent = {
+  ...chapters[5],
+  summary: 'Poglavlje prikazuje ugostiteljstvo kao sustav u kojemu se fizički kapacitet, organizacija procesa i ljudski kontakt moraju uskladiti u jedinstven doživljaj gosta. Objašnjava hrvatsku strukturu smještajnih kapaciteta, organizaciju hotela, neovisno poslovanje, franšizu, zakup i ugovor o upravljanju te pokazatelje OCC, ADR, RevPAR, GOPPAR i RevPASH. Završni dio povezuje zakonske standarde, tržišno percipiranu kvalitetu, put gosta, oporavak usluge, sezonski rad i smisleno uvođenje tehnologije.',
+  outcomes: [
+    'razvrstati ugostiteljske objekte i protumačiti strukturu hrvatskih smještajnih kapaciteta',
+    'objasniti organizaciju hotela te usporediti vlasničke i operativne poslovne modele',
+    'izračunati OCC, ADR i RevPAR te objasniti zašto prihodovni pokazatelji nisu dovoljni za procjenu dobiti',
+    'povezati standarde, iskustvo gosta, ljudske potencijale i tehnologiju s poslovnim rezultatom',
+  ],
+  keywords: [
+    { term: 'Ugostiteljstvo', definition: 'Djelatnost pružanja usluga smještaja te pripreme i usluživanja hrane, pića i napitaka, organizirana kroz propisane vrste objekata i operativne procese.' },
+    { term: 'Kategorizacija', definition: 'Službeno utvrđivanje ispunjava li objekt propisane uvjete određene kategorije; označuje standard opreme i usluge, ali sama ne jamči zadovoljstvo gosta.' },
+    { term: 'Front of House', definition: 'Odjeli i aktivnosti vidljivi gostu, poput recepcije, domaćinstva u dodiru s gostom te posluživanja hrane i pića.' },
+    { term: 'Back of House', definition: 'Pozadinski odjeli i procesi koji podupiru uslugu, poput nabave, financija, ljudskih potencijala, prodaje i tehničke službe.' },
+    { term: 'Neovisno vlasništvo', definition: 'Model u kojemu vlasnik zadržava kontrolu i dobit, ali sam snosi poslovni rizik te razvija vlastiti sustav i tržišnu prepoznatljivost.' },
+    { term: 'Franšiza', definition: 'Ugovorni model u kojemu vlasnik posluje pod brendom i prema sustavu davatelja franšize, uz naknade i ugovorena pravila.' },
+    { term: 'Ugovor o upravljanju', definition: 'Model u kojemu vlasnik zadržava imovinu, a specijaliziranom hotelskom operateru povjerava vođenje poslovanja uz naknadu.' },
+    { term: 'OCC — zauzetost', definition: 'Udio prodanih soba u raspoloživim sobama: prodane sobe ÷ raspoložive sobe × 100.' },
+    { term: 'ADR — prosječna dnevna cijena', definition: 'Prosječan prihod od prodane sobe: prihod od smještaja ÷ broj prodanih soba.' },
+    { term: 'RevPAR — prihod po raspoloživoj sobi', definition: 'Prihod od smještaja po svakoj raspoloživoj sobi: prihod od smještaja ÷ raspoložive sobe, odnosno ADR × OCC izražen decimalno.' },
+  ],
+  steps: [
+    {
+      title: 'Razvrstaj objekte i protumači strukturu kapaciteta',
+      body: 'Ugostiteljstvo obuhvaća različite pravne, statističke i tržišne kategorije. Isti fizički prostor ne mora imati isti status ako uslugu pruža trgovačko društvo, obrtnik, iznajmljivač u domaćinstvu ili OPG, a struktura kapaciteta određuje mogućnosti upravljanja kvalitetom na razini destinacije.',
+      points: [
+        'NKD 2025 u području I razdvaja smještaj od pripreme i usluživanja hrane, a unutar smještaja razlikuje hotele, objekte za kraći odmor i kampove.',
+        'Službena vrsta i kategorija ovise o pružatelju, načinu poslovanja i ispunjenim uvjetima, a ne samo o izgledu prostora.',
+        'Hrvatska je 2025. imala 1 160 182 stalne postelje u 441 474 smještajne jedinice.',
+        'Na hotele i sličan smještaj odnosilo se 15,0 % stalnih postelja, na kampove 22,9 %, a na odmarališta i slične objekte za kraći odmor 61,9 %.',
+      ],
+      takeaway: 'Struktura u kojoj prevladavaju brojni mali i raspršeni kapaciteti otežava ujednačavanje kvalitete, upravljanje podacima i koordinaciju destinacijskoga proizvoda.',
+      source: 'Kanonski izvor 1.0, str. 30–31; DZS, 2026.; NKD 2025.',
+    },
+    {
+      title: 'Uskladi organizaciju hotela i poslovni model',
+      body: 'Gost hotel doživljava kao jednu uslugu, premda je ona rezultat usklađenoga rada recepcije, domaćinstva, hrane i pića, prodaje, financija, ljudskih potencijala, nabave i tehničke službe. Poslovni model određuje tko ulaže kapital, tko upravlja, tko snosi rizik i tko zadržava dobit.',
+      points: [
+        'Front of House stvara izravni kontakt s gostom, a Back of House omogućuje da obećana usluga bude izvedena.',
+        'Neovisni hotel zadržava najveću kontrolu, ali sam razvija brend, prodaju, standarde i upravljačko znanje.',
+        'Franšiza daje brend i sustav, zakup vlasniku donosi ugovoreni prihod, a ugovor o upravljanju prenosi vođenje specijaliziranom operateru.',
+        'Što se više rizika i operativne odgovornosti prenese na drugoga, vlasnik u pravilu zadržava manje kontrole i potencijalnoga prinosa.',
+      ],
+      takeaway: 'Ne postoji univerzalno najbolji model: izbor ovisi o tome nedostaju li vlasniku kapital, tržišni sustav, operativno znanje ili spremnost na rizik.',
+      source: 'Kanonski izvor 1.0, str. 31–32',
+    },
+    {
+      title: 'Izračunaj rezultat i prepoznaj granice pokazatelja',
+      body: 'Operativni pokazatelji prevode rad smještajnoga odjela u usporedive brojke. OCC mjeri volumen, ADR cjenovnu moć, a RevPAR njihovu zajedničku posljedicu. Nijedan od njih ne pokazuje sam po sebi koliko dobiti ostaje nakon operativnih troškova.',
+      points: [
+        'OCC = prodane sobe ÷ raspoložive sobe × 100.',
+        'ADR = prihod od smještaja ÷ prodane sobe.',
+        'RevPAR = prihod od smještaja ÷ raspoložive sobe = ADR × OCC u decimalnom obliku.',
+        'GOPPAR uključuje bruto operativnu dobit po raspoloživoj sobi, a RevPASH u restoranu mjeri prihod po raspoloživom sjedalu i satu.',
+      ],
+      takeaway: 'Visoka zauzetost ostvarena preniskom cijenom može povećati troškove i smanjiti dobit; RevPAR je tržišni kompas, ali nije konačan sudac uspješnosti.',
+      source: 'Kanonski izvor 1.0, str. 32–33',
+    },
+    {
+      title: 'Pretvori standard u doživljaj i održiv proces',
+      body: 'Kategorizacija potvrđuje minimalne i propisane uvjete, dok gost vrednuje cjelinu dodirnih točaka prije, tijekom i nakon boravka. Kvaliteta zato ovisi o ljudima, koordinaciji procesa i sposobnosti brzoga, pravednog i empatičnog rješavanja pogrešaka.',
+      points: [
+        'Put gosta obuhvaća inspiraciju, rezervaciju, pripremu dolaska, prijavu, boravak, odjavu i odnos nakon boravka.',
+        'NPS, CSAT i CES mjere različite aspekte iskustva: sklonost preporuci, zadovoljstvo i trud potreban gostu.',
+        'Dobar oporavak usluge može obnoviti povjerenje nakon pogreške, ali ne jamči da će gost biti lojalniji nego da pogreške nije bilo.',
+        'Tehnologija treba preuzeti rutinske zadatke i osloboditi vrijeme za odnos s gostom; smanjenje broja ljudi bez promjene procesa može sniziti kvalitetu.',
+      ],
+      takeaway: 'Zvjezdice opisuju provjerljiv standard, a lojalnost nastaje dosljednom izvedbom, empatijom i malim naporom gosta duž cijeloga putovanja.',
+      source: 'Kanonski izvor 1.0, str. 33–35; urednička nadopuna o mjerenju iskustva i tehnologiji.',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'OCC', value: '75 %', change: '90 prodanih od 120 soba' },
+    { label: 'ADR', value: '150 €', change: '13 500 € ÷ 90 soba' },
+    { label: 'RevPAR', value: '112,50 €', change: '13 500 € ÷ 120 soba' },
+    { label: 'GOPPAR', value: '40 €', change: '4 800 € GOP ÷ 120 soba' },
+  ],
+  appliedActivity: {
+    title: 'Od hotelske matematike do putovanja gosta',
+    intro: 'Hotel raspolaže sa 120 soba. U promatranom je danu prodao 90 soba i ostvario 13 500 € prihoda od smještaja te 4 800 € bruto operativne dobiti.',
+    tasks: [
+      'Izračunajte OCC, ADR, RevPAR i GOPPAR te zapišite formulu i jedinicu mjere svakoga pokazatelja.',
+      'Objasnite kako bi spuštanje cijene moglo povećati zauzetost, a istodobno smanjiti GOPPAR.',
+      'Izradite kartu puta gosta od inspiracije do aktivnosti nakon boravka i označite najmanje pet dodirnih točaka.',
+      'Na dvije dodirne točke predvidite mogući prekid usluge, odgovorni odjel, način oporavka i pokazatelj kojim ćete provjeriti rezultat.',
+    ],
+    note: 'Didaktički konstruirano — financijski podatci služe učenju pokazatelja, a karta puta mora povezati vidljive i pozadinske hotelske procese.',
+  },
+  editorialUpdate: {
+    title: 'Standard, struktura kapaciteta i ljudi čine jedan operativni sustav',
+    checkedAt: '5. kolovoza 2026.',
+    body: 'DZS-ovi podatci za 2025. potvrđuju 1 160 182 stalne postelje, od kojih je samo 15,0 % u hotelima i sličnom smještaju, dok je 61,9 % u odmaralištima i sličnim objektima za kraći odmor. NKD 2025 statistički razvrstava djelatnosti, a službena kategorizacija utvrđuje propisane standarde objekta. Ni jedno ni drugo ne zamjenjuje tržišnu procjenu doživljaja gosta. U području smještaja te pripreme i usluživanja hrane broj zaposlenih porastao je s 83 230 krajem ožujka na 116 687 krajem rujna 2025., što jasno pokazuje sezonsku promjenu potrebne radne snage.',
+    implications: [
+      'Prije usporedbe objekata razjasnite govorite li o pravnoj vrsti, statističkom razredu, kategoriji, brendu ili tržišnoj ocjeni gosta.',
+      'Kapacitete, kvalitetu i radnu snagu promatrajte zajedno jer raspršena ponuda povećava zahtjev za koordinacijom i standardizacijom procesa.',
+      'Automatizirajte rutinu, ali ulaganje u tehnologiju povežite s redizajnom procesa, osposobljavanjem i kvalitetom preostalog ljudskog kontakta.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 30–35' },
+    { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025. — smještajni kapaciteti, objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/media/ctwkrcot/tur-2025-1-2-dolasci-i-no%C4%87enja-turista-u-komercijalnom-smje%C5%A1taju-u-2025.pdf' },
+    { label: 'Narodne novine', detail: 'Pravilnik o razvrstavanju, kategorizaciji i posebnim standardima ugostiteljskih objekata iz skupine Hoteli, NN 56/2016.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2016_06_56_1451.html' },
+    { label: 'Narodne novine', detail: 'Nacionalna klasifikacija djelatnosti 2025. — NKD 2025., NN 47/2024.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2024_04_47_800.html' },
+    { label: 'Državni zavod za statistiku', detail: 'Zaposleni prema spolu i djelatnostima, stanje 31. ožujka 2025., objavljeno 20. svibnja 2026.', url: 'https://podaci.dzs.hr/2025/hr/96961' },
+    { label: 'Državni zavod za statistiku', detail: 'Zaposleni prema djelatnostima, stanje u rujnu 2025., objavljeno 21. listopada 2025.', url: 'https://podaci.dzs.hr/2025/hr/96945' },
+    { label: 'Narodne novine', detail: 'Kolektivni ugovor ugostiteljstva, NN 37/2026.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/full/2026_04_37_451.html' },
+  ],
+  questions: [
+    { question: 'Što određuje službenu vrstu i kategoriju ugostiteljskog objekta?', options: ['Samo površina i luksuz prostora', 'Pružatelj, način poslovanja i ispunjeni propisani uvjeti', 'Isključivo ocjena na platformi', 'Broj pratitelja na društvenim mrežama'], correct: 1, explanation: 'Pravni status pružatelja i ispunjeni uvjeti određuju službenu vrstu i kategoriju; tržišna ocjena gosta zasebna je dimenzija.' },
+    { question: 'Koji model vlasniku daje brend i operativni sustav uz plaćanje naknade, dok vlasnik zadržava upravljanje?', options: ['Zakup', 'Franšiza', 'Neovisno vlasništvo bez ugovora', 'Ugovor o čišćenju'], correct: 1, explanation: 'Franšiza omogućuje korištenje brenda, distribucije i standarda davatelja franšize uz naknade i ugovorne obveze.' },
+    { question: 'Hotel ima 120 raspoloživih i 90 prodanih soba. Koliki je OCC?', options: ['60 %', '75 %', '90 %', '133 %'], correct: 1, explanation: 'OCC = 90 ÷ 120 × 100 = 75 %.' },
+    { question: 'Zašto RevPAR nije dovoljan za konačnu procjenu uspješnosti?', options: ['Ne uključuje broj raspoloživih soba', 'Ne pokazuje operativne troškove i dobit', 'Može se računati samo jednom godišnje', 'Vrijedi samo za restorane'], correct: 1, explanation: 'RevPAR povezuje cijenu i zauzetost, ali ne oduzima operativne troškove; zato ga treba dopuniti pokazateljem dobiti poput GOPPAR-a.' },
+    { question: 'Koja je najprimjerenija uloga tehnologije u hotelskoj usluzi?', options: ['Ukinuti svaki ljudski kontakt', 'Automatizirati rutinu i osloboditi ljude za složenije dodirne točke', 'Zamijeniti kategorizaciju', 'Povećati broj koraka koje gost mora obaviti'], correct: 1, explanation: 'Tehnologija stvara vrijednost kada smanjuje rutinski rad i trud gosta, a zaposlenicima ostavlja više vremena za odnos, prosudbu i oporavak usluge.' },
+  ],
+  media: {
+    audio: {
+      title: 'Psihologija hotelske usluge',
+      fileName: 'Psihologija_hotelske_usluge.mp3',
+      url: `${mediaBaseUrlSix}/Psihologija_hotelske_usluge.mp3`,
+      duration: '26:33',
+      description: 'Audioizvedenica objašnjava kako očekivanja, dodirne točke, emocionalni doživljaj i oporavak usluge oblikuju zadovoljstvo i lojalnost gosta.',
+    },
+    video: {
+      title: 'Operacije i poslovni modeli',
+      fileName: 'Operacije_i_modeli.mp4',
+      url: `${mediaBaseUrlSix}/Operacije_i_modeli.mp4`,
+      duration: '8:32',
+      description: 'Video povezuje strukturu ugostiteljstva, organizaciju hotela, izbor poslovnog modela i operativne pokazatelje s upravljanjem doživljajem gosta.',
+      poster: '/media/cjelina-06/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Ugostiteljski sustavi i iskustvo gosta',
+      fileName: 'Hospitality_Systems_and_Experience.pptx',
+      url: `${mediaBaseUrlSix}/Hospitality_Systems_and_Experience.pptx`,
+      description: 'Četrnaest slajdova vodi od strukture ugostiteljstva i poslovnih modela preko hotelske matematike do iskustva gosta, ljudskih potencijala i uloge tehnologije.',
+      slides: [
+        {
+          number: 1,
+          title: 'Ugostiteljstvo: operacije, poslovni modeli i iskustvo gosta',
+          image: '/media/cjelina-06/slides/slide-1.webp',
+          interpretation: 'Naslovni slajd povezuje dvije strane hotelskoga poslovanja: tehničku arhitekturu prostora i procesa te ljudski dodir koji usluzi daje značenje. Cjelina zato ne promatra prihod, operacije i iskustvo gosta odvojeno, nego kao međusobno ovisne sastavnice jedne usluge.',
+        },
+        {
+          number: 2,
+          title: 'Anatomija ugostiteljskog sustava',
+          image: '/media/cjelina-06/slides/slide-2.webp',
+          interpretation: 'Tri stupa sustava su infrastruktura, operativni proces i ljudski faktor. Objekt može imati kvalitetnu opremu, ali bez koordiniranih odjela i osposobljenih zaposlenika ne može dosljedno isporučiti obećanu uslugu. Jednako tako, predanost zaposlenika ne može trajno nadomjestiti loše procese i neprimjeren kapacitet.',
+        },
+        {
+          number: 3,
+          title: 'Strukturni paradoks hrvatskog ugostiteljstva 2025.',
+          image: '/media/cjelina-06/slides/slide-3.webp',
+          interpretation: 'DZS je za 2025. evidentirao 1 160 182 stalne postelje u 441 474 jedinice. Hoteli i sličan smještaj činili su 15,0 %, kampovi 22,9 %, a odmarališta i slični objekti za kraći odmor 61,9 % postelja. Ta struktura ne dokazuje sama po sebi nižu potrošnju, ali upućuje na fragmentiran sustav u kojemu je standardizaciju i koordinaciju teže provoditi.',
+        },
+        {
+          number: 4,
+          title: 'Pravni status određuje pravila poslovanja',
+          image: '/media/cjelina-06/slides/slide-4.webp',
+          interpretation: 'Fizički sličan apartman može pripadati različitoj pravnoj i statističkoj kategoriji ovisno o tome pruža li uslugu pravna osoba, obrt, iznajmljivač u domaćinstvu ili OPG. Iz toga proizlaze različite registracijske, porezne i operativne obveze. Stoga kvadratura i razina opreme nisu dovoljne za pravno razvrstavanje objekta.',
+        },
+        {
+          number: 5,
+          title: 'Odabir operativnog modela',
+          image: '/media/cjelina-06/slides/slide-5.webp',
+          interpretation: 'Neovisno vlasništvo, franšiza, zakup i ugovor o upravljanju raspodjeljuju kontrolu, rizik, kapital i znanje na različite načine. Neovisnost čuva kontrolu, franšiza donosi brend i sustav, zakup prenosi operativni rizik zakupniku, a ugovor o upravljanju nadomješta nedostatak hotelskoga znanja specijaliziranim operaterom.',
+        },
+        {
+          number: 6,
+          title: 'Anatomija hotela: pozornica i iza kulisa',
+          image: '/media/cjelina-06/slides/slide-6.webp',
+          interpretation: 'Recepcija, domaćinstvo i odjel hrane i pića stvaraju velik dio gostu vidljive usluge, dok ljudski potencijali, financije, prodaja, nabava i tehnička služba djeluju u pozadini. Gost ne procjenjuje odjele zasebno: kašnjenje sobe pripisuje hotelu kao cjelini, pa kvaliteta ovisi o prijenosu informacija i odgovornosti preko organizacijskih granica.',
+        },
+        {
+          number: 7,
+          title: 'Matematika uspješnosti smještajnog odjela',
+          image: '/media/cjelina-06/slides/slide-7.webp',
+          interpretation: 'OCC pokazuje koliki je dio kapaciteta prodan, ADR prosječnu cijenu prodane sobe, a RevPAR prihod po svakoj raspoloživoj sobi. Veza RevPAR = ADR × OCC omogućuje zajedničko čitanje cijene i volumena. U hrani i piću RevPASH dodaje vremensku dimenziju i mjeri iskorištenost sjedala po satu.',
+        },
+        {
+          number: 8,
+          title: 'Prihod naspram operativne dobiti',
+          image: '/media/cjelina-06/slides/slide-8.webp',
+          interpretation: 'Povećanje zauzetosti snižavanjem cijene može održati RevPAR, ali istodobno povećati varijabilne troškove čišćenja, rada, energije i potrošnoga materijala. Zato menadžer ne smije optimizirati samo prihodovni pokazatelj; GOPPAR pokazuje koliko bruto operativne dobiti ostaje po raspoloživoj sobi.',
+        },
+        {
+          number: 9,
+          title: 'Zakonski minimum i emocionalni trag',
+          image: '/media/cjelina-06/slides/slide-9.webp',
+          interpretation: 'Kategorizacija zvjezdicama potvrđuje propisanu opremu, prostor i minimalne uvjete, dok ocjena gosta obuhvaća očekivanja, odnos zaposlenika i cjelokupan doživljaj. Primjer ocjena 9,2 i 7,8 ilustrativan je, a ne univerzalni dokaz financijskog učinka. Upravljanje kvalitetom mora zato istodobno čuvati službeni standard i tržišno percipiranu vrijednost.',
+        },
+        {
+          number: 10,
+          title: 'Anatomija iskustva gosta',
+          image: '/media/cjelina-06/slides/slide-10.webp',
+          interpretation: 'Put gosta počinje inspiracijom i rezervacijom, nastavlja se pripremom dolaska, prijavom, boravkom i odjavom te završava recenzijom i mogućom ponovnom kupnjom. Svaka je faza dodirna točka koju podupiru pozadinski procesi. NPS, CSAT i CES daju različite, međusobno dopunjujuće poglede na preporuku, zadovoljstvo i trud gosta.',
+        },
+        {
+          number: 11,
+          title: 'Moć oporavka usluge',
+          image: '/media/cjelina-06/slides/slide-11.webp',
+          interpretation: 'Brz, iskren i primjeren odgovor na pogrešku može obnoviti povjerenje i ublažiti nezadovoljstvo. Ipak, takozvani paradoks oporavka nije zajamčen: težina i ponavljanje pogreške, pravednost rješenja i prethodni odnos s gostom mijenjaju ishod. Operativno je pravilo jasno — problem treba prepoznati, preuzeti odgovornost, riješiti i provjeriti zadovoljstvo.',
+        },
+        {
+          number: 12,
+          title: 'Paradoks sezonskog rada',
+          image: '/media/cjelina-06/slides/slide-12.webp',
+          interpretation: 'Radno intenzivna usluga i sezonski vrhunac stvaraju istodobnu najveću potrebu za zaposlenicima i snažan pritisak na dostupnost radne snage. Visoka fluktuacija prekida prijenos znanja i otežava dosljednost usluge. Produljenje sezone, primjeren smještaj radnika i obrazovanje povezano s gospodarstvom dio su istoga odgovora, a ne zasebne kadrovske mjere.',
+        },
+        {
+          number: 13,
+          title: 'Tehnologija preraspodjeljuje rad',
+          image: '/media/cjelina-06/slides/slide-13.webp',
+          interpretation: 'Automatska prijava, digitalne narudžbe i umjetna inteligencija mogu preuzeti ponavljajuće zadatke te zaposlenicima osloboditi vrijeme za prosudbu, empatiju i rješavanje problema. Vrijednost ne nastaje samim uvođenjem alata: ako se tehnologijom samo smanji broj ljudi bez redizajna procesa, gost može dobiti više prepreka i manje podrške.',
+        },
+        {
+          number: 14,
+          title: 'Arhitektura uspjeha',
+          image: '/media/cjelina-06/slides/slide-14.webp',
+          interpretation: 'Zaključak povezuje tri odluke. Poslovni model treba odgovarati resursima i znanju vlasnika; prihodovne pokazatelje treba dopuniti operativnom dobiti; standard i tehnologija moraju podržati ljude koji stvaraju doživljaj. Uspjeh zato nije rezultat jednoga pokazatelja, nego usklađenosti imovine, procesa, ekonomike i odnosa s gostom.',
+        },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
   3: chapterThree,
   4: chapterFour,
   5: chapterFive,
+  6: chapterSix,
 }
