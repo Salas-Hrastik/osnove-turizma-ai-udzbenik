@@ -7,6 +7,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .skip-link:focus { transform:translateY(0); }
 .app-shell { min-height: 100vh; }
 .topbar { height: 76px; display:flex; align-items:center; gap:14px; padding:0 26px; color:white; background:var(--green-dark); border-bottom:4px solid var(--gold); position:sticky; top:0; z-index:30; }
+.brand-home { min-width:0; display:flex; align-items:center; gap:14px; padding:4px; margin:-4px; border:0; border-radius:12px; color:inherit; background:transparent; text-align:left; cursor:pointer; transition:background-color .16s ease; }
+.brand-home:hover { background:#ffffff0d; }
 .baltazar-logo { flex:0 0 auto; width:52px; height:52px; overflow:hidden; border-radius:10px; background:#f7f9fa; box-shadow:0 0 0 1px #ffffff24; }
 .baltazar-logo img { display:block; width:auto; height:70px; max-width:none; transform:translate(-10px,-9px); }
 .brand-copy { display:flex; flex-direction:column; line-height:1.15; }

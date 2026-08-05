@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
@@ -18,6 +18,7 @@ function App() {
   const [mode, setMode] = useState<Mode>('Prouči')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
+  const mainBodyRef = useRef<HTMLDivElement>(null)
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
   const chapterContent = chapterContents[chapterId]
   const hasContent = Boolean(chapterContent)
@@ -28,16 +29,27 @@ function App() {
     setSidebarOpen(false)
   }
 
+  const goToHome = () => {
+    setChapterId(1)
+    setMode('Prouči')
+    setSidebarOpen(false)
+    setSummaryOpen(false)
+    mainBodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#glavni-sadrzaj">Preskoči na glavni sadržaj</a>
       <header className="topbar">
         <button className="icon-button mobile-only" onClick={() => setSidebarOpen(true)} aria-label="Otvori sadržaj"><Menu /></button>
-        <div className="baltazar-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></div>
-        <div className="brand-copy">
-          <span className="eyebrow">AI UDŽBENIK</span>
-          <strong>{book.title}</strong>
-        </div>
+        <button className="brand-home" onClick={goToHome} aria-label="Povratak na naslovnicu" title="Povratak na naslovnicu">
+          <span className="baltazar-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></span>
+          <span className="brand-copy">
+            <span className="eyebrow">AI UDŽBENIK</span>
+            <strong>{book.title}</strong>
+          </span>
+        </button>
         <div className="source-badge"><span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong></div>
       </header>
 
@@ -79,7 +91,7 @@ function App() {
             </nav>
           </div>
 
-          <div className="main-body-scroll">
+          <div className="main-body-scroll" ref={mainBodyRef}>
             <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
               <section className="learning-area">
                 {!chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
