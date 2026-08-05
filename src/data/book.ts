@@ -13,7 +13,7 @@ export const chapters: ChapterSummary[] = [
   { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
   { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
   { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
-  { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'planned' },
+  { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'planned' },
   { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'planned' },
   { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'planned' },
@@ -26,6 +26,7 @@ const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/obj
 const mediaBaseUrlTwo = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-02'
 const mediaBaseUrlThree = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-03'
 const mediaBaseUrlFour = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-04'
+const mediaBaseUrlFive = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-05'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -903,9 +904,239 @@ export const chapterFour: ChapterContent = {
   },
 }
 
+export const chapterFive: ChapterContent = {
+  ...chapters[4],
+  summary: 'Poglavlje objašnjava zašto se turistička ponuda i potražnja ponašaju drukčije nego na tržištima fizičkih dobara, kako se tržište pretvara u upotrebljive segmente te kako izravni i posredovani kanali raspodjeljuju informacije, rizik i prihod. Posebno se analiziraju upravljanje prihodima, platformizacija, trošak distribucijskog miksa, europski podatkovni okvir za kratkoročni najam i odljev turističke potrošnje iz destinacije.',
+  outcomes: [
+    'objasniti upravljačke posljedice neuskladištivosti, fiksnih troškova i promjenjive potražnje',
+    'oblikovati mjerljiv, dostupan, dovoljno velik i razlučiv tržišni segment',
+    'razlikovati funkcije i rizike izravnih kanala, turoperatora, agencija i OTA platformi',
+    'izračunati neto prihod distribucijskog kanala i obrazložiti uravnotežen distribucijski miks',
+  ],
+  keywords: [
+    { term: 'Turističko tržište', definition: 'Stvarni ili virtualni prostor susreta turističke ponude i potražnje.' },
+    { term: 'Neuskladištivost', definition: 'Svojstvo turističke usluge zbog kojega se neprodani kapacitet ne može sačuvati za kasniju prodaju.' },
+    { term: 'Elastičnost potražnje', definition: 'Osjetljivost turističke potražnje na promjene cijene, dohotka, tečaja, sigurnosti i drugih uvjeta.' },
+    { term: 'Segmentacija', definition: 'Podjela heterogenoga tržišta na skupine sličnih potreba, obilježja i ponašanja.' },
+    { term: 'Turoperator', definition: 'Organizator koji spaja pojedinačne usluge u paket-aranžman, prodaje ga u svoje ime i preuzima poslovni rizik.' },
+    { term: 'Putnička agencija', definition: 'Posrednik koji u ime i za račun organizatora ili pružatelja prodaje usluge uz proviziju.' },
+    { term: 'OTA', definition: 'Digitalni posrednik koji omogućuje pretraživanje, usporedbu i rezervaciju turističkih usluga.' },
+    { term: 'Dezintermedijacija i reintermedijacija', definition: 'Uklanjanje postojećih posrednika, odnosno pojava novih posrednika koji preuzimaju njihove funkcije i tržišnu moć.' },
+    { term: 'Upravljanje prihodima', definition: 'Usklađivanje gosta, kapaciteta, vremena i cijene radi najvećega mogućeg prinosa iz fiksnog kapaciteta.' },
+    { term: 'Odljev (leakage)', definition: 'Dio turističke potrošnje koji napušta destinaciju kroz uvoz, inozemne provizije ili repatrijaciju dobiti.' },
+  ],
+  steps: [
+    {
+      title: 'Uskladi fiksnu ponudu i promjenjivu potražnju',
+      body: 'Hotel ne može sačuvati neprodanu sobu za sutra niti brzo povećati broj soba u sezonskom vrhuncu. Neuskladištivost, visoki fiksni troškovi i kratkoročno neelastičan kapacitet susreću se s elastičnom, sezonskom i heterogenom potražnjom.',
+      points: [
+        'Neprodani kapacitet u određenom danu predstavlja trajno izgubljen mogući prihod.',
+        'Troškovi zgrade, opreme i stalnoga osoblja postoje i kada je popunjenost niska.',
+        'Potražnja snažno reagira na cijenu, tečaj, sigurnost i vrijeme putovanja.',
+        'Dinamičko određivanje cijena prilagođava cijenu preostaloj ponudi i očekivanoj potražnji.',
+      ],
+      takeaway: 'U turizmu ista cijena tijekom cijele godine rijetko optimalno koristi fiksni i neuskladištivi kapacitet.',
+      source: 'Kanonski izvor 1.0, str. 26–27',
+    },
+    {
+      title: 'Pretvori tržište u upotrebljive segmente',
+      body: 'Segmentacija ima smisla samo kada se široka oznaka pretvori u skupinu koju možemo izmjeriti, dosegnuti i profitabilno opslužiti. Geografski, demografski, psihografski i bihevioralni podatci zato se kombiniraju u konkretan profil gosta.',
+      points: [
+        'Geografski kriterij opisuje podrijetlo, regiju i veličinu naselja.',
+        'Demografski kriterij obuhvaća dob, obiteljski status, dohodak i obrazovanje.',
+        'Psihografski kriterij objašnjava životni stil, vrijednosti i osobnost.',
+        'Bihevioralni kriterij prati motiv, učestalost, kanal rezervacije, vjernost i potrošnju.',
+      ],
+      takeaway: '„Ljubitelji prirode” preširoka su oznaka; precizan segment povezuje podrijetlo, dob, motiv, termin, duljinu boravka i kanal rezervacije.',
+      source: 'Kanonski izvor 1.0, str. 27',
+    },
+    {
+      title: 'Upravljaj distribucijskim lancem i njegovim troškom',
+      body: 'Distribucija prenosi informaciju, omogućuje rezervaciju i naplatu te preuzima dio rizika. Izravni kanal daje veću kontrolu i neto prihod, dok posrednici pružaju doseg, usporedivost, povjerenje i potražnju koju mali pružatelj teško sam stvara.',
+      points: [
+        'Turoperator proizvodi paket-aranžman i zakupom kapaciteta preuzima veći rizik prodaje.',
+        'Putnička agencija uglavnom savjetuje i prodaje tuđi proizvod uz proviziju.',
+        'OTA platforma globalnim dosegom, rangiranjem i recenzijama smanjuje trošak pronalaženja gosta.',
+        'Neto prihod po sobi jednak je prodajnoj cijeni umanjenoj za proviziju i ostale troškove kanala.',
+      ],
+      takeaway: 'Cilj nije potpuno uklanjanje posrednika, nego miks u kojemu platforme pomažu akviziciji, a izravni kanal zadržavanju gosta.',
+      source: 'Kanonski izvor 1.0, str. 27–28',
+    },
+    {
+      title: 'Poveži platforme, regulaciju i lokalni učinak',
+      body: 'Digitalizacija nije uklonila posrednike, nego je stvorila nove i snažnije platforme. Njihov utjecaj treba tumačiti zajedno s pravilima transparentnosti kratkoročnoga najma i s odljevom dijela turističke potrošnje iz lokalnoga gospodarstva.',
+      points: [
+        'Uredba (EU) 2024/1028 primjenjuje se od 20. svibnja 2026. i uređuje prikupljanje te razmjenu podataka.',
+        'Uredba sama ne zabranjuje kratkoročni najam, ne određuje cijene i ne propisuje najveći broj dana iznajmljivanja.',
+        'Multiplikator slabi kada se roba uvozi, provizije odlaze stranim platformama ili se dobit repatrira.',
+        'Satelitski račun DZS-a mjeri izravni doprinos, dok WTTC modelira ukupne učinke; te brojke nisu izravno usporedive.',
+      ],
+      takeaway: 'Tržišni doseg, trošak kanala, podatkovna transparentnost i lokalno zadržana vrijednost moraju se promatrati u jednoj odluci.',
+      source: 'Kanonski izvor 1.0, str. 28–29; Uredba (EU) 2024/1028; DZS, 2025.',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Polazna cijena sobe', value: '140 €', change: 'didaktički primjer' },
+    { label: 'Neto — izravni kanal', value: '135,80 €', change: 'trošak 3 %' },
+    { label: 'Neto — OTA A', value: '114,80 €', change: 'provizija 18 %' },
+    { label: 'Razlika po sobi', value: '≈ 21 €', change: '≈ 315 000 € na 15 000 noćenja' },
+  ],
+  appliedActivity: {
+    title: 'Optimiziraj distribucijski miks hotela',
+    intro: 'Hotel prodaje 15 000 noćenja godišnje po prosječnoj cijeni od 140 €. Prosječni trošak sadašnjega miksa iznosi 15,7 %, dok izravni kanal stoji 3 %, a OTA A 18 %.',
+    tasks: [
+      'Izračunajte godišnji trošak provizija sadašnjega distribucijskog miksa.',
+      'Izračunajte uštedu ako se 15 % svih rezervacija preusmjeri s OTA A na izravni kanal.',
+      'Ako ulaganje u mrežnu stranicu, rezervacijski sustav i marketing iznosi 40 000 €, izračunajte približno razdoblje povrata.',
+      'Navedite najmanje jedan tržišni rizik koji financijski izračun ne obuhvaća i predložite uravnotežen novi miks.',
+    ],
+    note: 'Didaktički konstruirano — iznosi i udjeli služe učenju ekonomike kanala i ne opisuju određeni stvarni hotel.',
+  },
+  editorialUpdate: {
+    title: 'Transparentnost podataka ne znači europsku zabranu najma',
+    checkedAt: '5. kolovoza 2026.',
+    body: 'Uredba (EU) 2024/1028 primjenjuje se od 20. svibnja 2026. i usklađuje registracijske te podatkovne obveze ondje gdje države uspostave registracijske postupke. Ne propisuje zajedničku europsku zabranu, cijenu ni najveći broj dana najma. Hrvatsko Ministarstvo turizma i sporta 17. travnja 2026. predstavilo je prijedlog novoga Zakona o ugostiteljskoj djelatnosti i otvorilo javno savjetovanje do 18. svibnja; zato prije stručnoga rada treba provjeriti konačan važeći tekst u Narodnim novinama.',
+    implications: [
+      'Razlikujte podatkovnu transparentnost EU-a od nacionalnih i lokalnih pravila pristupa tržištu.',
+      'Ne tumačite registracijski broj kao automatsku dozvolu ni kao automatsku zabranu iznajmljivanja.',
+      'Pravne tvrdnje u seminarskim i završnim radovima uvijek ažurirajte prema važećem propisu i datumu provjere.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 26–29' },
+    { label: 'EUR-Lex', detail: 'Uredba (EU) 2024/1028, primjena od 20. svibnja 2026.', url: 'https://eur-lex.europa.eu/eli/reg/2024/1028/oj/hrv' },
+    { label: 'Ministarstvo turizma i sporta', detail: 'Predstavljanje prijedloga novoga Zakona o ugostiteljskoj djelatnosti, 17. travnja 2026.', url: 'https://mints.gov.hr/vijesti/ministar-glavina-predstavio-novi-zakon-o-ugostiteljskoj-djelatnosti-uvodimo-jasan-okvir-za-suzbijanje-neregistriranog-kratkorocnog-najma-smjestaja/24259' },
+    { label: 'Državni zavod za statistiku', detail: 'Satelitski račun turizma za Republiku Hrvatsku u 2022., objavljeno 10. travnja 2025.', url: 'https://podaci.dzs.hr/2024/hr/103106' },
+    { label: 'Dimitrios Buhalis', detail: 'eTourism: Information Technology for Strategic Tourism Management, 2003.' },
+  ],
+  questions: [
+    { question: 'Što se događa s hotelskom sobom koja ostane neprodana određene noći?', options: ['Može se prodati dvaput sljedeće noći', 'Pretvara se u zalihu', 'Mogući prihod te noći trajno je izgubljen', 'Automatski smanjuje fiksne troškove'], correct: 2, explanation: 'Turistička je usluga neuskladištiva: neprodani kapacitet ne možemo sačuvati i prodati poslije.' },
+    { question: 'Koji je segment najupotrebljiviji za tržišnu odluku?', options: ['Svi putnici', 'Ljubitelji prirode', 'Njemački cikloturisti 45–65 godina koji rezerviraju izravno i borave 5–7 noći u svibnju i rujnu', 'Ljudi koji vole odmor'], correct: 2, explanation: 'Upotrebljiv segment mora biti mjerljiv, dovoljno velik, dostupan i razlučiv; precizan opis omogućuje ciljanu ponudu i komunikaciju.' },
+    { question: 'Koja je ključna razlika između turoperatora i putničke agencije?', options: ['Agencija uvijek zakupljuje hotel', 'Turoperator kreira paket i preuzima veći rizik, a agencija uglavnom posreduje uz proviziju', 'Turoperator posluje samo na internetu', 'Agencija određuje zakone tržišta'], correct: 1, explanation: 'Turoperator spaja usluge u vlastiti proizvod i može zakupiti kapacitet, dok agencija uglavnom prodaje tuđu ponudu.' },
+    { question: 'Koji je razuman cilj upravljanja odnosom s OTA platformama?', options: ['Potpuno ukloniti sve posrednike', 'Sve rezervacije prepustiti jednoj platformi', 'Platforme koristiti za akviziciju, a izravni kanal za zadržavanje gosta', 'Svim kanalima zadati jednak udio bez izračuna'], correct: 2, explanation: 'Uravnotežen miks koristi doseg platforme, ali gradi izravni odnos radi kontrole troška i ponovne kupnje.' },
+    { question: 'Što Uredba (EU) 2024/1028 ne propisuje?', options: ['Pravila razmjene podataka', 'Mogućnost registracijskog broja', 'Obveze platformi u podatkovnom sustavu', 'Jedinstvenu europsku zabranu kratkoročnog najma'], correct: 3, explanation: 'Uredba uređuje podatkovnu transparentnost; nacionalne i lokalne vlasti zadržavaju nadležnost za razmjerna pravila pristupa tržištu.' },
+  ],
+  media: {
+    audio: {
+      title: 'Zašto cijene hotela divljaju?',
+      fileName: 'Zasto_cijene_hotela_divljaju.m4a',
+      url: `${mediaBaseUrlFive}/Zasto_cijene_hotela_divljaju.m4a`,
+      duration: '16:46',
+      description: 'Audioizvedenica objašnjava kako neuskladištivost, sezonalnost, fiksni kapacitet i promjenjiva potražnja utječu na dinamičko određivanje hotelskih cijena.',
+    },
+    video: {
+      title: 'Ekonomika turizma',
+      fileName: 'Ekonomika_turizma.mp4',
+      url: `${mediaBaseUrlFive}/Ekonomika_turizma.mp4`,
+      duration: '9:04',
+      description: 'Video povezuje posebnosti turističkoga tržišta s upravljanjem prihodima, segmentacijom i ekonomikom distribucijskih kanala.',
+      poster: '/media/cjelina-05/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Anatomija suvremenoga turističkog tržišta',
+      fileName: 'Modern_Tourism_Market_Anatomy.pptx',
+      url: `${mediaBaseUrlFive}/Modern_Tourism_Market_Anatomy.pptx`,
+      description: 'Petnaest slajdova vodi od posebnosti turističke ponude i potražnje preko segmentacije i distribucijskih kanala do platformizacije, regulacije i makroekonomskih učinaka.',
+      slides: [
+        {
+          number: 1,
+          title: 'Turističko tržište i poslovno posredovanje',
+          image: '/media/cjelina-05/slides/slide-1.webp',
+          interpretation: 'Naslovni slajd prikazuje turističko tržište kao sustav u kojemu se fizički kapaciteti, putnici i digitalna infrastruktura susreću u distribucijskom čvorištu. Ključna poruka jest da vrijednost više ne nastaje samo u hotelu ili destinaciji, nego i u načinu na koji se ponuda pronalazi, uspoređuje, rezervira, naplaćuje i regulira.',
+        },
+        {
+          number: 2,
+          title: 'Temeljni problem turističke ekonomike',
+          image: '/media/cjelina-05/slides/slide-2.webp',
+          interpretation: 'Na strani ponude nalaze se neuskladištivost, visoki fiksni troškovi, lokacijska vezanost i kratkoročno neelastičan kapacitet; na strani potražnje visoka elastičnost, sezonalnost i heterogenost. Njihov sudar objašnjava zašto je dinamičko određivanje cijena upravljački odgovor na ekonomiku kapaciteta, a ne samo proizvoljno povećavanje cijene.',
+        },
+        {
+          number: 3,
+          title: 'Upravljanje prihodima',
+          image: '/media/cjelina-05/slides/slide-3.webp',
+          interpretation: 'Upravljanje prihodima usklađuje četiri odluke: pravoga gosta, pravi kapacitet, pravo vrijeme i pravu cijenu. Cilj nije nužno najveća pojedinačna cijena, nego najveći ukupni prinos iz fiksnoga kapaciteta; zato cijena ovisi o segmentu, očekivanoj potražnji, vremenu do dolaska i preostaloj raspoloživosti.',
+        },
+        {
+          number: 4,
+          title: 'Anatomija upotrebljivoga segmenta',
+          image: '/media/cjelina-05/slides/slide-4.webp',
+          interpretation: 'Slajd spaja četiri kriterija segmentacije s lijevkom provjere tržišne upotrebljivosti. Široka oznaka poput „ljubitelji prirode” ne vodi operativnoj odluci, dok precizan opis njemačkih cikloturista određene dobi, termina, duljine boravka i kanala rezervacije omogućuje prilagodbu proizvoda, cijene i komunikacije.',
+        },
+        {
+          number: 5,
+          title: 'Distribucijski lanac vrijednosti',
+          image: '/media/cjelina-05/slides/slide-5.webp',
+          interpretation: 'Izravni i neizravni kanali povezuju pružatelja s kupcem, ali nude različitu kombinaciju kontrole, dosega, troška i rizika. Distribucija nije samo prodajno mjesto: ona prenosi informacije, provodi rezervaciju i naplatu te može preuzeti rizik popunjenosti ili pojednostavniti kupčev izbor.',
+        },
+        {
+          number: 6,
+          title: 'Turoperator i putnička agencija',
+          image: '/media/cjelina-05/slides/slide-6.webp',
+          interpretation: 'Turoperator spaja prijevoz, smještaj i druge usluge u vlastiti paket, često zakupljuje kapacitet i zato preuzima znatan prodajni rizik. Putnička agencija uglavnom ostaje maloprodajni posrednik: savjetuje kupca i prodaje proizvod drugoga subjekta uz proviziju, bez usporedivoga rizika zakupa.',
+        },
+        {
+          number: 7,
+          title: 'Od dezintermedijacije do nove ovisnosti',
+          image: '/media/cjelina-05/slides/slide-7.webp',
+          interpretation: 'Internet je najprije obećao izravnu vezu pružatelja i gosta, ali zatim je proizveo reintermedijaciju: OTA platforme postale su novi globalni posrednici. Njihova moć ne temelji se na fizičkoj poslovnici, nego na kontroli pretraživanja, rangiranja, recenzija, usporedbe i podatkovnoga toka.',
+        },
+        {
+          number: 8,
+          title: 'Ekonomika kanala i trošak posredovanja',
+          image: '/media/cjelina-05/slides/slide-8.webp',
+          interpretation: 'Pri polaznoj cijeni od 140 eura izravni kanal s troškom od 3 % ostavlja 135,80 eura, dok OTA kanali s provizijom od 18–20 % ostavljaju 114,80 odnosno 112 eura. Razlika od približno 21 euro po sobi može na velikom godišnjem obujmu financirati ulaganje u vlastiti sustav, ali izračun treba dopuniti troškom akvizicije gosta i mogućim gubitkom dosega.',
+        },
+        {
+          number: 9,
+          title: 'Učinak oglasne ploče',
+          image: '/media/cjelina-05/slides/slide-9.webp',
+          interpretation: 'Platforma može biti skupa, ali istodobno djelovati kao globalna oglasna ploča: gost na njoj otkrije objekt, a potom provjeri izravni kanal. Taj paradoks znači da optimalna odluka nije nužno izlazak s OTA-e, nego korištenje platforme za stjecanje novih gostiju i izravnoga odnosa za njihovo buduće zadržavanje.',
+        },
+        {
+          number: 10,
+          title: 'Regulatorni odgovor: Uredba (EU) 2024/1028',
+          image: '/media/cjelina-05/slides/slide-10.webp',
+          interpretation: 'Uredba koja se primjenjuje od 20. svibnja 2026. uspostavlja usklađen okvir za registracijske brojeve ondje gdje se registracija uvede, provjeru i dostavu podataka platformi te jedinstvene digitalne pristupne točke. Njezin je cilj pouzdanija podatkovna osnova za javne politike, a ne jedinstvena europska zabrana kratkoročnoga najma.',
+        },
+        {
+          number: 11,
+          title: 'Uredba 2024/1028: mitovi i stvarnost',
+          image: '/media/cjelina-05/slides/slide-11.webp',
+          interpretation: 'Slajd odvaja ono što europski okvir jest od onoga što nije: ne određuje cijene, ne propisuje jedinstveni broj dana najma i ne zabranjuje tržište. On omogućuje točnije podatke za nacionalne i lokalne politike. Hrvatski zakonodavni navod prikazuje stanje postupka iz 2026. i prije akademske uporabe mora se provjeriti u važećim Narodnim novinama.',
+        },
+        {
+          number: 12,
+          title: 'Multiplikator i odljev turističke potrošnje',
+          image: '/media/cjelina-05/slides/slide-12.webp',
+          interpretation: 'Turistička potrošnja pokreće izravne, neizravne i inducirane učinke, ali iz lokalnoga kruga istodobno istječe kroz uvoz, provizije stranim platformama i dobit inozemnih vlasnika. Što je odljev veći, to je lokalni multiplikator slabiji, pa velik broj noćenja ne mora značiti razmjerno velik učinak na lokalno gospodarstvo.',
+        },
+        {
+          number: 13,
+          title: 'Satelitski račun i WTTC procjene',
+          image: '/media/cjelina-05/slides/slide-13.webp',
+          interpretation: 'DZS-ov satelitski račun za 2022. službenom metodologijom mjeri izravni turistički BDP od 8,2 milijarde eura, odnosno 12,18 % ukupnoga BDP-a. WTTC-ova viša procjena uključuje i neizravne te inducirane učinke vlastitim modelom. Brojke zato odgovaraju na različita pitanja i ne smiju se neposredno uspoređivati.',
+        },
+        {
+          number: 14,
+          title: 'Novi ekosustav turističkoga tržišta',
+          image: '/media/cjelina-05/slides/slide-14.webp',
+          interpretation: 'Suvremeno turističko tržište oblikuju tri međusobno ovisna aktera: pružatelji usluga upravljaju kapacitetom i izravnim kanalom, platforme stvaraju globalni doseg i kontroliraju dio digitalne vidljivosti, a regulatori uspostavljaju transparentnost i pravila tržišta. Poslovni uspjeh nastaje njihovim uravnoteženjem, a ne dominacijom samo jednoga elementa.',
+        },
+        {
+          number: 15,
+          title: 'Ključni pojmovi za pamćenje',
+          image: '/media/cjelina-05/slides/slide-15.webp',
+          interpretation: 'Završni slajd sažima četiri nosive ideje: ekonomiku neuskladištivoga kapaciteta, distribucijsku moć novih digitalnih posrednika, troškovni paradoks učinka oglasne ploče i novu podatkovnu transparentnost. Zajedno pokazuju da menadžer mora istodobno upravljati cijenom, kanalom, odnosom s gostom i regulatornom usklađenošću.',
+        },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
   3: chapterThree,
   4: chapterFour,
+  5: chapterFive,
 }
