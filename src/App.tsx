@@ -5,6 +5,8 @@ import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterContents, chapters } from './data/book'
 import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
+type MediaKind = 'audio' | 'video' | 'presentation'
+
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
   { name: 'Gledaj i slušaj', label: 'Gledaj i slušaj', icon: Headphones },
@@ -18,6 +20,8 @@ function App() {
   const [mode, setMode] = useState<Mode>('Prouči')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
+  const [selectedMedia, setSelectedMedia] = useState<MediaKind | null>(null)
+  const [slideIndex, setSlideIndex] = useState(0)
   const mainBodyRef = useRef<HTMLDivElement>(null)
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
   const chapterContent = chapterContents[chapterId]
@@ -26,12 +30,26 @@ function App() {
   const selectChapter = (id: number) => {
     setChapterId(id)
     setMode('Prouči')
+    setSelectedMedia(null)
+    setSlideIndex(0)
     setSidebarOpen(false)
+  }
+
+  const selectMode = (nextMode: Mode) => {
+    setMode(nextMode)
+    setSelectedMedia(null)
+  }
+
+  const openMedia = (media: MediaKind) => {
+    if (media === 'presentation') setSlideIndex(0)
+    setSelectedMedia(media)
   }
 
   const goToHome = () => {
     setChapterId(1)
     setMode('Prouči')
+    setSelectedMedia(null)
+    setSlideIndex(0)
     setSidebarOpen(false)
     setSummaryOpen(false)
     mainBodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
@@ -43,13 +61,13 @@ function App() {
       <a className="skip-link" href="#glavni-sadrzaj">Preskoči na glavni sadržaj</a>
       <header className="topbar">
         <button className="icon-button mobile-only" onClick={() => setSidebarOpen(true)} aria-label="Otvori sadržaj"><Menu /></button>
-        <button className="brand-home" onClick={goToHome} aria-label="Povratak na naslovnicu" title="Povratak na naslovnicu">
+        <a className="brand-home" href="/" onClick={(event) => { event.preventDefault(); goToHome() }} aria-label="Povratak na naslovnicu" title="Povratak na naslovnicu">
           <span className="baltazar-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></span>
           <span className="brand-copy">
             <span className="eyebrow">AI UDŽBENIK</span>
             <strong>{book.title}</strong>
           </span>
-        </button>
+        </a>
         <div className="source-badge"><span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong></div>
       </header>
 
@@ -84,11 +102,12 @@ function App() {
 
             <nav className="mode-tabs" aria-label="Načini rada">
               {modes.map(({ name, label, icon: Icon }) => (
-                <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => setMode(name)} disabled={!hasContent && name !== 'Prouči'}>
+                <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => selectMode(name)} disabled={!hasContent && name !== 'Prouči'}>
                   <Icon /><span>{label}</span>
                 </button>
               ))}
             </nav>
+            {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaSubmenu content={chapterContent} onSelect={openMedia} />}
           </div>
 
           <div className="main-body-scroll" ref={mainBodyRef}>
@@ -115,6 +134,7 @@ function App() {
       </div>
 
       {summaryOpen && <SummaryModal title={chapter.title} pages={chapter.pages} summary={chapterContent?.summary ?? chapter.outcome} outcomes={chapterContent?.outcomes ?? []} hasContent={hasContent} onClose={() => setSummaryOpen(false)} />}
+      {selectedMedia && chapterContent?.media && <SelectedMediaModal media={selectedMedia} content={chapterContent} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setSelectedMedia(null)} />}
     </div>
   )
 }
@@ -325,9 +345,15 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
 }
 
 function MediaViewer({ content }: { content: ChapterContent }) {
-  const [slideIndex, setSlideIndex] = useState(0)
-  const [expandedMedia, setExpandedMedia] = useState<'audio' | 'video' | 'presentation' | null>(null)
   if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedija je prenesena" text="Izvorne datoteke nalaze se u samostalnom Supabase spremniku. Njihovi točni nazivi još se povezuju s ovim prikazom." />
+  return <>
+    <div className="section-heading media-overview"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Audio, video i prezentacija</h2><p>Medijski podizbornik stalno je dostupan neposredno ispod glavnog izbornika. Odaberite medij i otvorit će se pripadajući skočni prozor.</p></div>
+    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-{String(content.id).padStart(2, '0')}</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
+  </>
+}
+
+function MediaSubmenu({ content, onSelect }: { content: ChapterContent; onSelect: (media: MediaKind) => void }) {
+  if (!content.media) return null
   const { audio, video, presentation } = content.media
   const media = [
     { key: 'audio' as const, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration },
@@ -335,26 +361,25 @@ function MediaViewer({ content }: { content: ChapterContent }) {
     { key: 'presentation' as const, icon: Presentation, title: 'Prezentacija', detail: presentation.title, meta: `${presentation.slides.length} slajdova` },
   ]
 
-  return <>
-    <div className="section-heading"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Odaberite medij</h2><p>Pritiskom na Audio, Video ili Prezentaciju odmah se otvara pripadajući skočni prozor. Izvorne datoteke ostaju dostupne u svakom prikazu.</p></div>
-    <div className="media-selector" role="group" aria-label="Odaberite vrstu medija">
-      {media.map(({ key, icon: Icon, title, detail, meta }, index) => <button key={key} onClick={() => setExpandedMedia(key)} aria-haspopup="dialog">
-        <span className="media-icon"><Icon /></span><span className="media-number">{String(index + 1).padStart(2, '0')}</span><strong>{title}</strong><small>{detail}</small><em>{meta}</em>
+  return <nav className="media-submenu" aria-label="Mediji cjeline">
+    {media.map(({ key, icon: Icon, title, detail, meta }) => <button key={key} onClick={() => onSelect(key)} aria-haspopup="dialog">
+        <span className="media-submenu-icon"><Icon /></span>
+        <span className="media-submenu-copy"><strong>{title}</strong><small>{detail}</small></span>
+        <em>{meta}</em>
       </button>)}
-    </div>
+  </nav>
+}
 
-    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-{String(content.id).padStart(2, '0')}</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
-
-    {expandedMedia === 'audio' && <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={() => setExpandedMedia(null)}>
+function SelectedMediaModal({ media, content, slideIndex, onSlideChange, onClose }: { media: MediaKind; content: ChapterContent; slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {
+  if (!content.media) return null
+  const { audio, video, presentation } = content.media
+  if (media === 'audio') return <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={onClose}>
       <div className="expanded-audio"><p>{audio.description}</p><audio controls autoPlay preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio><a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a></div>
-    </MediaModal>}
-
-    {expandedMedia === 'video' && <MediaModal title={video.title} label={`VIDEO · ${video.duration}`} onClose={() => setExpandedMedia(null)}>
+    </MediaModal>
+  if (media === 'video') return <MediaModal title={video.title} label={`VIDEO · ${video.duration}`} onClose={onClose}>
       <div className="expanded-video"><p>{video.description}</p><video controls autoPlay preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video><a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a></div>
-    </MediaModal>}
-
-    {expandedMedia === 'presentation' && <PresentationModal presentation={presentation} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setExpandedMedia(null)} />}
-  </>
+    </MediaModal>
+  return <PresentationModal presentation={presentation} slideIndex={slideIndex} onSlideChange={onSlideChange} onClose={onClose} />
 }
 
 function SlideStage({ slide, slideCount }: { slide: PresentationSlide; slideCount: number }) {
