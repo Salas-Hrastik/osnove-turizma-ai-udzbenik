@@ -35,11 +35,13 @@ function App() {
     setSelectedMedia(null)
     setSlideIndex(0)
     setSidebarOpen(false)
+    mainBodyRef.current?.scrollTo({ top: 0 })
   }
 
   const selectMode = (nextMode: Mode) => {
     setMode(nextMode)
     setSelectedMedia(null)
+    mainBodyRef.current?.scrollTo({ top: 0 })
   }
 
   const openMedia = (media: MediaKind) => {
@@ -120,13 +122,15 @@ function App() {
                 </button>
               ))}
             </nav>
-            {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaOverview content={chapterContent} />}
+            {mode === 'Gledaj i slušaj' && chapterContent?.media && <>
+              <MediaOverview content={chapterContent} />
+              <MediaSubmenu content={chapterContent} onSelect={openMedia} />
+            </>}
           </div>
 
           <div className="main-body-scroll" ref={mainBodyRef}>
             <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
               <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''}`}>
-                {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaSubmenu content={chapterContent} onSelect={openMedia} />}
                 {!chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
               {mode === 'Prouči' && <aside className="guide-card">
