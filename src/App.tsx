@@ -203,6 +203,13 @@ function Study({ content }: { content: ChapterContent }) {
             description: 'Svi su pokazatelji izračunani na istom didaktičkom primjeru: 120 raspoloživih soba, 90 prodanih soba, 13 500 € prihoda od smještaja i 4 800 € bruto operativne dobiti.',
             appendComparison: false,
           }
+        : content.id === 7
+          ? {
+              eyebrow: 'UČINCI I POKAZATELJI',
+              title: 'Od gospodarskog doprinosa do turističkog opterećenja',
+              description: 'Prva dva pokazatelja potječu iz ispravljenoga službenog satelitskog računa za 2022.; druga dva rezultat su didaktičkog primjera i služe učenju turističkog intenziteta i gustoće.',
+              appendComparison: false,
+            }
       : {
           eyebrow: 'SLUŽBENI PODACI · HRVATSKA 2025.',
           title: 'Veličina prometa nije cijela slika',
@@ -286,6 +293,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
             'Usporedi neovisni hotel, franšizu i ugovor o upravljanju.',
             'Kako oporavak usluge i tehnologija mogu zajedno smanjiti trud gosta?',
           ]
+        : content.id === 7
+          ? [
+              'Objasni put turističkog eura kroz izravne, neizravne i inducirane učinke.',
+              'Kako zajedno primijeniti Doxeyev i Butlerov model na destinaciju u konsolidaciji?',
+              'Izračunaj turistički intenzitet i gustoću za zadani primjer te protumači ograničenja rezultata.',
+            ]
       : [
           'Objasni razliku između turista i izletnika na novom primjeru.',
           'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',

@@ -15,7 +15,7 @@ export const chapters: ChapterSummary[] = [
   { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
-  { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'planned' },
+  { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'available' },
   { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'planned' },
   { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'planned' },
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '50–51', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'planned' },
@@ -28,6 +28,7 @@ const mediaBaseUrlThree = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/o
 const mediaBaseUrlFour = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-04'
 const mediaBaseUrlFive = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-05'
 const mediaBaseUrlSix = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-06'
+const mediaBaseUrlSeven = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-07'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -1359,6 +1360,223 @@ export const chapterSix: ChapterContent = {
   },
 }
 
+export const chapterSeven: ChapterContent = {
+  ...chapters[6],
+  summary: 'Poglavlje analizira višedimenzionalne učinke turizma na gospodarstvo, društvo, kulturu i okoliš destinacije. Uvodi izravne, neizravne i inducirane učinke, multiplikator i odljev, satelitski račun turizma, Doxeyev indeks iritacije, Butlerov životni ciklus destinacije, nosivi kapacitet i prekomjerni turizam. Cilj nije samo opisati posljedice turističkog razvoja, nego ih mjeriti uravnoteženim skupom pokazatelja i pravodobno njima upravljati.',
+  outcomes: [
+    'razlikovati izravne, neizravne i inducirane gospodarske učinke te objasniti multiplikator i odljev',
+    'procijeniti odnos stanovnika i posjetitelja pomoću Doxeyeva indeksa iritacije i teorije društvene razmjene',
+    'primijeniti Butlerov model životnog ciklusa i prepoznati razvojnu fazu destinacije',
+    'povezati okolišne i društvene pritiske s nosivim kapacitetom, instrumentima upravljanja i uravnoteženim pokazateljima',
+  ],
+  keywords: [
+    { term: 'Izravni učinci', definition: 'Potrošnja turista u turističkim djelatnostima te pripadajuće plaće i dobit hotela, restorana, prijevoznika, muzeja, agencija i drugih izravnih pružatelja.' },
+    { term: 'Neizravni učinci', definition: 'Nabava dobara i usluga koje turističke djelatnosti kupuju od drugih sektora, primjerice hrane, održavanja, građevinarstva, praonica i IT usluga.' },
+    { term: 'Inducirani učinci', definition: 'Potrošnja dohotka koji su zaposleni zaradili u turizmu i povezanim djelatnostima na trgovinu, zdravstvo, obrazovanje i druge potrebe.' },
+    { term: 'Turistički multiplikator', definition: 'Koeficijent koji pokazuje ukupni gospodarski učinak početne jedinice turističke potrošnje nakon njezina ponovljenog kruženja kroz gospodarstvo.' },
+    { term: 'Odljev', definition: 'Dio turističke potrošnje koji napušta destinaciju uvozom hrane, energije i opreme, provizijama vanjskim posrednicima ili repatrijacijom dobiti.' },
+    { term: 'Satelitski račun turizma', definition: 'Međunarodno usklađen statistički okvir koji iz nacionalnih računa izdvaja izravnu bruto dodanu vrijednost i izravni BDP pripisiv turističkoj potrošnji.' },
+    { term: 'Doxeyev indeks iritacije', definition: 'Model promjene stava lokalne zajednice prema turistima kroz euforiju, apatiju, iritaciju i antagonizam.' },
+    { term: 'Butlerov životni ciklus', definition: 'Dijagnostički model razvoja destinacije od istraživanja i uključivanja preko razvoja, konsolidacije i stagnacije do opadanja ili pomlađivanja.' },
+    { term: 'Nosivi kapacitet', definition: 'Najveći obujam korištenja koji prostor, infrastruktura, okoliš i zajednica mogu podnijeti bez neprihvatljive degradacije.' },
+    { term: 'Prekomjerni turizam', definition: 'Stanje u kojem obujam ili ponašanje posjetitelja neprihvatljivo narušava kvalitetu života stanovnika, okoliš ili kvalitetu doživljaja posjetitelja.' },
+  ],
+  steps: [
+    {
+      title: 'Prati put turističkog eura',
+      body: 'Turistička potrošnja stvara učinke u više krugova. Izravna kupnja pokreće nabavu dobavljača i potrošnju plaća zaposlenih, ali dio novca istodobno odlazi iz destinacije. Zato rast prometa nije jednak rastu lokalno zadržane vrijednosti.',
+      points: [
+        'Izravni učinci nastaju u hotelima, restoranima, prijevozu, muzejima, agencijama i drugim djelatnostima koje turist neposredno plaća.',
+        'Neizravni učinci nastaju nabavom lokalne hrane, održavanja, građevinskih, praoničkih i IT usluga.',
+        'Inducirani učinci nastaju kada zaposleni troše zarađeni dohodak u lokalnom gospodarstvu.',
+        'Uvoz hrane, energije i opreme, provizije stranim platformama i repatrijacija dobiti povećavaju odljev i smanjuju multiplikator.',
+      ],
+      takeaway: 'Za gospodarski učinak presudno je koliko puta turistički euro kruži lokalno prije nego što napusti destinaciju.',
+      source: 'Kanonski izvor 1.0, str. 36–37',
+    },
+    {
+      title: 'Procijeni društvenu bilancu i stav zajednice',
+      body: 'Turizam može obnoviti baštinu, ojačati identitet i poboljšati sadržaje, ali može i komodificirati kulturu, povećati cijene, poremetiti funkcije naselja i istisnuti stanovnike. Potpora zajednice traje dok stanovnici opažaju da su koristi veće od troškova.',
+      points: [
+        'Doxeyev model opisuje prijelaz od euforije preko apatije i iritacije do antagonizma.',
+        'Iritacija se javlja uz zasićenje, gužve i rast troškova života; antagonizam je kasni signal otvorenog neprijateljstva.',
+        'Demonstracijski učinak označuje preuzimanje potrošačkih i ponašajnih obrazaca posjetitelja, osobito među mladima.',
+        'Teorija društvene razmjene pokazuje da se potpora održava vidljivom, pravednom i lokalno raspoređenom koristi.',
+      ],
+      takeaway: 'Otpor zajednice najčešće nije iznenadan: nastaje kada se rani i mjerljivi signali nezadovoljstva dugo zanemaruju.',
+      source: 'Kanonski izvor 1.0, str. 37–38; Doxey, 1975.',
+    },
+    {
+      title: 'Dijagnosticiraj razvojnu fazu destinacije',
+      body: 'Butlerov model prati razvoj od maloga broja samostalnih posjetitelja do brzoga rasta, konsolidacije i stagnacije. Nakon stagnacije destinacija može nastaviti opadati ili se pomladiti novim proizvodom, tržištem ili načinom korištenja resursa.',
+      points: [
+        'Istraživanje i uključivanje obilježavaju mali obujam, lokalna inicijativa i malo infrastrukture.',
+        'Razvoj donosi vanjski kapital i brz rast kapaciteta, ali može smanjiti lokalnu kontrolu.',
+        'Konsolidacija usporava rast, pojačava gospodarsku ovisnost i otkriva prve znakove zasićenja.',
+        'Stagnacija upućuje na dosegnut vrhunac, zastarijevanje imidža i moguće prekoračenje nosivog kapaciteta.',
+      ],
+      takeaway: 'Najjeftiniji je zaokret prije stagnacije: razvojna faza služi kao dijagnoza za pravodobnu odluku, a ne kao neizbježna sudbina.',
+      source: 'Kanonski izvor 1.0, str. 38; Butler, 1980.',
+    },
+    {
+      title: 'Mjeri pritisak i upravljaj prije preopterećenja',
+      body: 'Voda, zrak, klima, zemljište, bioraznolikost i sustav otpada istodobno su resursi i granice turističkog razvoja. Prekomjerni turizam zato nije određen jednim apsolutnim brojem, nego odnosom obujma, prostora, vremena, infrastrukture i podnošljivosti zajednice.',
+      points: [
+        'Turistička gustoća mjeri noćenja po km², a turistički intenzitet noćenja po stanovniku.',
+        'Rano upozorenje daju i udio kratkoročnog smještaja u stambenom fondu, udio dnevnih posjetitelja te kontinuirano zadovoljstvo stanovnika.',
+        'Mjere se kreću od vremenskog i prostornog usmjeravanja preko regulacije ponašanja i fiskalnih instrumenata do ograničenja ponude i pristupa.',
+        'Uravnotežen nadzor obuhvaća gospodarske, društvene, okolišne i upravljačke pokazatelje, a ne samo dolaske i noćenja.',
+      ],
+      takeaway: 'Destinacija koja mjeri samo promet upravlja obujmom; destinacija koja mjeri učinke može upravljati kvalitetom života i vrijednošću turizma.',
+      source: 'Kanonski izvor 1.0, str. 38–40; urednička aktualizacija službenih pokazatelja.',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Izravni BDP turizma', value: '62,0 mlrd. kn', change: 'DZS · 2022.' },
+    { label: 'Udio u BDP-u', value: '12,18 %', change: 'DZS · ispravak 2025.' },
+    { label: 'Intenzitet primjera', value: '150', change: 'noćenja po stanovniku' },
+    { label: 'Gustoća primjera', value: '81 818', change: 'noćenja po km²' },
+  ],
+  appliedActivity: {
+    title: 'Dijagnoza turističkog opterećenja',
+    intro: 'Didaktička destinacija ima 12 000 stalnih stanovnika, ostvaruje 1,8 milijuna noćenja godišnje na površini od 22 km², a 68 % noćenja ostvaruje u srpnju i kolovozu.',
+    tasks: [
+      'Izračunajte turistički intenzitet: ukupan broj noćenja podijelite brojem stalnih stanovnika.',
+      'Izračunajte turističku gustoću: ukupan broj noćenja podijelite površinom destinacije u km².',
+      'Izračunajte broj i intenzitet noćenja u srpnju i kolovozu te objasnite što godišnji prosjek prikriva.',
+      'Odaberite pet pokazatelja ranog upozorenja: jedan gospodarski, dva okolišna, jedan društveni i jedan upravljački; za svaki navedite izvor i ciljnu vrijednost.',
+    ],
+    note: 'Didaktički konstruirano — rezultat je 150 noćenja po stanovniku, približno 81 818 noćenja po km² te 102 noćenja po stanovniku samo u dvama vršnim mjesecima. Podatci nisu empirijski opis stvarne destinacije.',
+  },
+  editorialUpdate: {
+    title: 'Od mjerenja prometa prema upravljanju nosivim kapacitetom',
+    checkedAt: '6. kolovoza 2026.',
+    body: 'Ispravljeni DZS-ov satelitski račun navodi da je izravni BDP turizma u 2022. iznosio 62,038 milijardi kuna i činio 12,18 % ukupnog BDP-a. To je metodološki uža mjera od širih procjena ukupnog doprinosa koje uključuju neizravne i inducirane učinke, pa se različite metodologije ne smiju zbrajati ni izravno uspoređivati. Dubrovnik je u 2025. ostvario 4,2 milijuna noćenja, a UNESCO je u odluci 47 COM 7B.102 zatražio da se nalazi procjene nosivog kapaciteta potpuno ugrade u planiranje turizma, razvoja i zaštite baštine. Velik promet i upravljanje opterećenjem zato se moraju pratiti istodobno, bez izvođenja uzročnih zaključaka samo iz broja noćenja.',
+    implications: [
+      'Pri svakoj brojci najprije utvrdite mjeri li izravni učinak, ukupni učinak, promet ili lokalno zadržanu vrijednost.',
+      'Nosivi kapacitet ne svodite na jednu kvotu: uključite prostor, vrijeme, stanovnike, zaposlenike, infrastrukturu i baštinu.',
+      'Javno objavljujte uravnotežen skup pokazatelja i reagirajte u fazi iritacije ili konsolidacije, prije antagonizma i stagnacije.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 36–40' },
+    { label: 'Državni zavod za statistiku', detail: 'Satelitski račun turizma za Republiku Hrvatsku u 2022. — ispravak, 10. travnja 2025.', url: 'https://podaci.dzs.hr/2024/hr/103106' },
+    { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025., objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/2025/hr/97093' },
+    { label: 'UNESCO World Heritage Centre', detail: 'Decision 47 COM 7B.102 — Old City of Dubrovnik.', url: 'https://whc.unesco.org/en/decisions/8826/' },
+    { label: 'Grad Dubrovnik', detail: 'Procjena prihvatnog kapaciteta svjetskog dobra UNESCO-a „Starog grada Dubrovnika”.', url: 'https://www.dubrovnik.hr/uploads/pages/6/SAZETAK-Procjena-prihvatnog-kapaciteta-svjetskog-dobra-UNESCO-Starog-grada-Dubrovnika.pdf' },
+  ],
+  questions: [
+    { question: 'Koji učinak nastaje kada hotel kupuje hranu od lokalnog proizvođača?', options: ['Izravni učinak', 'Neizravni učinak', 'Inducirani učinak', 'Odljev'], correct: 1, explanation: 'Nabava turističkoga poduzeća od dobavljača pripada neizravnim učincima. Izravni učinak nastaje turistovom kupnjom, a inducirani potrošnjom zarađenih plaća.' },
+    { question: 'Koji kanal izravno smanjuje lokalni turistički multiplikator?', options: ['Veći udio lokalnih dobavljača', 'Dulja sezona', 'Uvoz hrane i provizije vanjskim platformama', 'Veća potrošnja zaposlenih u lokalnim trgovinama'], correct: 2, explanation: 'Uvoz, vanjske provizije i repatrijacija dobiti odvode novac iz destinacije te prekidaju njegovo daljnje lokalno kruženje.' },
+    { question: 'Koji je ispravan redoslijed Doxeyevih faza?', options: ['Euforija – apatija – iritacija – antagonizam', 'Apatija – razvoj – stagnacija – antagonizam', 'Istraživanje – euforija – opadanje – pomlađivanje', 'Euforija – konsolidacija – iritacija – stagnacija'], correct: 0, explanation: 'Doxey opisuje promjenu odnosa stanovnika prema turizmu kroz euforiju, apatiju, iritaciju i antagonizam.' },
+    { question: 'Što prema Butlerovu modelu najčešće obilježava stagnaciju?', options: ['Malen broj samostalnih posjetitelja', 'Prvi lokalni pružatelji usluga', 'Dosegnut vrhunac i mogući prekoračen nosivi kapacitet', 'Potpuni izostanak turističke infrastrukture'], correct: 2, explanation: 'U stagnaciji je rast dosegnuo vrhunac, imidž može zastarjeti, a pritisak na nosivi kapacitet postaje vidljiv.' },
+    { question: 'Zašto broj noćenja nije dovoljan pokazatelj uspjeha destinacije?', options: ['Jer se noćenja ne mogu službeno mjeriti', 'Jer ne pokazuje lokalno zadržanu vrijednost, zadovoljstvo stanovnika ni okolišni pritisak', 'Jer vrijedi samo za hotele', 'Jer uvijek precjenjuje broj turista'], correct: 1, explanation: 'Noćenja mjere obujam. Za upravljanje učincima treba im pridružiti gospodarske, društvene, okolišne i upravljačke pokazatelje.' },
+  ],
+  media: {
+    audio: {
+      title: 'Kamo zapravo odlazi turistički euro?',
+      fileName: 'Kamo_zapravo.mp3',
+      url: `${mediaBaseUrlSeven}/Kamo_zapravo.mp3`,
+      duration: '30:49',
+      description: 'Audioizvedenica prati put turističke potrošnje kroz izravne, neizravne i inducirane učinke te pokazuje kako odljev, društvena podnošljivost i okolišna ograničenja određuju stvarnu vrijednost turizma.',
+    },
+    video: {
+      title: 'Složeni ekosustav turizma',
+      fileName: 'Slozeni_ekosustav_turizma.mp4',
+      url: `${mediaBaseUrlSeven}/Slozeni_ekosustav_turizma.mp4`,
+      duration: '9:23',
+      description: 'Video prikazuje turizam kao sustav u kojem se gospodarski učinci, odnos domaćina i gosta te okolišni pritisci moraju mjeriti i zajednički upravljati.',
+      poster: '/media/cjelina-07/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Anatomija turizma: upravljanje učincima u destinaciji',
+      fileName: 'Tourism_Diagnostic_Blueprint.pptx',
+      url: `${mediaBaseUrlSeven}/Tourism_Diagnostic_Blueprint.pptx`,
+      description: 'Trinaest slajdova vodi od gospodarskog multiplikatora i odljeva preko društvene podnošljivosti i ekološkog otiska do upravljanja prekomjernim turizmom i uravnoteženog skupa pokazatelja.',
+      slides: [
+        {
+          number: 1,
+          title: 'Anatomija turizma: upravljanje učincima u destinaciji',
+          image: '/media/cjelina-07/slides/slide-1.webp',
+          interpretation: 'Naslovni slajd prikazuje destinaciju kao prostorni sustav u kojem se gospodarski tokovi, život zajednice i okolišni resursi susreću na istom području. Tehnički nacrt naglašava upravljačku poruku cjeline: učinci nisu apstraktne posljedice, nego odnosi koje treba locirati, mjeriti i povezati prije odluke o daljnjem rastu.',
+        },
+        {
+          number: 2,
+          title: 'Turizam je sustav, a ne samo industrija',
+          image: '/media/cjelina-07/slides/slide-2.webp',
+          interpretation: 'Tri međusobno povezana zupčanika predstavljaju gospodarske, društveno-kulturne i ekološke učinke. Nijedan se ne može optimizirati izolirano: veći prihod može povećati cijene stanovanja, opteretiti infrastrukturu ili financirati zaštitu okoliša. Upravljanje zato zahtijeva zajednički skup pokazatelja i jasno određene granice prihvatljivosti.',
+        },
+        {
+          number: 3,
+          title: 'Putovanje turističkog eura',
+          image: '/media/cjelina-07/slides/slide-3.webp',
+          interpretation: 'Cijev prikazuje tri kruga učinka početne turističke potrošnje. Izravni učinak nastaje kod pružatelja kojega gost plaća, neizravni kod njegovih dobavljača, a inducirani kada zaposleni troše zarađeni dohodak. Prikaz nije račun multiplikatora sam po sebi, nego mapa kanala kojima se vrijednost širi kroz lokalno gospodarstvo.',
+        },
+        {
+          number: 4,
+          title: 'Paradoks odljeva',
+          image: '/media/cjelina-07/slides/slide-4.webp',
+          interpretation: 'Lijevak pokazuje zašto turistički prihod nije jednak lokalno zadržanoj vrijednosti. Uvoz hrane, pića i opreme, provizije vanjskim digitalnim posrednicima te dobit koja napušta destinaciju smanjuju učinak bez obzira na rast dolazaka i noćenja. Hrvatsku ne treba jednostavno izjednačiti s malim otočnim gospodarstvom; veličinu svakoga kanala odljeva treba empirijski utvrditi.',
+        },
+        {
+          number: 5,
+          title: 'Satelitski račun turizma',
+          image: '/media/cjelina-07/slides/slide-5.webp',
+          interpretation: 'Službeni DZS-ov ispravak potvrđuje izravni BDP turizma od 62,038 milijardi kuna i udio od 12,18 % u BDP-u za 2022. Donja napomena slajda navodi širu WTTC procjenu iz starije radne inačice; završna urednička validacija nije zadržala te precizne iznose kao jednoznačno provjerljive. Studenti trebaju usvojiti metodološko pravilo, a ne citirati taj usporedni broj: TSA i šire procjene ukupnog doprinosa ne mjere isto.',
+        },
+        {
+          number: 6,
+          title: 'Društvena bilanca domaćina i gosta',
+          image: '/media/cjelina-07/slides/slide-6.webp',
+          interpretation: 'Vaga suprotstavlja koristi poput obnove baštine, jačanja identiteta i boljih javnih sadržaja troškovima poput komodifikacije kulture, gentrifikacije i gubitka privatnosti. Teorija društvene razmjene objašnjava da potpora stanovnika ovisi o njihovoj procjeni raspodjele koristi i troškova. Ukupan prihod destinacije zato ne jamči društveno prihvaćanje turizma.',
+        },
+        {
+          number: 7,
+          title: 'Fizički rast i društveni otpor',
+          image: '/media/cjelina-07/slides/slide-7.webp',
+          interpretation: 'Slajd usporedno prikazuje Butlerov rast destinacije i Doxeyev pad potpore zajednice. Modeli nisu jedna empirijska formula niti tvrde da se svaka destinacija razvija jednakom brzinom. Njihova je zajednička vrijednost dijagnostička: rast kapaciteta i konsolidacija trebaju se pratiti zajedno sa zadovoljstvom stanovnika, jer antagonizam često slijedi nakon zanemarenih signala iritacije.',
+        },
+        {
+          number: 8,
+          title: 'Ekološki otisak i ranjivost temeljnog resursa',
+          image: '/media/cjelina-07/slides/slide-8.webp',
+          interpretation: 'Tablica povezuje pet područja pritiska s mehanizmima ublažavanja. Voda se mjeri po gostu, emisije se smanjuju prometnim i energetskim mjerama, zemljište štiti prostornim planiranjem, bioraznolikost zoniranjem, a otpad smanjenjem i kružnim modelima. Ključ je u relativnim pokazateljima po noćenju ili gostu, a ne samo u ukupnoj potrošnji.',
+        },
+        {
+          number: 9,
+          title: 'Točka pucanja sustava: prekomjerni turizam',
+          image: '/media/cjelina-07/slides/slide-9.webp',
+          interpretation: 'Četiri mjerača upozoravaju da isti broj posjetitelja ima različit učinak ovisno o prostoru i zajednici. Gustoću i intenzitet treba dopuniti odnosom kratkoročnog smještaja i stambenog fonda, pritiskom dnevnih posjetitelja te redovitim mjerenjem zadovoljstva stanovnika. Pragovi nisu univerzalni; moraju se odrediti za konkretno mjesto i razdoblje.',
+        },
+        {
+          number: 10,
+          title: 'Ljestvica upravljanja',
+          image: '/media/cjelina-07/slides/slide-10.webp',
+          interpretation: 'Mjere se pojačavaju od usmjeravanja posjeta u vremenu i prostoru preko regulacije ponašanja i fiskalnih instrumenata do ograničenja ponude i pristupa. Redoslijed nije automatski recept: svaka mjera mora odgovarati uzroku, biti razmjerna i imati pokazatelj učinka. Stroža mjera opravdana je kada blaža ne štiti nosivi kapacitet ili javni interes.',
+        },
+        {
+          number: 11,
+          title: 'Dubrovnik kao studija upravljanja posjetiteljima',
+          image: '/media/cjelina-07/slides/slide-11.webp',
+          interpretation: 'Dubrovnik povezuje usklađivanje kruzerskih dolazaka, praćenje opterećenja povijesne jezgre i upravljanje javnim prostorom. DZS potvrđuje 4,2 milijuna noćenja u 2025., ali taj podatak sam po sebi nije uzročni dokaz da mjere nisu utjecale na gospodarstvo. Precizniji je zaključak da je promet ostao velik dok se razvijaju alati nosivog kapaciteta, čije učinke treba pratiti gospodarskim, društvenim i baštinskim pokazateljima.',
+        },
+        {
+          number: 12,
+          title: 'Uravnoteženi skup pokazatelja',
+          image: '/media/cjelina-07/slides/slide-12.webp',
+          interpretation: 'Četiri skupine pretvaraju održivost u mjerljiv upravljački sustav. Gospodarski pokazatelji prate vrijednost i lokalnu povezanost, društveni kvalitetu života i stanovanje, okolišni potrošnju resursa i stanje okoliša, a upravljački provedbu plana, uključivanje dionika i dostupnost podataka. Zajedno sprječavaju da rast jednoga pokazatelja prikrije pogoršanje ostalih.',
+        },
+        {
+          number: 13,
+          title: 'Od mjerenja dolazaka do upravljanja učincima',
+          image: '/media/cjelina-07/slides/slide-13.webp',
+          interpretation: 'Završna poruka sažima promjenu upravljačke logike: cilj nije samo privući više posjetitelja, nego održavati prihvatljiv odnos koristi i troškova. Potpora zajednice nije trajno stečena; obnavlja se transparentnim mjerenjem, pravednijom raspodjelom koristi i pravodobnim odgovorom na gospodarske, društvene i okolišne signale.',
+        },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
@@ -1366,4 +1584,5 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   4: chapterFour,
   5: chapterFive,
   6: chapterSix,
+  7: chapterSeven,
 }
