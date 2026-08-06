@@ -103,7 +103,7 @@ function App() {
         {sidebarOpen && <button className="scrim" onClick={() => setSidebarOpen(false)} aria-label="Zatvori izbornik" />}
 
         <main className="main-panel" id="glavni-sadrzaj">
-          <div className="chapter-controls">
+          <div className={`chapter-controls ${mode === 'Gledaj i slušaj' ? 'media-mode-controls' : ''}`}>
             <section className="chapter-hero">
               <div>
                 <span className="eyebrow">CJELINA {chapter.id} · {chapter.status === 'assessment' ? chapter.pages : `STRANICE ${chapter.pages}`}</span>
@@ -120,18 +120,19 @@ function App() {
                 </button>
               ))}
             </nav>
-            {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaSubmenu content={chapterContent} onSelect={openMedia} />}
+            {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaOverview content={chapterContent} />}
           </div>
 
           <div className="main-body-scroll" ref={mainBodyRef}>
             <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
-              <section className="learning-area">
+              <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''}`}>
+                {mode === 'Gledaj i slušaj' && chapterContent?.media && <MediaSubmenu content={chapterContent} onSelect={openMedia} />}
                 {!chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
               {mode === 'Prouči' && <aside className="guide-card">
                 <div className="guide-avatar"><Bot /></div>
                 <span className="eyebrow">STALNI VODIČ</span>
-                <h3>Kako učiti ovu cjelinu?</h3>
+                <h3>Kako pručiti ovu cjelinu?</h3>
                 <p>{guideText(mode, hasContent)}</p>
                 <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
               </aside>}
@@ -393,10 +394,11 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
 
 function MediaViewer({ content }: { content: ChapterContent }) {
   if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedija je prenesena" text="Izvorne datoteke nalaze se u samostalnom Supabase spremniku. Njihovi točni nazivi još se povezuju s ovim prikazom." />
-  return <>
-    <div className="section-heading media-overview"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Audio, video i prezentacija</h2><p>Medijski podizbornik stalno je dostupan neposredno ispod glavnog izbornika. Odaberite medij i otvorit će se pripadajući skočni prozor.</p></div>
-    <div className="media-note"><CheckCircle2 /><div><strong>Samostalna medijska infrastruktura</strong><p>Sve tri izvorne datoteke učitavaju se iz javnog spremnika <code>otu-aiu-media/cjelina-{String(content.id).padStart(2, '0')}</code>; slike slajdova optimizirane su za čitljiv prikaz u udžbeniku.</p></div></div>
-  </>
+  return <div className="media-note"><CheckCircle2 /><strong>Samostalna medijska infrastruktura</strong></div>
+}
+
+function MediaOverview({ content }: { content: ChapterContent }) {
+  return <div className="section-heading media-overview"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Audio, video i prezentacija</h2><p>Odaberite medij u podizborniku ispod i otvorit će se pripadajući skočni prozor.</p></div>
 }
 
 function MediaSubmenu({ content, onSelect }: { content: ChapterContent; onSelect: (media: MediaKind) => void }) {
