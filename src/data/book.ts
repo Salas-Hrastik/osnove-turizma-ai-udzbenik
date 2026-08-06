@@ -16,7 +16,7 @@ export const chapters: ChapterSummary[] = [
   { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
   { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'available' },
-  { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'planned' },
+  { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'available' },
   { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'planned' },
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '50–51', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'planned' },
   { id: 11, title: 'Završna samoprovjera znanja', pages: '30 pitanja', outcome: 'Integrirati znanje iz svih deset cjelina i prepoznati područja koja treba ponoviti.', status: 'assessment' },
@@ -29,6 +29,7 @@ const mediaBaseUrlFour = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/ob
 const mediaBaseUrlFive = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-05'
 const mediaBaseUrlSix = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-06'
 const mediaBaseUrlSeven = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-07'
+const mediaBaseUrlEight = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-08'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -1577,6 +1578,158 @@ export const chapterSeven: ChapterContent = {
   },
 }
 
+export const chapterEight: ChapterContent = {
+  ...chapters[7],
+  summary: 'Poglavlje povezuje održivost i strateško upravljanje kao dvije neodvojive teme. Održivost se promatra kao smjer koji se dokazuje relativnim pokazateljima, a ne kao apsolutno stanje ili promotivna tvrdnja. ETIS, GSTC i vjerodostojne certifikacijske sheme povezuju načela s mjerenjem, dok europski i hrvatski okvir usmjeravaju ciljeve, planove i odgovornosti. Završni dio prikazuje pet faza strateškog planiranja, uključivanje dionika i preobrazbu destinacijskih organizacija iz promotivnih tijela u koordinatore upravljanja.',
+  outcomes: [
+    'raspraviti napetost između turističkoga rasta, koristi i ograničenja resursa',
+    'razlikovati pokazatelj, izvješćivanje, certifikaciju i marketinšku oznaku',
+    'povezati europski i hrvatski okvir održivosti s ciljevima i planovima destinacije',
+    'primijeniti pet faza strateškog planiranja te oblikovati uključivanje ključnih dionika',
+  ],
+  keywords: [
+    { term: 'Održivi razvoj turizma', definition: 'Razvoj koji zadovoljava potrebe današnjih posjetitelja i domaćih regija, uz zaštitu i unaprjeđenje mogućnosti budućih generacija.' },
+    { term: 'Regenerativni turizam', definition: 'Pristup koji nadilazi nečinjenje štete i teži aktivnoj obnovi ekosustava, lokalne zajednice i odnosa koji čine destinaciju.' },
+    { term: 'ESG', definition: 'Okolišni, društveni i upravljački kriteriji kojima se vrednuju učinci, rizici i način upravljanja organizacije.' },
+    { term: 'ETIS', definition: 'Europski sustav pokazatelja za samostalno praćenje gospodarske, društvene, okolišne i upravljačke održivosti destinacije.' },
+    { term: 'GSTC kriteriji', definition: 'Globalni referentni kriteriji održivoga turizma za destinacije i turistička poduzeća te osnova za vrednovanje certifikacijskih standarda.' },
+    { term: 'Greenwashing', definition: 'Neutemeljeno, nejasno ili pretjerano predstavljanje okolišnih i drugih prednosti bez provjerljivih dokaza.' },
+    { term: 'Vjerodostojan certifikat', definition: 'Potvrda utemeljena na javnim kriterijima, neovisnoj provjeri, periodičnoj obnovi i mogućnosti oduzimanja statusa.' },
+    { term: 'Strateško planiranje', definition: 'Kontinuiran i participativan ciklus analize, definiranja vizije i ciljeva, izbora strategije, provedbe te praćenja i vrednovanja.' },
+    { term: 'Analiza dionika', definition: 'Postupak utvrđivanja interesa, utjecaja, mogućeg otpora i primjerenog načina uključivanja svake skupine.' },
+    { term: 'DMO', definition: 'Organizacija za upravljanje destinacijom koja povezuje dionike, podatke, proizvode, resurse, posjetitelje i rizike, a ne provodi samo promociju.' },
+  ],
+  steps: [
+    {
+      title: 'Procijeni održivost kao smjer, a ne etiketu',
+      body: 'Putovanje troši energiju, vodu i prostor, ali stvara i gospodarske, društvene i kulturne koristi. Zato pitanje nije je li destinacija apsolutno održiva, nego smanjuje li pritisak po jedinici ostvarene koristi i održava li ravnotežu okolišnoga, društvenoga, gospodarskoga i upravljačkoga stupa.',
+      points: [
+        'Relativni pokazatelji povezuju opterećenje s opsegom aktivnosti: voda po noćenju, emisije po gostu ili lokalna nabava u ukupnoj nabavi.',
+        'Rast broja dolazaka nije sam po sebi ni održiv ni neodrživ; treba istodobno mjeriti korist, pritisak, raspodjelu i sposobnost sustava.',
+        'Regenerativni pristup ide dalje od smanjenja štete i pita ostavlja li turizam ekosustav i zajednicu sposobnijima nego prije.',
+        'Upravljački stup uključuje institucije, transparentnost, odgovornost, podatke i stvarno sudjelovanje dionika.',
+      ],
+      takeaway: 'Održivost nije obećanje ni konačna oznaka: ona je dokaziv smjer promjene odnosa koristi i pritiska.',
+      source: 'Kanonski izvor 1.0, str. 41–42',
+    },
+    {
+      title: 'Razdvoji mjerenje, izvješćivanje i certifikaciju',
+      body: 'ETIS pomaže destinaciji izabrati i pratiti pokazatelje, GSTC pruža globalne referentne kriterije, a certifikacijska shema provjerava ispunjavanje objavljenog standarda. Ti se instrumenti dopunjuju, ali nisu isto što i promotivna oznaka ili izvješće bez vanjske provjere.',
+      points: [
+        'ETIS grupira pokazatelje u upravljanje destinacijom, gospodarsku vrijednost, društveno-kulturne te okolišne učinke.',
+        'Pokazatelj mora imati definiciju, izvor podataka, početnu i ciljnu vrijednost, učestalost praćenja i odgovornog nositelja.',
+        'Vjerodostojan certifikat traži javne kriterije, neovisnu provjeru, vremenski ograničen status i mogućnost oduzimanja.',
+        'Samoprocjena i plaćena oznaka bez audita ne dokazuju učinak te mogu postati greenwashing.',
+      ],
+      takeaway: 'Mjerenje pokazuje promjenu, izvješćivanje je čini vidljivom, a certifikacija neovisno provjerava usklađenost sa standardom.',
+      source: 'Kanonski izvor 1.0, str. 42; Europska komisija, ETIS; GSTC kriteriji.',
+    },
+    {
+      title: 'Pretvori propise i nacionalne ciljeve u destinacijske odluke',
+      body: 'Europski okvir izvješćivanja o održivosti promijenio se tijekom 2025. i 2026., ali tržišni zahtjevi za vjerodostojnim ESG podatcima nisu nestali. Hrvatska Strategija do 2030. naglasak premješta s pukoga rasta obujma na cjelogodišnjost, regionalnu ravnotežu, očuvanje resursa, inovativnost i otpornost.',
+      points: [
+        'Direktiva (EU) 2025/794 odgodila je izvješćivanje za drugi i treći krug obveznika, a Direktiva (EU) 2026/470 bitno je suzila opseg CSRD-a.',
+        'Novi prag obuhvaća poduzeća s više od 1 000 zaposlenih i više od 450 milijuna eura godišnjega neto prihoda.',
+        'Banke, ulagači, veliki kupci i poslovni partneri mogu tražiti podatke i od poduzeća izvan zakonskog opsega.',
+        'Četiri hrvatska strateška cilja nisu formulirana kao rast dolazaka, nego kao uravnoteženost, očuvanje, konkurentnost i otpornost.',
+      ],
+      takeaway: 'Propis određuje minimalnu obvezu, ali destinacijski cilj i tržišni odnos određuju koje podatke treba stvarno voditi.',
+      source: 'Kanonski izvor 1.0, str. 42–43; Direktive (EU) 2025/794 i 2026/470; NN 2/2023.',
+    },
+    {
+      title: 'Zatvori strateški ciklus i uključi dionike',
+      body: 'Strateško upravljanje prolazi kroz situacijsku analizu, viziju i ciljeve, formuliranje strategije, provedbu te praćenje i vrednovanje. Dionici se ne uključuju jednako: način sudjelovanja mora odgovarati njihovu interesu, utjecaju i ulozi, a DMO koordinira taj proces na temelju podataka.',
+      points: [
+        'Situacijska analiza koristi SWOT, PESTLE, resursnu analizu i usporedbu konkurentnosti.',
+        'Vizija se prevodi u SMART ciljeve, a strategija u akcijski plan, proračun, nositelje, rokove i projekte.',
+        'Praćenje povezuje pokazatelje s korekcijom odstupanja; bez pete faze strategija ostaje izjava.',
+        'DMO se pomiče od promocije prema upravljanju posjetiteljima, nosivim kapacitetom, podatcima, rizicima i odnosima među dionicima.',
+      ],
+      takeaway: 'Strategija postaje upravljački instrument tek kada ima nositelja, resurse, pokazatelj, javno praćenje i mogućnost korekcije.',
+      source: 'Kanonski izvor 1.0, str. 43–45; Zakon o turizmu, NN 156/2023.',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Strateški stupovi', value: '4', change: 'okoliš · društvo · gospodarstvo · upravljanje' },
+    { label: 'Strateške faze', value: '5', change: 'analiza → praćenje' },
+    { label: 'Plan destinacije', value: '4 godine', change: 'Zakon o turizmu' },
+    { label: 'Prag CSRD-a', value: '>1 000', change: 'i >450 mil. € neto prihoda' },
+  ],
+  appliedActivity: {
+    title: 'Od pokazatelja do upravljačke odluke',
+    intro: 'Didaktička destinacija ima 9 500 stanovnika, 1,25 milijuna noćenja godišnje i 18 000 turističkih postelja na 15 km². Razmatra povećanje broja postelja za 10 %, bez očekivanoga rasta noćenja.',
+    tasks: [
+      'Izračunajte turistički intenzitet: broj noćenja podijelite brojem stalnih stanovnika.',
+      'Izračunajte gustoću smještaja: broj turističkih postelja podijelite površinom destinacije.',
+      'Izračunajte pojednostavljenu godišnju iskorištenost postelja prije i nakon povećanja kapaciteta te protumačite promjenu.',
+      'Dodajte po jedan društveni i okolišni pokazatelj, odredite izvor, ciljnu vrijednost, nositelja i način uključivanja pogođenih dionika.',
+    ],
+    note: 'Didaktički konstruirano — intenzitet iznosi približno 131,6 noćenja po stanovniku, gustoća 1 200 postelja po km², a pojednostavljena iskorištenost postelja pada s približno 19,0 % na 17,3 %. Pad iskorištenosti upućuje na veći investicijski i okolišni pritisak bez dodatnog prometa.',
+  },
+  editorialUpdate: {
+    title: 'Održivost u Hrvatskoj postala je operativna obveza upravljanja destinacijom',
+    checkedAt: '6. kolovoza 2026.',
+    body: 'Direktiva (EU) 2026/470 potvrdila je suženje obveznog CSRD izvješćivanja na poduzeća s više od 1 000 zaposlenih i godišnjim neto prihodom većim od 450 milijuna eura. To je zakonski prag, a ne dokaz da manjim turističkim poduzećima ESG podatci više nisu potrebni. U Hrvatskoj je Zakon o turizmu (NN 156/2023), zajedno s provedbenim pravilnicima (NN 112/2024), načela održivosti pretvorio u četverogodišnje planove upravljanja destinacijom, pokazatelje održivosti i, za propisane kategorije destinacija, izračun prihvatnoga kapaciteta. Godišnje izvješće Ministarstva za 2025. dodatno potvrđuje da je naglasak na prikupljanju podataka i donošenju odluka na temelju učinaka, a ne samo turističkog prometa.',
+    implications: [
+      'Destinacijski pokazatelj povežite s konkretnom mjerom, proračunom, nositeljem i rokom korekcije.',
+      'Poduzeća izvan CSRD opsega neka odvoje dobrovoljno tržišno izvješćivanje od tvrdnje da imaju zakonsku obvezu.',
+      'DMO treba koordinirati plan i dionike, ali odluke o prostoru, infrastrukturi i ograničenjima donose se u zakonom utvrđenoj podjeli nadležnosti.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 41–45' },
+    { label: 'Europska unija', detail: 'Direktiva (EU) 2026/470 o izmjenama zahtjeva za korporativno izvješćivanje o održivosti i dubinsku analizu.', url: 'https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng' },
+    { label: 'Vijeće Europske unije', detail: 'Konačno usvajanje pojednostavljenja izvješćivanja i dubinske analize, 24. veljače 2026.', url: 'https://www.consilium.europa.eu/en/press/press-releases/2026/02/24/council-signs-off-simplification-of-sustainability-reporting-and-due-diligence-requirements-to-boost-eu-competitiveness/' },
+    { label: 'Narodne novine', detail: 'Strategija razvoja održivog turizma do 2030. godine, NN 2/2023.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2023_01_2_18.html' },
+    { label: 'Narodne novine', detail: 'Zakon o turizmu, NN 156/2023.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2023_12_156_2382.html' },
+    { label: 'Ministarstvo turizma i sporta', detail: 'Godišnje izvješće o provedbi Nacionalnog plana razvoja održivog turizma do 2027. za 2025.', url: 'https://mints.gov.hr/UserDocsImages//1A_UPISNICI//Godi%C5%A1nje%20izvje%C5%A1%C4%87e%20o%20provedbi%20Nacionalnog%20plana%20razvoja%20odr%C5%BEivog%20turizma%20do%202027_za%202025.pdf' },
+  ],
+  questions: [
+    { question: 'Koja tvrdnja najbolje opisuje održivost destinacije?', options: ['To je konačno stanje koje potvrđuje jedna oznaka', 'To je smjer smanjivanja pritiska po jedinici koristi, praćen pokazateljima', 'To je sinonim za rast prihoda', 'Odnosi se samo na okoliš'], correct: 1, explanation: 'Kanonski izvor održivost definira kao smjer. Treba pratiti relativne pokazatelje i uravnotežiti okolišni, društveni, gospodarski i upravljački stup.' },
+    { question: 'Koja kombinacija obilježava vjerodostojan certifikat?', options: ['Samoprocjena i jednokratna naknada', 'Neobjavljeni kriteriji i trajni status', 'Javni kriteriji, neovisna provjera, obnova i mogućnost oduzimanja', 'Promotivna kampanja i logotip'], correct: 2, explanation: 'Certifikacijski sustav mora biti transparentan, neovisno provjeravan, vremenski obnavljan i sposoban oduzeti status kada kriteriji više nisu ispunjeni.' },
+    { question: 'Koja poduzeća prema Direktivi (EU) 2026/470 ulaze u suženi opseg CSRD-a?', options: ['Sva turistička poduzeća', 'Sva poduzeća s više od 250 zaposlenih', 'Poduzeća s više od 1 000 zaposlenih i više od 450 milijuna eura neto prihoda', 'Samo poduzeća koja dobrovoljno traže certifikat'], correct: 2, explanation: 'Oba praga moraju biti ispunjena. Izlazak iz zakonskog opsega ne uklanja moguće zahtjeve banaka, ulagača i poslovnih partnera za ESG podatcima.' },
+    { question: 'Koja faza pretvara strategiju iz izjave u upravljački ciklus?', options: ['Samo SWOT analiza', 'Promotivna kampanja', 'Praćenje i vrednovanje s korekcijom odstupanja', 'Izrada slogana vizije'], correct: 2, explanation: 'Peta faza povezuje pokazatelje s rezultatima i omogućuje korekciju provedbe. Bez nje nije moguće utvrditi napreduje li strategija.' },
+    { question: 'Što najtočnije opisuje novu paradigmu DMO-a?', options: ['Isključivo povećavanje broja dolazaka', 'Samo zakup medija i odnosi s javnošću', 'Koordinacija dionika, upravljanje podatcima, posjetiteljima, resursima i rizicima', 'Preuzimanje svih ovlasti lokalne samouprave'], correct: 2, explanation: 'DMO postaje koordinator upravljanja destinacijom, ali djeluje u podjeli nadležnosti s lokalnom i regionalnom samoupravom, javnim sektorom i drugim dionicima.' },
+  ],
+  media: {
+    audio: {
+      title: 'Regenerativni turizam umjesto lova na rekorde',
+      fileName: 'Regenerativni_turizam_umjesto_lova_na_rekorde.m4a',
+      url: `${mediaBaseUrlEight}/Regenerativni_turizam_umjesto_lova_na_rekorde.m4a`,
+      duration: '17:50',
+      description: 'Audioizvedenica propituje napuštanje lova na rekorde, odnos održivoga i regenerativnoga turizma te pretvaranje načela u upravljačke odluke i mjerljive učinke.',
+    },
+    video: {
+      title: 'Održivost i upravljanje',
+      fileName: 'Odrzivost_i_upravljanje.mp4',
+      url: `${mediaBaseUrlEight}/Odrzivost_i_upravljanje.mp4`,
+      duration: '9:56',
+      description: 'Video povezuje relativne pokazatelje održivosti, strateško planiranje, uključivanje dionika i novu ulogu destinacijskih organizacija.',
+      poster: '/media/cjelina-08/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Održivi razvoj i strateško upravljanje destinacijom',
+      fileName: 'Strategic_Destination_Sustainability.pptx',
+      url: `${mediaBaseUrlEight}/Strategic_Destination_Sustainability.pptx`,
+      description: 'Dvanaest slajdova vodi od održivosti kao mjerljivoga smjera preko ETIS-a, certifikacije i regulatornog okvira do strateškog ciklusa, dionika i preobrazbe DMO-a.',
+      slides: [
+        { number: 1, title: 'Održivi razvoj i strateško upravljanje destinacijom', image: '/media/cjelina-08/slides/slide-1.webp', interpretation: 'Kompas, pokazatelj trenda i naslov povezuju dvije funkcije: održivost određuje razvojni smjer, a strateško upravljanje pretvara taj smjer u odluke, projekte i korekcije. Središnja poruka prezentacije nije da regulativa sama stvara održivost, nego da se načela moraju prevesti u mjerljive rezultate na terenu.' },
+        { number: 2, title: 'Održivost nije stanje, nego smjer', image: '/media/cjelina-08/slides/slide-2.webp', interpretation: 'Razbijena kutija upozorava na izlazak iz binarne podjele održivo–neodrživo. Četiri stupa pokazuju da ekološki napredak nije dovoljan ako slabe kvaliteta života, gospodarska održivost ili transparentnost upravljanja. Relativni pokazatelji omogućuju usporedbu pritiska s ostvarenim učinkom, ali ih treba tumačiti zajedno s apsolutnim granicama resursa.' },
+        { number: 3, title: 'Arhitektura ključnih pojmova', image: '/media/cjelina-08/slides/slide-3.webp', interpretation: 'Gornja razina razlikuje održivi razvoj od regenerativnoga turizma: prvi smanjuje i uravnotežuje negativne učinke, a drugi teži obnovi ekosustava i zajednice. ESG i DMO nisu ciljevi sami po sebi, nego alati — ESG organizira kriterije i podatke, a DMO koordinira dionike i provedbu u destinaciji.' },
+        { number: 4, title: 'ETIS: od načela do matematike', image: '/media/cjelina-08/slides/slide-4.webp', interpretation: 'Tri formule pokazuju kako se široko načelo pretvara u operativnu metriku. Turistički intenzitet povezuje noćenja i stanovništvo, gustoća smještaja kapacitet i prostor, a udio obnovljive energije izvor i ukupnu potrošnju. Nijedan pokazatelj nije dovoljan sam: četiri skupine ETIS-a zajednički prate upravljanje, gospodarsku vrijednost, društveni učinak i okoliš.' },
+        { number: 5, title: 'Certifikacija nasuprot greenwashingu', image: '/media/cjelina-08/slides/slide-5.webp', interpretation: 'Kišobran GSTC-a predstavlja globalni referentni okvir, a ne certifikat koji GSTC izravno dodjeljuje svakom hotelu ili destinaciji. Vjerodostojnost konkretne sheme procjenjuje se prema objavljenim kriterijima, neovisnom auditu, periodičnoj obnovi i oduzimanju statusa. Naziv ili logotip bez tih mehanizama ne dokazuje stvarni okolišni ili društveni učinak.' },
+        { number: 6, title: 'Sužavanje obveze izvješćivanja u EU-u', image: '/media/cjelina-08/slides/slide-6.webp', interpretation: 'Službeni okvir potvrđuje oba prikazana koraka: Direktiva (EU) 2025/794 odgodila je drugi i treći val, a Direktiva (EU) 2026/470 suzila je CSRD na poduzeća koja istodobno imaju više od 1 000 zaposlenih i više od 450 milijuna eura godišnjega neto prihoda. Zaključak o većini hrvatskih turističkih poduzeća razuman je prema veličini sektora, ali za svako poduzeće obuhvat treba provjeriti prema važećem pravu i konsolidiranim podatcima.' },
+        { number: 7, title: 'Regulatorni i tržišni zahtjevi nisu isto', image: '/media/cjelina-08/slides/slide-7.webp', interpretation: 'Vaga dobro prikazuje da slabljenje izravne zakonske obveze ne uklanja zahtjeve financiranja, lanaca opskrbe i kupaca. Ipak, tvrdnju da je tržište preuzelo ulogu regulatora treba čitati kao naglašenu metaforu: tržišni zahtjevi nisu univerzalni, jednako provedivi ni pravno jednaki propisu. Preciznije je reći da tržište i dobrovoljni standardi dopunjuju suženi regulatorni obuhvat.' },
+        { number: 8, title: 'Četiri cilja hrvatske Strategije do 2030.', image: '/media/cjelina-08/slides/slide-8.webp', interpretation: 'Četiri cilja službene Strategije usmjerena su na cjelogodišnjost i regionalnu ravnotežu, očuvanje okoliša, prostora i klime, konkurentnost i inovacije te otpornost. Nijedan cilj nije formuliran kao rast broja dolazaka, što označuje važan pomak prioriteta. Naslov „prestanak ovisnosti o obujmu” treba razumjeti kao razvojni smjer, a ne kao već ostvareno stanje hrvatskoga turizma.' },
+        { number: 9, title: 'Pet faza strateškog planiranja', image: '/media/cjelina-08/slides/slide-9.webp', interpretation: 'Pet faza čini kružni, a ne jednokratni proces. Analiza podupire viziju i mjerljive ciljeve, izbor strategije određuje put, a provedba raspoređuje projekte, proračun, nositelje i rokove. Praćenje i vrednovanje vraćaju nalaze u novu analizu; upravo zato naglašena peta faza razlikuje aktivan upravljački instrument od dokumenta koji ostaje neproveden.' },
+        { number: 10, title: 'Matrica interesa i utjecaja dionika', image: '/media/cjelina-08/slides/slide-10.webp', interpretation: 'Matrica pomaže odabrati način uključivanja, ali položaji na slici nisu trajne osobine skupina. Lokalno stanovništvo može imati velik kolektivni utjecaj iako je slabo organizirano, zaposlenici mogu postati ključni dionik u krizi radne snage, a udruge mogu steći formalnu ulogu u projektu. Zato analizu treba ponoviti za konkretan projekt, mjesto i fazu odlučivanja.' },
+        { number: 11, title: 'DMO: od marketinga prema upravljanju', image: '/media/cjelina-08/slides/slide-11.webp', interpretation: 'Usporedba pokazuje promjenu fokusa, mjerenja uspjeha, komunikacije i odnosa prema resursima. Hrvatski Zakon o turizmu taj pomak čini operativnim kroz planove upravljanja destinacijom, pokazatelje održivosti, uključivanje lokalnog stanovništva i koordinaciju dionika. DMO ipak ne zamjenjuje lokalnu samoupravu ni druga nadležna tijela; njegova je ključna uloga okupljanje, analitika i koordinacija.' },
+        { number: 12, title: 'Održiva destinacija u praksi', image: '/media/cjelina-08/slides/slide-12.webp', interpretation: 'Koncentrični sustav povezuje mjerljivu održivost, nacionalnu strategiju, tržišne zahtjeve i preobrazbu DMO-a. Nijedan sloj ne djeluje samostalno: podatci bez odluke ne mijenjaju praksu, strategija bez provedbe ne stvara učinak, a certifikat bez upravljačkog ciklusa ostaje izolirana potvrda. Održivost postaje stvarna kada pokazatelji mijenjaju proračun, projekte, tokove posjetitelja i odnos prema zajednici.' },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
@@ -1585,4 +1738,5 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   5: chapterFive,
   6: chapterSix,
   7: chapterSeven,
+  8: chapterEight,
 }

@@ -300,6 +300,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
               'Kako zajedno primijeniti Doxeyev i Butlerov model na destinaciju u konsolidaciji?',
               'Izračunaj turistički intenzitet i gustoću za zadani primjer te protumači ograničenja rezultata.',
             ]
+        : content.id === 8
+          ? [
+              'Kako razlikovati pokazatelj, izvješće, certifikat i marketinšku oznaku održivosti?',
+              'Pretvori jedan cilj hrvatske Strategije do 2030. u SMART cilj, pokazatelj i akcijski projekt.',
+              'Izradi matricu interesa i utjecaja dionika za plan upravljanja odabranom destinacijom.',
+            ]
       : [
           'Objasni razliku između turista i izletnika na novom primjeru.',
           'Prikaži Leiperov model na putovanju iz Zagreba u Dubrovnik.',
