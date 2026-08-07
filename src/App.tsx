@@ -136,7 +136,7 @@ function App() {
               {mode === 'Prouči' && <aside className="guide-card">
                 <div className="guide-avatar"><Bot /></div>
                 <span className="eyebrow">STALNI VODIČ</span>
-                <h3>Kako pručiti ovu cjelinu?</h3>
+                <h3>Kako proučiti ovu cjelinu?</h3>
                 <p>{guideText(mode, hasContent)}</p>
                 <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
               </aside>}
@@ -213,6 +213,20 @@ function Study({ content }: { content: ChapterContent }) {
               eyebrow: 'UČINCI I POKAZATELJI',
               title: 'Od gospodarskog doprinosa do turističkog opterećenja',
               description: 'Prva dva pokazatelja potječu iz ispravljenoga službenog satelitskog računa za 2022.; druga dva rezultat su didaktičkog primjera i služe učenju turističkog intenziteta i gustoće.',
+              appendComparison: false,
+            }
+        : content.id === 8
+          ? {
+              eyebrow: 'OKVIRI I UPRAVLJAČKI PRAGOVI',
+              title: 'Održivost postaje operativna tek kada se mjeri i provodi',
+              description: 'Četiri pokazatelja povezuju stupove održivosti, strateški ciklus, vremenski horizont plana upravljanja i aktualni europski prag izvješćivanja.',
+              appendComparison: false,
+            }
+        : content.id === 9
+          ? {
+              eyebrow: 'OTPORNOST I DIGITALNA PRAVILA',
+              title: 'Priprema prije poremećaja određuje sposobnost oporavka',
+              description: 'Pokazatelji sažimaju ciklus kriznog upravljanja, skupine primjene umjetne inteligencije te aktualne datume europskih obveza transparentnosti i visokorizičnih sustava.',
               appendComparison: false,
             }
       : {
@@ -309,6 +323,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
               'Kako razlikovati pokazatelj, izvješće, certifikat i marketinšku oznaku održivosti?',
               'Pretvori jedan cilj hrvatske Strategije do 2030. u SMART cilj, pokazatelj i akcijski projekt.',
               'Izradi matricu interesa i utjecaja dionika za plan upravljanja odabranom destinacijom.',
+            ]
+        : content.id === 9
+          ? [
+              'Izradi matricu rizika i predloži mjeru za svaki njezin kvadrant.',
+              'Kako hotel treba uvesti virtualnog asistenta uz transparentnost i prijelaz na djelatnika?',
+              'Zašto pametna destinacija ovisi više o upravljanju podacima nego o broju senzora?',
             ]
       : [
           'Objasni razliku između turista i izletnika na novom primjeru.',

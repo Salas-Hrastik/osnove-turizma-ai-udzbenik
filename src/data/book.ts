@@ -17,7 +17,7 @@ export const chapters: ChapterSummary[] = [
   { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
   { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'available' },
   { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'available' },
-  { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'planned' },
+  { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'available' },
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '50–51', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'planned' },
   { id: 11, title: 'Završna samoprovjera znanja', pages: '30 pitanja', outcome: 'Integrirati znanje iz svih deset cjelina i prepoznati područja koja treba ponoviti.', status: 'assessment' },
 ]
@@ -30,6 +30,7 @@ const mediaBaseUrlFive = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/ob
 const mediaBaseUrlSix = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-06'
 const mediaBaseUrlSeven = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-07'
 const mediaBaseUrlEight = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-08'
+const mediaBaseUrlNine = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-09'
 
 export const chapterOne: ChapterContent = {
   ...chapters[0],
@@ -1730,6 +1731,158 @@ export const chapterEight: ChapterContent = {
   },
 }
 
+export const chapterNine: ChapterContent = {
+  ...chapters[8],
+  summary: 'Poglavlje povezuje otpornost i tehnološku preobrazbu kao dvije sposobnosti istoga turističkog sustava. Krizni menadžment obuhvaća prevenciju, pripremu, odgovor i oporavak, dok kvalitetno krizno komuniciranje štiti ljude i povjerenje. Umjetna inteligencija, analitika podataka i pametne destinacije mogu poboljšati doživljaj i operativu, ali zahtijevaju upravljanje podacima, privatnošću, transparentnošću i ljudskim nadzorom. Platformizacija mijenja pristup tržištu i odnos moći, a klimatska prilagodba povezuje sve teme u dugoročnu arhitekturu otpornosti.',
+  outcomes: [
+    'primijeniti četiri faze ciklusa upravljanja krizom i matricu procjene rizika',
+    'oblikovati brzo, istinito, empatično i usklađeno krizno komuniciranje',
+    'vrednovati koristi, granice i regulatorne obveze primjene umjetne inteligencije',
+    'povezati upravljanje podacima, platformizaciju i klimatsku prilagodbu s otpornošću destinacije',
+  ],
+  keywords: [
+    { term: 'Kriza u turizmu', definition: 'Neočekivan događaj koji ugrožava sigurnost posjetitelja, poslovanje ili ugled destinacije i zahtijeva odluke u uvjetima velike nesigurnosti.' },
+    { term: 'Otpornost destinacije', definition: 'Sposobnost turističkog sustava da apsorbira poremećaj, prilagodi se, nastavi funkcionirati i ugradi naučeno u buduće odluke.' },
+    { term: 'Matrica rizika', definition: 'Alat koji rizike razvrstava prema vjerojatnosti nastanka i veličini učinka kako bi se odabrale razmjerne mjere.' },
+    { term: 'Krizno komuniciranje', definition: 'Pravodobno, istinito, empatično i usklađeno informiranje javnosti i dionika tijekom poremećaja.' },
+    { term: 'Umjetna inteligencija u turizmu', definition: 'Primjena modela za predviđanje potražnje, komunikaciju, personalizaciju, operativnu učinkovitost i upravljanje destinacijom.' },
+    { term: 'Hiperpersonalizacija', definition: 'Prilagodba ponude pojedincu na temelju podataka i modela u stvarnom vremenu, uz pravnu osnovu, transparentnost i zaštitu privatnosti.' },
+    { term: 'Pametna turistička destinacija', definition: 'Destinacija koja tehnologijom i podacima unapređuje održivost, pristupačnost i doživljaj, uz uključivanje dionika i jasna pravila upravljanja.' },
+    { term: 'Digitalni blizanac', definition: 'Virtualni model destinacije ili objekta koji omogućuje simuliranje tokova, opterećenja i mogućih scenarija prije odluke.' },
+    { term: 'Platformizacija', definition: 'Premještanje pristupa tržištu, distribucije i dijela rada na digitalne platforme čiji algoritmi utječu na vidljivost, cijene i odnos moći.' },
+    { term: 'Klimatska prilagodba', definition: 'Sustavna prilagodba poslovanja, proizvoda, infrastrukture i planova promijenjenim klimatskim uvjetima i ekstremnim događajima.' },
+  ],
+  steps: [
+    {
+      title: 'Izgradi otpornost prije nego što kriza počne',
+      body: 'Brzina oporavka ne ovisi samo o težini događaja. Ovisi o tome je li sustav unaprijed utvrdio ranjivosti, izradio protokole, uvježbao odgovorne osobe i osigurao sposobnost učenja nakon poremećaja.',
+      points: [
+        'Prevencija i ublažavanje smanjuju izloženost procjenom rizika, ranim upozoravanjem i otpornijom infrastrukturom.',
+        'Priprema obuhvaća krizni plan, protokole, vježbe, zalihe, osiguranja i unaprijed određene odgovornosti.',
+        'Odgovor stavlja sigurnost ljudi, operativno zapovijedanje i provjereno informiranje ispred zaštite imidža.',
+        'Oporavak uključuje obnovu, povratak tržišta, analizu naučenog i promjenu sustava kako se ista ranjivost ne bi ponovila.',
+      ],
+      takeaway: 'Otpornost nije improvizacija tijekom krize, nego sposobnost izgrađena prevencijom, pripremom, diversifikacijom i učenjem.',
+      source: 'Kanonski izvor 1.0, str. 46–47',
+    },
+    {
+      title: 'Primijeni umjetnu inteligenciju uz jasne granice i ljudski nadzor',
+      body: 'Umjetna inteligencija stvara vrijednost kada podupire predviđanje, komunikaciju, personalizaciju, operativu i upravljanje destinacijom. Isti sustavi mogu pojačati pristranost, narušiti privatnost ili pogriješiti upravo u iznenadnom prekidu koji nema presedan u povijesnim podacima.',
+      points: [
+        'Predviđanje potražnje i prihoda povezuje povijesne rezervacije s vanjskim signalima, ali zahtijeva nadzor pri strukturnim promjenama.',
+        'Virtualni asistent mora jasno pokazati da je riječ o umjetnoj inteligenciji i omogućiti prijelaz na djelatnika kada je potreban ljudski odgovor.',
+        'Hiperpersonalizacija traži minimalan, zakonito prikupljen skup podataka i objašnjivu svrhu obrade.',
+        'Od 2. kolovoza 2026. primjenjuju se obveze transparentnosti Akta o umjetnoj inteligenciji, dok su pojedine obveze za visokorizične sustave odgođene.',
+      ],
+      takeaway: 'Najbolja primjena automatizira rutinu i pojačava prosudbu zaposlenika, ali ne skriva identitet sustava niti ukida ljudsku odgovornost.',
+      source: 'Kanonski izvor 1.0, str. 47–48; Uredbe (EU) 2024/1689 i 2026/1744.',
+    },
+    {
+      title: 'Upravljaj podacima i platformama, a ne samo tehnologijom',
+      body: 'Pametna destinacija nije ona s najviše senzora. Ona povezuje podatke o smještaju, prometu, potrošnji, otpadu i vremenskim uvjetima s konkretnim odlukama, uz dogovor o vlasništvu, pristupu i odgovornosti. Platforme istodobno šire tržišni doseg i premještaju dio moći prema algoritmu rangiranja.',
+      points: [
+        'Integrirana podatkovna osnova mora imati poznat izvor, kvalitetu, odgovornog vlasnika i pravila pristupa.',
+        'Upravljanje tokovima u stvarnom vremenu vrijedi samo ako je povezano s mjerama u prostoru, prometu i komunikaciji.',
+        'Digitalni blizanac služi simulaciji scenarija; nije zamjena za podatke s terena ni uključivanje zajednice.',
+        'Platformizacija smanjuje ulaznu barijeru malim pružateljima, ali povećava ovisnost o proviziji, pravilima vidljivosti i nesigurnim oblicima rada.',
+      ],
+      takeaway: 'Tehnologija postaje pametna tek kada su podaci upravljani, odluke odgovorne, a koristi i rizici vidljivi svim važnim dionicima.',
+      source: 'Kanonski izvor 1.0, str. 48–49',
+    },
+    {
+      title: 'Ugradi klimatsku prilagodbu u proizvod i poslovni plan',
+      body: 'Za mediteranski turizam toplinski valovi, vodni stres, ekstremni događaji i promjene ekosustava već utječu na ugodnost boravka, troškove, osiguranje i raspored potražnje. Prilagodba zato nije izdvojeni zeleni projekt, nego dio upravljanja rizikom i razvoja proizvoda.',
+      points: [
+        'Ekonomija vremena produljuje sezonu i premješta aktivnosti iz najtoplijih sati, ne samo radi prihoda nego i radi sigurnosti i ugodnosti.',
+        'Zelena infrastruktura, sjena, hlađenje i urbana vegetacija smanjuju toplinsko opterećenje prostora.',
+        'Recirkulacija, mjerenje i cjenovni signali smanjuju vodni stres u vršnoj sezoni.',
+        'Protupožarna zaštita, večernji i unutarnji sadržaji te razvoj kontinentalne i gorske ponude diversificiraju klimatski rizik.',
+      ],
+      takeaway: 'Klimatska prilagodba povezuje sigurnost, resurse, sezonalnost i tržišni portfelj u jedinstven plan otpornosti.',
+      source: 'Kanonski izvor 1.0, str. 49',
+    },
+  ],
+  dataSnapshot: [
+    { label: 'Faze kriznog ciklusa', value: '4', change: 'prevencija → oporavak' },
+    { label: 'Skupine primjene AI-ja', value: '5', change: 'gost · operativa · destinacija' },
+    { label: 'Transparentnost AI-ja', value: '2. 8. 2026.', change: 'članak 50.' },
+    { label: 'Visokorizični sustavi', value: '2. 12. 2027.', change: 'Prilog III.' },
+  ],
+  appliedActivity: {
+    title: 'Plan uvođenja virtualnog asistenta u hotel',
+    intro: 'Hotel s 80 soba želi virtualnim asistentom preuzeti rutinske upite prije dolaska i tijekom boravka, ali bez smanjenja sigurnosti, privatnosti i mogućnosti ljudskoga kontakta.',
+    tasks: [
+      'Razvrstajte upite na one koje asistent smije samostalno riješiti, one koji zahtijevaju potvrdu djelatnika i one koje izrijekom ne preuzima.',
+      'Napišite početnu obavijest kojom se gostu jasno kaže da komunicira s umjetnom inteligencijom.',
+      'Odredite pravila trenutačnog prijelaza na djelatnika, zadržavanja konteksta i postupanja u sigurnosnim, zdravstvenim i pritužbenim situacijama.',
+      'Predložite pet pokazatelja za prva tri mjeseca: točnost, stopa prijelaza na djelatnika, vrijeme odgovora, zadovoljstvo gosta i broj prijavljenih problema s podacima.',
+    ],
+    note: 'Didaktički zadatak — uspjeh se ne mjeri samo udjelom automatiziranih razgovora. Pogrešan odgovor, skriven identitet sustava ili onemogućen ljudski kontakt mogu poništiti operativnu uštedu.',
+  },
+  editorialUpdate: {
+    title: 'Pravila transparentnosti umjetne inteligencije sada se primjenjuju',
+    checkedAt: '7. kolovoza 2026.',
+    body: 'Od 2. kolovoza 2026. primjenjuje se glavnina Akta o umjetnoj inteligenciji, uključujući članak 50. Osoba mora biti obaviještena da izravno komunicira sa sustavom umjetne inteligencije, osim kada je to očito iz okolnosti. Za generativne sustave vrijede tehničke obveze označavanja izlaza u strojno čitljivom obliku, dok se za deepfake sadržaj i određene tekstove od javnog interesa primjenjuju posebne obveze objave. Uredba (EU) 2026/1744 odgodila je primjenu pravila za visokorizične sustave iz Priloga III., među kojima su i određeni sustavi zapošljavanja, na 2. prosinca 2027., a za sustave ugrađene u regulirane proizvode na 2. kolovoza 2028. Zato vidljiva oznaka svakog umjetno generiranog vizuala nije univerzalno jednaka obveza; potrebno je utvrditi ulogu subjekta, vrstu sadržaja i konkretnu odredbu.',
+    implications: [
+      'Virtualni asistent mora na početku razgovora jasno otkriti da je sustav umjetne inteligencije i ponuditi dostupan prijelaz na djelatnika.',
+      'Hotel i DMO trebaju odvojeno provjeriti obveze pružatelja sustava, korisnika sustava i objavitelja sintetičkog sadržaja.',
+      'Datume i klasifikaciju visokorizičnog sustava prije nabave ili citiranja treba provjeriti u konsolidiranom tekstu propisa.',
+    ],
+  },
+  sources: [
+    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 46–49' },
+    { label: 'EUR-Lex', detail: 'Konsolidirani tekst Uredbe (EU) 2024/1689, stanje 27. srpnja 2026.', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX%3A02024R1689-20260727' },
+    { label: 'EUR-Lex', detail: 'Uredba (EU) 2026/1744 — izmjene rokova i pojednostavljenje Akta o umjetnoj inteligenciji.', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ%3AL_202601744' },
+    { label: 'Europska komisija', detail: 'AI Act — regulatorni okvir i aktualni raspored primjene.', url: 'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai' },
+    { label: 'Europska agencija za okoliš', detail: 'European Climate Risk Assessment — procjena klimatskih rizika za Europu.', url: 'https://www.eea.europa.eu/publications/european-climate-risk-assessment' },
+  ],
+  questions: [
+    { question: 'Koji je ispravan redoslijed ciklusa upravljanja krizom?', options: ['Odgovor, promocija, oporavak, prevencija', 'Prevencija i ublažavanje, priprema, odgovor, oporavak', 'Priprema, oporavak, odgovor, prodaja', 'Prevencija, rebrendiranje, prodaja, evaluacija'], correct: 1, explanation: 'Otpornost se gradi kroz prevenciju i ublažavanje, zatim pripremu, odgovor tijekom događaja te oporavak i učenje nakon njega.' },
+    { question: 'Koje pravilo nije dio kvalitetnog kriznog komuniciranja?', options: ['Brzo i istinito', 'Empatija prije brojki', 'Jedan usklađeni glas', 'Obećati datum završetka i kada nije poznat'], correct: 3, explanation: 'Netočno obećanje dodatno narušava povjerenje. Neizvjesnost treba priznati i redovito ažurirati provjerenim informacijama.' },
+    { question: 'Što najtočnije opisuje pametnu destinaciju?', options: ['Destinacija s najvećim brojem senzora', 'Destinacija koja podatke pretvara u odluke uz jasna pravila upravljanja', 'Destinacija bez ljudskih djelatnika', 'Destinacija koja sve podatke drži zatvorenima'], correct: 1, explanation: 'Tehnologija je vidljivi dio, ali vrijednost nastaje iz integriranih podataka, dogovorenog vlasništva i pristupa te povezivanja pokazatelja s odlukama.' },
+    { question: 'Koja se obveza Akta o umjetnoj inteligenciji primjenjuje od 2. kolovoza 2026.?', options: ['Sve obveze za svaki visokorizični sustav', 'Transparentnost prema članku 50.', 'Zabrana svih virtualnih asistenata', 'Ukidanje ljudskog nadzora'], correct: 1, explanation: 'Obveze transparentnosti primjenjuju se od 2. kolovoza 2026.; pojedine obveze za visokorizične sustave imaju kasnije rokove.' },
+    { question: 'Zašto je klimatska prilagodba dio poslovne otpornosti?', options: ['Jer se odnosi samo na marketinške oznake', 'Jer mijenja ugodnost, resurse, osiguranje, sezonu i turistički proizvod', 'Jer uklanja potrebu za kriznim planom', 'Jer vrijedi samo za gorske destinacije'], correct: 1, explanation: 'Toplinski valovi, vodni stres, ekstremni događaji i promjene ekosustava već utječu na troškove, sigurnost, raspored potražnje i samu atraktivnost resursa.' },
+  ],
+  media: {
+    audio: {
+      title: 'Što čini turističku destinaciju otpornom?',
+      fileName: 'Sto_ciini_turisticku.mp3',
+      url: `${mediaBaseUrlNine}/Sto_ciini_turisticku.mp3`,
+      duration: '27:12',
+      description: 'Audioizvedenica povezuje pripremljenost za poremećaje, digitalnu preobrazbu i klimatsku prilagodbu u jedinstven okvir otpornosti turističke destinacije.',
+    },
+    video: {
+      title: 'Otpornost i trendovi',
+      fileName: 'Otpornost_i_trendovi.mp4',
+      url: `${mediaBaseUrlNine}/Otpornost_i_trendovi.mp4`,
+      duration: '8:16',
+      description: 'Video sažima krizni menadžment, tehnološke promjene i klimatske trendove koji oblikuju sposobnost destinacije da nastavi funkcionirati i nakon poremećaja.',
+      poster: '/media/cjelina-09/video-poster.jpg',
+    },
+    presentation: {
+      title: 'Arhitektura destinacije budućnosti',
+      fileName: 'Future_Destination_Architecture.pptx',
+      url: `${mediaBaseUrlNine}/Future_Destination_Architecture.pptx`,
+      description: 'Trinaest slajdova povezuje krizni ciklus i komunikaciju, primjenu i regulaciju umjetne inteligencije, pametne destinacije, platformizaciju te klimatske rizike i prilagodbu.',
+      slides: [
+        { number: 1, title: 'Arhitektura destinacije budućnosti', image: '/media/cjelina-09/slides/slide-1.webp', interpretation: 'Naslovni slajd najavljuje da otpornost, tehnološka preobrazba i klimatska prilagodba nisu tri odvojena dodatka turističkom razvoju, nego nosiva konstrukcija destinacije budućnosti. Tehnički nacrt sugerira sustav međusobno ovisnih odluka; ponovljena sintagma u podnaslovu izvorna je osobina priložene prezentacije, dok kanonski sadržaj jasno razlikuje tehnološku preobrazbu od klimatske prilagodbe.' },
+        { number: 2, title: 'Otpornost i digitalna preobrazba', image: '/media/cjelina-09/slides/slide-2.webp', interpretation: 'Presjek dviju kružnica pokazuje da sposobnost apsorbiranja poremećaja i sposobnost korištenja tehnologije stvaraju destinaciju budućnosti tek zajedno. Tehnologija bez krizne pripreme može ubrzati pogrešnu odluku, a otpornost bez podataka teže prepoznaje rane signale. Arhitektura pripremljenosti zato povezuje ljude, protokole, podatke i infrastrukturu.' },
+        { number: 3, title: 'Ciklus upravljanja krizom', image: '/media/cjelina-09/slides/slide-3.webp', interpretation: 'Dvostruka petlja naglašava da krizno upravljanje nema završnu točku. Prevencija smanjuje ranjivost, priprema gradi sposobnost odgovora, odgovor štiti ljude i funkcije, a oporavak vraća sustav i ugrađuje naučeno u novi krug prevencije. Ako se oporavak svede samo na promociju povratka gostiju, propušta se najvažnija prilika za uklanjanje uzroka ranjivosti.' },
+        { number: 4, title: 'Matrica procjene rizika', image: '/media/cjelina-09/slides/slide-4.webp', interpretation: 'Matrica spaja vjerojatnost i učinak kako bi se odredio prioritet i vrsta mjere. Operativni rizici traže standardne procedure, sporadični osiguranje i zamjenske planove, sistemski prilagodbu proizvoda i ugovora, a kritični uvježban krizni tim. Položaj rizika nije trajan: klimatska promjena može nekad rijedak događaj pretvoriti u učestali sistemski pritisak.' },
+        { number: 5, title: 'Zlatna pravila kriznog komuniciranja', image: '/media/cjelina-09/slides/slide-5.webp', interpretation: 'Četiri pravila štite povjerenje: službeni izvor treba biti brz i istinit, sigurnost ljudi prethodi obrani imidža, imenovani glasnogovornik usklađuje poruke, a neizvjesnost se priznaje umjesto da se prikriva netočnim obećanjem. Diversifikacija tržišta, proizvoda i sezone važna je pouka pandemije, ali njezin doprinos treba procjenjivati zajedno s vrstom poremećaja, prometnom dostupnošću i javnim mjerama.' },
+        { number: 6, title: 'Primjene i granice umjetne inteligencije', image: '/media/cjelina-09/slides/slide-6.webp', interpretation: 'Gornja razina prikazuje dodirne točke gosta, a donja pozadinske operacije. Virtualni asistenti i preporuke mogu povećati dostupnost i relevantnost, dok predviđanje, rasporedi i analiza tokova podupiru učinkovitost. Donja napomena postavlja nužnu granicu: model koji uči iz povijesti može podbaciti u prekidu bez presedana, a automatizacija osobne usluge i obrada podataka mogu smanjiti povjerenje i vrijednost iskustva.' },
+        { number: 7, title: 'Akt o umjetnoj inteligenciji mijenja pravila igre', image: '/media/cjelina-09/slides/slide-7.webp', interpretation: 'Vremenska crta odgovara važećem europskom okviru nakon Uredbe (EU) 2026/1744: glavnina pravila i članak 50. primjenjuju se od 2. kolovoza 2026., obveze za visokorizične sustave iz Priloga III. od 2. prosinca 2027., a za sustave ugrađene u regulirane proizvode od 2. kolovoza 2028. Formulaciju o označavanju vizuala treba čitati precizno: Akt razlikuje obavijest o razgovoru s AI-jem, strojno čitljivo označavanje generiranih izlaza i posebnu objavu deepfake sadržaja.' },
+        { number: 8, title: 'Pametna destinacija: tehnologija i upravljanje', image: '/media/cjelina-09/slides/slide-8.webp', interpretation: 'Ledeni brijeg odvaja vidljivu tehnologiju od većega, često zanemarenoga upravljačkog sloja. Senzori, digitalne kartice i blizanci vrijede samo ako postoje integrirana podatkovna osnova, dogovor o vlasništvu i prikupljanju, otvorenost prema opravdanim korisnicima te pokazatelji povezani s odlukama. Pilot-projekt bez tih pravila ostaje demonstracija opreme, a ne pametna destinacija.' },
+        { number: 9, title: 'Platformizacija i digitalni nomadi', image: '/media/cjelina-09/slides/slide-9.webp', interpretation: 'Vaga pokazuje dvostruki učinak platformi: malim pružateljima omogućuju globalnu vidljivost i fleksibilnije modele, ali algoritmu prenose moć nad rangiranjem, troškom pristupa tržištu i dijelom uvjeta rada. Digitalni nomadi mogu produljiti boravak i potrošnju izvan sezone, ali njihov utjecaj na stanovanje ovisi o prostornoj koncentraciji, duljini boravka i lokalnoj ponudi; poseban hrvatski boravišni status ne uklanja potrebu mjerenja tih učinaka.' },
+        { number: 10, title: 'Klimatska prilagodba: konačni test otpornosti', image: '/media/cjelina-09/slides/slide-10.webp', interpretation: 'Slajd klimatsku promjenu smješta u sadašnje operativno planiranje mediteranskoga turizma. Coolcationing može preusmjeriti dio ljetne potražnje prema hladnijim područjima, ali istodobno otvara prostor za predsezonu, posezonu, gorske i kontinentalne proizvode. To nije automatski tržišni ishod: destinacija mora povezati klimatske podatke, kapacitete, prijevoz i stvarnu privlačnost proizvoda.' },
+        { number: 11, title: 'Četiri kanala klimatskog rizika', image: '/media/cjelina-09/slides/slide-11.webp', interpretation: 'Četiri ulazna kanala proizvode povezane posljedice. Toplina smanjuje ugodnost i mijenja vrijeme aktivnosti, vodni stres ograničava vršnu sezonu, ekstremni događaji povećavaju prekide i troškove osiguranja, a promjene ekosustava slabe sam turistički resurs. Zbog tih veza rizik se ne smije procjenjivati odvojeno po odjelima ili samo prema prosječnim vremenskim vrijednostima.' },
+        { number: 12, title: 'Alati za klimatsku prilagodbu', image: '/media/cjelina-09/slides/slide-12.webp', interpretation: 'Pet skupina alata pretvara klimatski rizik u upravljački program: raspodjela aktivnosti kroz sezonu i dan, zelena infrastruktura, upravljanje vodom i drugim resursima, sigurnosno planiranje te preoblikovanje proizvoda. Svaka mjera treba imati nositelja, rok, proračun i pokazatelj učinka; bez toga prilagodba ostaje popis dobrih namjera.' },
+        { number: 13, title: 'Jedinstveni živčani sustav destinacije budućnosti', image: '/media/cjelina-09/slides/slide-13.webp', interpretation: 'Završna shema povezuje podatke i umjetnu inteligenciju, krizni menadžment i klimatsku prilagodbu u povratnu petlju. Predviđanje može aktivirati rane protokole, krizni odgovor stvara nove podatke, a naučeno mijenja dugoročni proizvod i infrastrukturu. Središnja poruka cjeline jest da tehnologija ne zamjenjuje otpornost: ona je njezin osjetilni sloj, dok odgovornost, protokoli i prilagodba određuju stvarni opstanak sustava.' },
+      ],
+    },
+  },
+}
+
 export const chapterContents: Partial<Record<number, ChapterContent>> = {
   1: chapterOne,
   2: chapterTwo,
@@ -1739,4 +1892,5 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   6: chapterSix,
   7: chapterSeven,
   8: chapterEight,
+  9: chapterNine,
 }
