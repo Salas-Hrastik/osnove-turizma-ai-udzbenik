@@ -171,6 +171,7 @@ function BookCover({ onOpen }: { onOpen: () => void }) {
       </div>
       <div className="book-cover-footer">
         <div><span>Autor</span><strong>{book.author}</strong></div>
+        <div><span>Autorski istraživački dodatak</span><strong>Ivan Ružić, Tanja Gavrić</strong></div>
         <div><span>Izdavač</span><strong>{book.publisher}</strong></div>
         <button type="button" className="cover-open-button" onClick={onOpen}><BookOpen /> Otvori udžbenik</button>
       </div>
