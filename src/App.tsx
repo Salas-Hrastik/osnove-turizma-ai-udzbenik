@@ -107,7 +107,7 @@ function App() {
         {sidebarOpen && <button className="scrim" onClick={() => setSidebarOpen(false)} aria-label="Zatvori izbornik" />}
 
         <main className="main-panel" id="glavni-sadrzaj">
-          <div className={`chapter-controls ${mode === 'Gledaj i slušaj' ? 'media-mode-controls' : ''}`}>
+          <div className={`chapter-controls ${mode === 'Gledaj i slušaj' ? 'media-mode-controls' : ''} ${isFinalAssessment ? 'assessment-controls' : ''}`}>
             <section className="chapter-hero">
               <div>
                 <span className="eyebrow">CJELINA {chapter.id} · {chapter.status === 'assessment' ? chapter.pages : `STRANICE ${chapter.pages}`}</span>
@@ -132,7 +132,7 @@ function App() {
 
           <div className="main-body-scroll" ref={mainBodyRef}>
             <div className={`content-grid ${mode !== 'Prouči' || isFinalAssessment ? 'without-guide' : ''}`}>
-              <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''}`}>
+              <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''} ${isFinalAssessment ? 'assessment-learning-area' : ''}`}>
                 {isFinalAssessment ? <FinalOralExam /> : !chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
               {mode === 'Prouči' && !isFinalAssessment && <aside className="guide-card">

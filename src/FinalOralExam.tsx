@@ -6,10 +6,11 @@ import type { ChapterContent } from './types'
 
 const QUESTION_COUNT = 5
 const ANSWER_PAUSE_MS = 5500
-const INITIAL_HELP_MS = 10000
+const INITIAL_HELP_MS = 8000
+const CONFIRMATION_REMINDER_MS = 8000
 
-type ExamPhase = 'intro' | 'connecting' | 'asking' | 'answering' | 'evaluating' | 'feedback' | 'finishing' | 'complete' | 'error'
-type SpokenKind = 'question' | 'hint' | 'final'
+type ExamPhase = 'intro' | 'connecting' | 'asking' | 'answering' | 'evaluating' | 'feedback' | 'confirming' | 'finishing' | 'complete' | 'error'
+type SpokenKind = 'question' | 'hint' | 'confirmation' | 'continue' | 'final'
 
 type OralQuestion = {
   id: string
@@ -106,8 +107,16 @@ function isExplicitlyFinished(value: string) {
   return /\b(gotov(?:a)? sam|to je sve|završio sam|završila sam)\b/iu.test(value)
 }
 
+function isAffirmative(value: string) {
+  return /\b(da|jesam|dovršio sam|dovršila sam|gotov sam|gotova sam|završio sam|završila sam)\b/iu.test(value)
+}
+
+function isNegative(value: string) {
+  return /\b(ne|nisam|još nisam|želim nastaviti|nastavio bih|nastavila bih)\b/iu.test(value)
+}
+
 function spokenQuestion(question: OralQuestion, index: number) {
-  return `Pitanje ${index + 1} od ${QUESTION_COUNT}, iz cjeline ${question.chapterId}. ${question.question}`
+  return `Pitanje ${index + 1}. ${question.question}`
 }
 
 export function FinalOralExam() {
@@ -135,6 +144,7 @@ export function FinalOralExam() {
   const questionIndexRef = useRef(0)
   const recordsRef = useRef<ExamRecord[]>([])
   const pendingSpokenRef = useRef<SpokenKind | null>(null)
+  const confirmationReminderUsedRef = useRef(false)
 
   const currentQuestion = questions[questionIndex]
 
@@ -143,6 +153,11 @@ export function FinalOralExam() {
       window.clearTimeout(pauseTimerRef.current)
       pauseTimerRef.current = null
     }
+  }
+
+  function changePhase(nextPhase: ExamPhase) {
+    phaseRef.current = nextPhase
+    setPhase(nextPhase)
   }
 
   function closeConnection() {
@@ -194,22 +209,44 @@ export function FinalOralExam() {
     hintUsedRef.current = false
     hintTextRef.current = ''
     setCurrentHint('')
-    setPhase('asking')
+    confirmationReminderUsedRef.current = false
+    changePhase('asking')
     sendSpoken(spokenQuestion(questionsRef.current[index], index), 'question')
+  }
+
+  function giveHint(hint: string) {
+    hintUsedRef.current = true
+    hintTextRef.current = hint
+    setCurrentHint(hint)
+    changePhase('feedback')
+    sendSpoken(hint, 'hint')
   }
 
   function scheduleInitialHelp() {
     clearPauseTimer()
     pauseTimerRef.current = window.setTimeout(() => {
-      if (answerSegmentsRef.current.length || hintUsedRef.current || evaluatingRef.current) return
+      if (phaseRef.current !== 'answering' || answerSegmentsRef.current.length || hintUsedRef.current || evaluatingRef.current) return
       const question = questionsRef.current[questionIndexRef.current]
-      const hint = `Za početak pokušajte povezati odgovor s pojmovima ${question.hintTerms.join(', ')}.`
-      hintUsedRef.current = true
-      hintTextRef.current = hint
-      setCurrentHint(hint)
-      setPhase('feedback')
-      sendSpoken(hint, 'hint')
+      giveHint(`Pomoćno pitanje: kako biste s postavljenim pitanjem povezali pojmove ${question.hintTerms.join(', ')}?`)
     }, INITIAL_HELP_MS)
+  }
+
+  function scheduleConfirmationReminder() {
+    clearPauseTimer()
+    if (confirmationReminderUsedRef.current) return
+    pauseTimerRef.current = window.setTimeout(() => {
+      if (phaseRef.current !== 'confirming' || responseActiveRef.current) return
+      confirmationReminderUsedRef.current = true
+      sendSpoken('Recite da ako ste dovršili odgovor ili ne ako želite nastaviti.', 'confirmation')
+    }, CONFIRMATION_REMINDER_MS)
+  }
+
+  function askForCompletion() {
+    if (responseActiveRef.current || evaluatingRef.current) return
+    clearPauseTimer()
+    confirmationReminderUsedRef.current = false
+    changePhase('confirming')
+    sendSpoken('Jeste li dovršili odgovor? Recite da ili ne.', 'confirmation')
   }
 
   async function requestEvaluation(question: OralQuestion, answer: string, provisional: boolean) {
@@ -234,27 +271,48 @@ export function FinalOralExam() {
     return payload as AnswerEvaluation
   }
 
-  async function evaluateCurrentAnswer(forceFinal = false) {
+  async function reviewCurrentAnswer() {
     if (evaluatingRef.current) return
     const question = questionsRef.current[questionIndexRef.current]
     const answer = cleanAnswer(answerSegmentsRef.current.join(' '))
     if (!question || !answer) return
     evaluatingRef.current = true
     clearPauseTimer()
-    setPhase('evaluating')
+    changePhase('evaluating')
     setError('')
     try {
-      const evaluation = await requestEvaluation(question, answer, !forceFinal && !hintUsedRef.current)
-      if (!forceFinal && !hintUsedRef.current && !evaluation.complete) {
-        const hint = evaluation.hint || `Pokušajte povezati odgovor s pojmovima ${question.hintTerms.join(', ')}.`
-        hintUsedRef.current = true
-        hintTextRef.current = hint
-        setCurrentHint(hint)
+      const evaluation = await requestEvaluation(question, answer, true)
+      if (!hintUsedRef.current && !evaluation.complete) {
+        const hint = evaluation.hint || `Kako biste odgovor povezali s pojmovima ${question.hintTerms.join(', ')}?`
         evaluatingRef.current = false
-        setPhase('feedback')
-        sendSpoken(hint, 'hint')
+        giveHint(hint)
         return
       }
+
+      evaluatingRef.current = false
+      askForCompletion()
+    } catch (evaluationError) {
+      evaluatingRef.current = false
+      setError(evaluationError instanceof Error ? evaluationError.message : 'Odgovor trenutačno nije moguće provjeriti.')
+      changePhase('error')
+    }
+  }
+
+  async function finalizeCurrentAnswer() {
+    if (evaluatingRef.current) return
+    const question = questionsRef.current[questionIndexRef.current]
+    const answer = cleanAnswer(answerSegmentsRef.current.join(' '))
+    if (!question || !answer) {
+      const hint = `Još nisam zabilježio sadržaj odgovora. Koji biste od pojmova ${question?.hintTerms.join(', ') || 'iz postavljenoga pitanja'} najprije povezali s pitanjem?`
+      giveHint(hint)
+      return
+    }
+    evaluatingRef.current = true
+    clearPauseTimer()
+    changePhase('evaluating')
+    setError('')
+    try {
+      const evaluation = await requestEvaluation(question, answer, false)
 
       const record = { question, answer, hint: hintTextRef.current || undefined, evaluation }
       const nextRecords = [...recordsRef.current, record]
@@ -267,12 +325,12 @@ export function FinalOralExam() {
     } catch (evaluationError) {
       evaluatingRef.current = false
       setError(evaluationError instanceof Error ? evaluationError.message : 'Vrednovanje trenutačno nije dostupno.')
-      setPhase('error')
+      changePhase('error')
     }
   }
 
   async function finishExam() {
-    setPhase('finishing')
+    changePhase('finishing')
     const total = recordsRef.current.reduce((sum, record) => sum + record.evaluation.score, 0)
     const mapped = gradeFromTotal(total)
     let summary = 'Odgovori su vrednovani prema očekivanim pojmovima i obrazloženjima iz odabranih cjelina.'
@@ -303,17 +361,30 @@ export function FinalOralExam() {
     responseActiveRef.current = false
     pendingSpokenRef.current = null
     if (kind === 'question') {
-      setPhase('answering')
+      if (phaseRef.current !== 'asking') return
+      changePhase('answering')
       scheduleInitialHelp()
       return
     }
     if (kind === 'hint') {
-      setPhase('answering')
+      if (phaseRef.current !== 'feedback') return
+      changePhase('answering')
+      if (!answerSegmentsRef.current.length) scheduleInitialHelp()
+      return
+    }
+    if (kind === 'confirmation') {
+      if (phaseRef.current !== 'confirming') return
+      scheduleConfirmationReminder()
+      return
+    }
+    if (kind === 'continue') {
+      changePhase('answering')
+      scheduleInitialHelp()
       return
     }
     if (kind === 'final') {
       closeConnection()
-      setPhase('complete')
+      changePhase('complete')
     }
   }
 
@@ -326,7 +397,7 @@ export function FinalOralExam() {
     }
     switch (event.type) {
       case 'input_audio_buffer.speech_started':
-        if (!['asking', 'answering'].includes(phaseRef.current)) break
+        if (!['asking', 'answering', 'feedback', 'confirming'].includes(phaseRef.current)) break
         clearPauseTimer()
         if (responseActiveRef.current) {
           channelRef.current?.send(JSON.stringify({ type: 'response.cancel' }))
@@ -334,15 +405,32 @@ export function FinalOralExam() {
           responseActiveRef.current = false
           pendingSpokenRef.current = null
         }
-        setPhase('answering')
+        if (phaseRef.current !== 'confirming') changePhase('answering')
         break
       case 'conversation.item.input_audio_transcription.completed': {
-        if (!['asking', 'answering'].includes(phaseRef.current)) break
-        const segment = cleanAnswer(String(event.transcript || ''))
+        if (!['asking', 'answering', 'feedback', 'confirming'].includes(phaseRef.current)) break
+        const rawTranscript = String(event.transcript || '')
+        if (phaseRef.current === 'confirming') {
+          clearPauseTimer()
+          if (isNegative(rawTranscript)) {
+            changePhase('answering')
+            sendSpoken('U redu, nastavite odgovor.', 'continue')
+            break
+          }
+          if (isAffirmative(rawTranscript)) {
+            void finalizeCurrentAnswer()
+            break
+          }
+        }
+        const segment = cleanAnswer(rawTranscript)
         if (segment) answerSegmentsRef.current.push(segment)
-        const finished = isExplicitlyFinished(String(event.transcript || ''))
+        const finished = isExplicitlyFinished(rawTranscript)
+        changePhase('answering')
         clearPauseTimer()
-        pauseTimerRef.current = window.setTimeout(() => void evaluateCurrentAnswer(finished || hintUsedRef.current), finished ? 200 : ANSWER_PAUSE_MS)
+        pauseTimerRef.current = window.setTimeout(() => {
+          if (finished) askForCompletion()
+          else void reviewCurrentAnswer()
+        }, finished ? 250 : ANSWER_PAUSE_MS)
         break
       }
       case 'response.created':
@@ -352,7 +440,12 @@ export function FinalOralExam() {
         const kind = event.response?.metadata?.exam_kind || pendingSpokenRef.current
         if (event.response?.status === 'incomplete' && event.response.status_details?.reason === 'max_output_tokens' && kind) {
           setError('Govorni izlaz nije dovršen. Možete nastaviti ispit ponovnim pokretanjem.')
-          setPhase('error')
+          changePhase('error')
+          return
+        }
+        if (event.response?.status && event.response.status !== 'completed') {
+          responseActiveRef.current = false
+          pendingSpokenRef.current = null
           return
         }
         if (kind) handleSpokenDone(kind)
@@ -360,7 +453,7 @@ export function FinalOralExam() {
       }
       case 'error':
         setError(event.error?.message || 'Došlo je do pogreške u glasovnoj sesiji.')
-        setPhase('error')
+        changePhase('error')
         break
     }
   }
@@ -371,7 +464,7 @@ export function FinalOralExam() {
     const selected = selectQuestions()
     if (selected.length !== QUESTION_COUNT) {
       setError('U prethodnim cjelinama nema dovoljno pitanja za završnu provjeru.')
-      setPhase('error')
+      changePhase('error')
       return
     }
     questionsRef.current = selected
@@ -379,13 +472,14 @@ export function FinalOralExam() {
     recordsRef.current = []
     answerSegmentsRef.current = []
     hintUsedRef.current = false
+    confirmationReminderUsedRef.current = false
     setQuestions(selected)
     setQuestionIndex(0)
     setRecords([])
     setCurrentHint('')
     setFinalAssessment(null)
     setError('')
-    setPhase('connecting')
+    changePhase('connecting')
 
     try {
       if (!navigator.mediaDevices?.getUserMedia || typeof RTCPeerConnection === 'undefined') {
@@ -412,14 +506,14 @@ export function FinalOralExam() {
             disconnectTimerRef.current = null
             if (peerRef.current === peer && peer.connectionState === 'disconnected') {
               setError('Glasovna veza nije se uspjela obnoviti. Ponovno pokrenite završnu provjeru.')
-              setPhase('error')
+              changePhase('error')
               closeConnection()
             }
           }, 8000)
         }
         if (peer.connectionState === 'failed') {
           setError('Glasovna veza je prekinuta. Ponovno pokrenite završnu provjeru.')
-          setPhase('error')
+          changePhase('error')
           closeConnection()
         }
       }
@@ -434,7 +528,7 @@ export function FinalOralExam() {
       channel.onclose = () => {
         if (channelRef.current === channel && phaseRef.current !== 'complete') {
           setError('Veza s AI ispitivačem je zatvorena.')
-          setPhase('error')
+          changePhase('error')
         }
       }
 
@@ -472,13 +566,13 @@ export function FinalOralExam() {
     } catch (startError) {
       closeConnection()
       setError(startError instanceof Error ? startError.message : 'Završnu provjeru nije bilo moguće pokrenuti.')
-      setPhase('error')
+      changePhase('error')
     }
   }
 
   function stopExam() {
     closeConnection()
-    setPhase('intro')
+    changePhase('intro')
     setQuestions([])
     setRecords([])
     setFinalAssessment(null)
@@ -498,10 +592,10 @@ export function FinalOralExam() {
   return <>
     <section className="final-exam" aria-labelledby="final-exam-title">
       <header className="final-exam-heading">
-        <div><span className="eyebrow">CJELINA 12 · ZAVRŠNI USMENI RAZGOVOR</span><h2 id="final-exam-title">Pet pitanja, jedno po jedno</h2><p>AI postavlja pitanje i čeka Vaš odgovor. Ako dulje zastanete, dobit ćete kratku sugestiju. Nakon odgovora odmah slijedi sljedeće pitanje.</p></div>
+        <div><span className="eyebrow">ZAVRŠNI USMENI RAZGOVOR</span><h2 id="final-exam-title">Pet pitanja, jedno po jedno</h2><p>Odgovorite svojim riječima. Ako zastanete, dobit ćete pomoć. Novo pitanje slijedi tek kada potvrdite da ste završili odgovor.</p></div>
       </header>
 
-      {phase === 'intro' && <div className="exam-start"><div className="exam-start-icon"><Mic /></div><h3>Spremni?</h3><p>Nakon svakoga pitanja odgovorite svojim riječima. Sustav će prepoznati završetak odgovora i nastaviti dalje.</p><button type="button" className="primary-button" onClick={() => void startExam()}><Mic /> Pokreni razgovor</button></div>}
+      {phase === 'intro' && <div className="exam-start"><div className="exam-start-icon"><Mic /></div><div><h3>Spremni?</h3><p>Poslušajte pitanje, odgovorite i na kraju potvrdite je li odgovor dovršen.</p></div><button type="button" className="primary-button" onClick={() => void startExam()}><Mic /> Pokreni razgovor</button></div>}
 
       {active && <div className="exam-simple-session" aria-live="polite"><span><Mic />{phase === 'connecting' ? 'Pripremam prvo pitanje…' : phase === 'finishing' ? 'Pripremam završni osvrt…' : 'Usmeni razgovor je u tijeku'}</span><button type="button" onClick={stopExam}><Square /> Prekini</button></div>}
 
@@ -512,16 +606,17 @@ export function FinalOralExam() {
       <p className="exam-privacy"><LockKeyhole /> Zapis razgovora ostaje skriven do završnoga osvrta i ne sprema se na poslužitelj.</p>
     </section>
 
-    {showQuestion && currentQuestion && <QuestionPopup question={currentQuestion} index={questionIndex} hint={currentHint} />}
+    {showQuestion && currentQuestion && <QuestionPopup question={currentQuestion} index={questionIndex} hint={currentHint} phase={phase} />}
   </>
 }
 
-function QuestionPopup({ question, index, hint }: { question: OralQuestion; index: number; hint: string }) {
+function QuestionPopup({ question, index, hint, phase }: { question: OralQuestion; index: number; hint: string; phase: ExamPhase }) {
   return createPortal(<div className="exam-question-layer"><aside className="exam-question-popup" role="dialog" aria-live="polite" aria-label={`Pitanje ${index + 1} od ${QUESTION_COUNT}`}>
     <div><span>PITANJE {index + 1} OD {QUESTION_COUNT}</span><small>Cjelina {question.chapterId}</small></div>
     <p>{question.question}</p>
     {hint && <div className="exam-popup-hint"><Sparkles /><span><strong>Pomoć</strong>{hint}</span></div>}
-    <footer><Mic /> Odgovorite usmeno</footer>
+    {phase === 'confirming' && <div className="exam-popup-confirmation"><CheckCircle2 /><span><strong>Jeste li dovršili odgovor?</strong>Recite „da” ili „ne”.</span></div>}
+    <footer><Mic />{phase === 'asking' ? 'Poslušajte pitanje' : phase === 'evaluating' ? 'Provjeravam odgovor…' : phase === 'confirming' ? 'Čekam Vašu potvrdu' : 'Odgovorite usmeno'}</footer>
   </aside></div>, document.body)
 }
 
