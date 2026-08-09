@@ -19,6 +19,21 @@ function upstreamError(status, payload) {
   return detail || 'AI usluga nije vratila odgovor.'
 }
 
+function plainText(value) {
+  return String(value || '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/^\s*```[^\n]*\n?/gm, '')
+    .replace(/^\s{0,3}#{1,6}\s*/gm, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/_([^_\n]+)_/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
 export default async function handler(request, response) {
   const apiKey = process.env.ANTHROPIC_API_KEY
   const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL
@@ -66,7 +81,7 @@ export default async function handler(request, response) {
         model,
         max_tokens: 900,
         temperature: 0.2,
-        system: `Ti si stručni AI vodič hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”. Odgovaraj prirodnim, jasnim hrvatskim jezikom. Odgovor temelji isključivo na DOPUŠTENIM IZVORIMA iz posljednje korisničke poruke i relevantnoj kratkoj povijesti. Ne izmišljaj činjenice. Razlikuj kanonski tekst od uredničkog ili istraživačkog dodatka. Ako izvori nisu dovoljni, to izričito reci i predloži preciznije pitanje ili širi unutarnji opseg. Ne pretražuj vanjske izvore. Odgovori u 2–5 kratkih odlomaka, a na kraju dodaj redak "Izvor: ..." s najrelevantnijom oznakom izvora iz konteksta.`,
+        system: `Ti si stručni AI vodič hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”. Odgovaraj prirodnim, jasnim hrvatskim jezikom. Odgovor temelji isključivo na DOPUŠTENIM IZVORIMA iz posljednje korisničke poruke i relevantnoj kratkoj povijesti. Ne izmišljaj činjenice. Razlikuj kanonski tekst od uredničkog ili istraživačkog dodatka. Ako izvori nisu dovoljni, to izričito reci i predloži preciznije pitanje ili širi unutarnji opseg. Ne pretražuj vanjske izvore. Odgovori u 2–5 kratkih odlomaka. Piši kao običan tekst: bez Markdowna, bez zvjezdica, bez ljestvi, bez popisa i bez naslova. Na kraju dodaj zaseban redak "Izvor: ..." s najrelevantnijom oznakom izvora iz konteksta.`,
         messages,
       }),
     })
@@ -80,8 +95,8 @@ export default async function handler(request, response) {
     if (!text) throw new Error('AI usluga vratila je prazan odgovor.')
     const sourceMatch = text.match(/\n?Izvor:\s*(.+)$/i)
     return response.status(200).json({
-      text: sourceMatch ? text.slice(0, sourceMatch.index).trim() : text,
-      source: sourceMatch?.[1]?.trim() || 'AI odgovor utemeljen na odabranom opsegu udžbenika',
+      text: plainText(sourceMatch ? text.slice(0, sourceMatch.index) : text),
+      source: plainText(sourceMatch?.[1]) || 'AI odgovor utemeljen na odabranom opsegu udžbenika',
     })
   } catch (error) {
     const timedOut = error instanceof Error && error.name === 'TimeoutError'

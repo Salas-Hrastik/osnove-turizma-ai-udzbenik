@@ -293,16 +293,16 @@ function Flashcards({ content }: { content: ChapterContent }) {
 }
 
 type ConversationMessage = { role: 'user' | 'assistant'; text: string; source?: string }
-type SpeechRecognitionEventLike = { results: ArrayLike<{ 0: { transcript: string } }> }
-type SpeechRecognitionLike = {
-  lang: string
-  interimResults: boolean
-  continuous: boolean
-  start: () => void
-  stop: () => void
-  onresult: ((event: SpeechRecognitionEventLike) => void) | null
-  onend: (() => void) | null
-  onerror: (() => void) | null
+type VoiceStatus = 'idle' | 'connecting' | 'ready' | 'listening' | 'thinking' | 'speaking' | 'error'
+
+const voiceStatusText: Record<VoiceStatus, string> = {
+  idle: 'Razgovor nije pokrenut',
+  connecting: 'Povezujem mikrofon…',
+  ready: 'Spreman — izgovorite pitanje',
+  listening: 'Slušam vas…',
+  thinking: 'Oblikujem odgovor…',
+  speaking: 'AI vodič govori…',
+  error: 'Razgovor je prekinut',
 }
 
 function conversationContext(content: ChapterContent, scope: 'topic' | 'chapter' | 'book') {
@@ -348,10 +348,14 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   const [voiceScope, setVoiceScope] = useState<'topic' | 'chapter' | 'book'>('topic')
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState<ConversationMessage[]>([])
-  const [isListening, setIsListening] = useState(false)
   const [isAnswering, setIsAnswering] = useState(false)
   const [conversationError, setConversationError] = useState('')
-  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>('idle')
+  const [voiceError, setVoiceError] = useState('')
+  const voicePeerRef = useRef<RTCPeerConnection | null>(null)
+  const voiceChannelRef = useRef<RTCDataChannel | null>(null)
+  const voiceStreamRef = useRef<MediaStream | null>(null)
+  const voiceAudioRef = useRef<HTMLAudioElement | null>(null)
   const prompts = content.id === 2
     ? [
         'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
@@ -418,7 +422,7 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   ]
   const selectedScope = voiceScopes.find((scope) => scope.key === voiceScope) ?? voiceScopes[0]
 
-  const askQuestion = async (text: string, speak = false) => {
+  const askQuestion = async (text: string) => {
     const cleanQuestion = text.trim()
     if (!cleanQuestion || isAnswering) return
     const currentHistory = messages
@@ -436,12 +440,6 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
       if (!result.ok) throw new Error(payload?.error || 'Odgovor trenutačno nije dostupan.')
       const answer = { text: String(payload.text), source: String(payload.source || 'Odabrani izvor udžbenika') }
       setMessages((current) => [...current, { role: 'assistant', ...answer }])
-      if (speak && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel()
-        const utterance = new SpeechSynthesisUtterance(answer.text)
-        utterance.lang = 'hr-HR'
-        window.speechSynthesis.speak(utterance)
-      }
     } catch (error) {
       setConversationError(error instanceof Error ? error.message : 'Razgovor trenutačno nije dostupan.')
     } finally {
@@ -449,31 +447,147 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
     }
   }
 
-  const toggleListening = () => {
-    if (isListening) {
-      recognitionRef.current?.stop()
-      setIsListening(false)
-      return
+  function closeVoiceConnection() {
+    voiceChannelRef.current?.close()
+    voiceChannelRef.current = null
+    voicePeerRef.current?.close()
+    voicePeerRef.current = null
+    voiceStreamRef.current?.getTracks().forEach((track) => track.stop())
+    voiceStreamRef.current = null
+    if (voiceAudioRef.current) {
+      voiceAudioRef.current.pause()
+      voiceAudioRef.current.srcObject = null
     }
-    const browserWindow = window as typeof window & { webkitSpeechRecognition?: new () => SpeechRecognitionLike; SpeechRecognition?: new () => SpeechRecognitionLike }
-    const Recognition = browserWindow.SpeechRecognition ?? browserWindow.webkitSpeechRecognition
-    if (!Recognition) return
-    const recognition = new Recognition()
-    recognition.lang = 'hr-HR'
-    recognition.interimResults = false
-    recognition.continuous = false
-    recognition.onresult = (event) => askQuestion(event.results[0][0].transcript, true)
-    recognition.onend = () => setIsListening(false)
-    recognition.onerror = () => setIsListening(false)
-    recognitionRef.current = recognition
-    setIsListening(true)
-    recognition.start()
+    voiceAudioRef.current = null
   }
 
-  useEffect(() => () => {
-    recognitionRef.current?.stop()
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-  }, [])
+  function stopVoiceConversation() {
+    closeVoiceConnection()
+    setVoiceStatus('idle')
+    setVoiceError('')
+  }
+
+  function handleVoiceEvent(raw: string) {
+    let event: { type?: string; error?: { message?: string } }
+    try {
+      event = JSON.parse(raw)
+    } catch {
+      return
+    }
+    switch (event.type) {
+      case 'input_audio_buffer.speech_started':
+        setVoiceStatus('listening')
+        break
+      case 'input_audio_buffer.speech_stopped':
+      case 'response.created':
+        setVoiceStatus('thinking')
+        break
+      case 'response.output_audio.delta':
+      case 'response.audio.delta':
+        setVoiceStatus('speaking')
+        break
+      case 'response.output_audio.done':
+      case 'response.audio.done':
+      case 'response.done':
+        setVoiceStatus('ready')
+        break
+      case 'error':
+        setVoiceError(event.error?.message || 'Došlo je do pogreške u glasovnoj sesiji.')
+        setVoiceStatus('error')
+        break
+    }
+  }
+
+  async function startVoiceConversation() {
+    if (!['idle', 'error'].includes(voiceStatus)) return
+    setVoiceStatus('connecting')
+    setVoiceError('')
+    try {
+      if (!navigator.mediaDevices?.getUserMedia || typeof RTCPeerConnection === 'undefined') {
+        throw new Error('Ovaj preglednik ne podržava izravni glasovni razgovor.')
+      }
+
+      const peer = new RTCPeerConnection()
+      voicePeerRef.current = peer
+      const audio = document.createElement('audio')
+      audio.autoplay = true
+      audio.setAttribute('playsinline', '')
+      voiceAudioRef.current = audio
+      peer.ontrack = (event) => {
+        audio.srcObject = event.streams[0] ?? new MediaStream([event.track])
+        void audio.play().catch(() => undefined)
+      }
+      peer.onconnectionstatechange = () => {
+        if (peer.connectionState === 'failed' || peer.connectionState === 'disconnected') {
+          setVoiceError('Glasovna veza je prekinuta. Pokrenite razgovor ponovno.')
+          setVoiceStatus('error')
+          closeVoiceConnection()
+        }
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+      })
+      voiceStreamRef.current = stream
+      stream.getTracks().forEach((track) => peer.addTrack(track, stream))
+
+      const channel = peer.createDataChannel('oai-events')
+      voiceChannelRef.current = channel
+      channel.onopen = () => setVoiceStatus('ready')
+      channel.onmessage = (event) => handleVoiceEvent(event.data)
+      channel.onerror = () => {
+        setVoiceError('Veza s glasovnim AI vodičem je prekinuta.')
+        setVoiceStatus('error')
+      }
+
+      const offer = await peer.createOffer()
+      await peer.setLocalDescription(offer)
+      if (!offer.sdp) throw new Error('Preglednik nije stvorio valjanu glasovnu vezu.')
+
+      const response = await fetch('/api/realtime-session', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          sdp: offer.sdp,
+          context: conversationContext(content, voiceScope),
+          scopeLabel: `${selectedScope.label} · ${selectedScope.title}`,
+        }),
+      })
+      if (!response.ok) {
+        const raw = await response.text()
+        let message = 'Glasovnu sesiju trenutačno nije moguće pokrenuti.'
+        try {
+          const payload = JSON.parse(raw)
+          if (typeof payload?.error === 'string') message = payload.error
+        } catch {
+          if (raw.trim()) message = raw.replace(/\s+/g, ' ').slice(0, 180)
+        }
+        throw new Error(message)
+      }
+      await peer.setRemoteDescription({ type: 'answer', sdp: await response.text() })
+    } catch (error) {
+      closeVoiceConnection()
+      setVoiceError(error instanceof Error ? error.message : 'Glasovni razgovor nije bilo moguće pokrenuti.')
+      setVoiceStatus('error')
+    }
+  }
+
+  function interruptVoiceAnswer() {
+    const channel = voiceChannelRef.current
+    if (!channel || channel.readyState !== 'open') return
+    channel.send(JSON.stringify({ type: 'response.cancel' }))
+    channel.send(JSON.stringify({ type: 'output_audio_buffer.clear' }))
+    setVoiceStatus('ready')
+  }
+
+  function closeConversation() {
+    if (conversationType === 'voice') stopVoiceConversation()
+    setConversationType(null)
+  }
+
+  useEffect(() => () => closeVoiceConnection(), [])
+
+  const voiceActive = ['ready', 'listening', 'thinking', 'speaking'].includes(voiceStatus)
 
   return <>
     <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pismeni ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
@@ -487,30 +601,33 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
       </button>
     </div>
 
-    {conversationType && <ConversationModal type={conversationType} onClose={() => setConversationType(null)}>
+    {conversationType && <ConversationModal type={conversationType} onClose={closeConversation}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
         <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
         <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => void askQuestion(prompt)} disabled={isAnswering}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} />{isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor iz odabranih izvora…</span></div>}{conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}<form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); void askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" disabled={isAnswering} /><button type="submit" disabled={!question.trim() || isAnswering} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor oblikuje AI isključivo iz sadržaja odabranog opsega. Vanjski izvori nisu automatski uključeni.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
-        <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odaberite opseg, pritisnite mikrofon i izgovorite pitanje. Vodič će odgovor pronaći u udžbeniku i pročitati ga naglas.</p></div><div className={`voice-status ${isListening ? 'active' : ''}`}><Mic /><span><small>Status mikrofona</small><strong>{isListening ? 'Slušam…' : 'Spreman'}</strong></span></div></div>
+        <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · IZRAVNI DIJALOG</span><h3>Razgovarajte prirodno s AI vodičem</h3><p>Odaberite opseg i pokrenite razgovor. Vodič vas sluša, odgovara prirodnim glasom i automatski prepušta riječ kada ponovno progovorite.</p></div><div className={`voice-status ${voiceStatus !== 'idle' ? 'active' : ''}`}><Mic /><span><small>Status razgovora</small><strong>{voiceStatusText[voiceStatus]}</strong></span></div></div>
 
         <div className="voice-scope-selector" role="radiogroup" aria-label="Odaberite opseg izvora za usmeni razgovor">
-          {voiceScopes.map((scope, index) => <button key={scope.key} className={voiceScope === scope.key ? 'active' : ''} onClick={() => setVoiceScope(scope.key)} role="radio" aria-checked={voiceScope === scope.key}>
+          {voiceScopes.map((scope, index) => <button key={scope.key} className={voiceScope === scope.key ? 'active' : ''} onClick={() => setVoiceScope(scope.key)} role="radio" aria-checked={voiceScope === scope.key} disabled={voiceActive || voiceStatus === 'connecting'}>
             <span className="scope-number">{String(index + 1).padStart(2, '0')}</span><span><strong>{scope.label}</strong><em>{scope.title}</em><small>{scope.description}</small><b>{scope.source}</b></span><CheckCircle2 />
           </button>)}
         </div>
 
-        <div className="voice-console">
+        <div className={`voice-console voice-${voiceStatus}`}>
           <div className="voice-orb"><Mic /></div>
           <div className="voice-console-copy"><span className="eyebrow">ODABRANI OPSEG</span><h3>{selectedScope.label}</h3><p>{selectedScope.description}</p><div className="voice-source-layers"><span><BookOpen />Kanonski tekst 1.0</span><span><Sparkles />Datirani urednički dodatci</span></div></div>
-          <div className="voice-action"><button type="button" className={isListening ? 'active' : ''} onClick={toggleListening}><Mic /> {isListening ? 'Zaustavi slušanje' : 'Postavi pitanje glasom'}</button><small>{('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) ? 'Preglednik će zatražiti dopuštenje za mikrofon.' : 'Ovaj preglednik nema glasovni unos; koristite Chrome ili Edge.'}</small></div>
+          <div className="voice-action">
+            {!voiceActive ? <button type="button" onClick={() => void startVoiceConversation()} disabled={voiceStatus === 'connecting'}><Mic /> {voiceStatus === 'connecting' ? 'Povezujem…' : 'Pokreni razgovor'}</button> : <>
+              {(voiceStatus === 'speaking' || voiceStatus === 'thinking') && <button type="button" className="interrupt" onClick={interruptVoiceAnswer}>Prekini odgovor</button>}
+              <button type="button" className="stop" onClick={stopVoiceConversation}>Završi razgovor</button>
+            </>}
+            <small>{voiceActive ? 'Govorite čim želite. Novi govorni potez automatski prekida odgovor AI vodiča.' : 'Preglednik će jednom zatražiti dopuštenje za mikrofon.'}</small>
+          </div>
         </div>
 
-        <ConversationHistory messages={messages} />
-        {isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor i zatim će ga pročitati…</span></div>}
-        {conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}
-        <div className="voice-state-preview" aria-label="Stanja usmenog razgovora"><span><i>1</i>Slušam</span><ChevronRight /><span><i>2</i>Tražim u izvoru</span><ChevronRight /><span><i>3</i>Govorim</span></div>
-        <p className="conversation-boundary"><LockKeyhole /><span><strong>Granica odgovora ostaje vidljiva.</strong> Vanjski izvori ne uključuju se automatski. Ako vlastiti izvori nisu dovoljni, vodič to mora jasno reći i zatražiti dopuštenje prije vanjskog pretraživanja.</span></p>
+        {voiceError && <p className="conversation-boundary voice-error"><LockKeyhole /><span><strong>Razgovor nije nastavljen.</strong> {voiceError}</span></p>}
+        <p className="voice-privacy"><LockKeyhole /> Zvuk se prenosi samo tijekom aktivnoga razgovora i ne prikazuje se transkript. Vanjski izvori nisu automatski uključeni.</p>
       </section>}
     </ConversationModal>}
   </>
@@ -518,7 +635,24 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
 
 function ConversationHistory({ messages }: { messages: ConversationMessage[] }) {
   if (!messages.length) return <div className="conversation-empty"><MessageCircle /><span>Razgovor će se prikazati ovdje.</span></div>
-  return <div className="conversation-history" aria-live="polite">{messages.map((message, index) => <article key={`${message.role}-${index}`} className={message.role}><strong>{message.role === 'user' ? 'Vi' : 'AI vodič'}</strong><p>{message.text}</p>{message.source && <small><BookOpen />{message.source}</small>}</article>)}</div>
+  return <div className="conversation-history" aria-live="polite">{messages.map((message, index) => {
+    const paragraphs = plainConversationText(message.text).split(/\n{2,}/).filter(Boolean)
+    return <article key={`${message.role}-${index}`} className={message.role}><strong>{message.role === 'user' ? 'Vi' : 'AI vodič'}</strong>{paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}{message.source && <small><BookOpen />{plainConversationText(message.source)}</small>}</article>
+  })}</div>
+}
+
+function plainConversationText(value: string) {
+  return value
+    .replace(/\r\n?/g, '\n')
+    .replace(/^\s{0,3}#{1,6}\s*/gm, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/_([^_\n]+)_/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 function ConversationModal({ type, onClose, children }: { type: 'written' | 'voice'; onClose: () => void; children: React.ReactNode }) {
