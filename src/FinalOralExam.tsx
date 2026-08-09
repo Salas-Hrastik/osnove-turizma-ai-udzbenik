@@ -8,6 +8,7 @@ const QUESTION_COUNT = 5
 
 type ExamStatus = 'idle' | 'connecting' | 'ready' | 'listening' | 'thinking' | 'speaking' | 'completed' | 'error'
 type JsonRecord = Record<string, unknown>
+type PendingResponse = 'continue-exam' | 'finish-exam' | 'final-spoken-summary'
 
 type OralQuestion = {
   id: string
@@ -109,6 +110,8 @@ export function FinalOralExam() {
   const recordsRef = useRef<ExamRecord[]>([])
   const assistantTextRef = useRef('')
   const completionRef = useRef(false)
+  const pendingResponseRef = useRef<PendingResponse | null>(null)
+  const awaitingFinishResponseRef = useRef(false)
 
   const currentQuestion = questions[questionIndex]
   const progress = Math.min(QUESTION_COUNT, records.length)
@@ -139,12 +142,45 @@ export function FinalOralExam() {
     if (channel.readyState === 'open') channel.send(JSON.stringify(payload))
   }
 
-  function answerTool(channel: RTCDataChannel, callId: string, output: JsonRecord) {
+  function answerTool(channel: RTCDataChannel, callId: string, output: JsonRecord, nextResponse: PendingResponse) {
     send(channel, {
       type: 'conversation.item.create',
       item: { type: 'function_call_output', call_id: callId, output: JSON.stringify(output) },
     })
-    send(channel, { type: 'response.create' })
+    pendingResponseRef.current = nextResponse
+  }
+
+  function createPendingResponse(channel: RTCDataChannel, pending: PendingResponse) {
+    if (pending === 'continue-exam') {
+      send(channel, { type: 'response.create' })
+      return
+    }
+    if (pending === 'finish-exam') {
+      awaitingFinishResponseRef.current = true
+      send(channel, {
+        type: 'response.create',
+        response: {
+          tool_choice: { type: 'function', name: 'finish_exam' },
+          instructions: 'Svih pet odgovora je spremljeno. Sada obvezno pozovi finish_exam i ne stvaraj novo pitanje.',
+        },
+      })
+      return
+    }
+    send(channel, {
+      type: 'response.create',
+      response: {
+        tool_choice: 'none',
+        instructions: 'Izgovori kratak završni osvrt, aproksimativnu ocjenu i jednu preporuku. Ponovi da konačnu ocjenu donosi nastavnik.',
+      },
+    })
+  }
+
+  function completeWithRecordedAssessment() {
+    if (!completionRef.current) setFinalAssessment(buildFinalAssessment(recordsRef.current))
+    completionRef.current = true
+    awaitingFinishResponseRef.current = false
+    setStatus('completed')
+    window.setTimeout(closeConnection, 250)
   }
 
   function handleTool(event: JsonRecord, channel: RTCDataChannel) {
@@ -156,12 +192,12 @@ export function FinalOralExam() {
       const iteration = numberValue(args.iteration)
       const sourceQuestion = questionsRef.current[iteration - 1]
       if (!Number.isInteger(iteration) || iteration < 1 || iteration > QUESTION_COUNT || !sourceQuestion) {
-        answerTool(channel, event.call_id, { recorded: false, error: 'Nevaljana ispitna iteracija.' })
+        answerTool(channel, event.call_id, { recorded: false, error: 'Nevaljana ispitna iteracija.' }, 'continue-exam')
         return
       }
       const existingIteration = recordsRef.current[iteration - 1]
       if (!existingIteration && iteration !== recordsRef.current.length + 1) {
-        answerTool(channel, event.call_id, { recorded: false, error: 'Pitanja treba dovršavati zadanim redoslijedom.' })
+        answerTool(channel, event.call_id, { recorded: false, error: 'Pitanja treba dovršavati zadanim redoslijedom.' }, 'continue-exam')
         return
       }
       const item: ExamRecord = {
@@ -182,33 +218,30 @@ export function FinalOralExam() {
       setRecords(compact)
       setQuestionIndex(Math.min(compact.length, QUESTION_COUNT - 1))
       setProfessorPrompt('')
-      answerTool(channel, event.call_id, { recorded: true, completed: compact.length, remaining: QUESTION_COUNT - compact.length })
+      answerTool(
+        channel,
+        event.call_id,
+        { recorded: true, completed: compact.length, remaining: QUESTION_COUNT - compact.length },
+        compact.length === QUESTION_COUNT ? 'finish-exam' : 'continue-exam',
+      )
       return
     }
 
     if (event.name === 'finish_exam') {
       if (recordsRef.current.length !== QUESTION_COUNT) {
-        answerTool(channel, event.call_id, { completed: false, error: 'Najprije treba dovršiti svih pet pitanja.' })
+        answerTool(channel, event.call_id, { completed: false, error: 'Najprije treba dovršiti svih pet pitanja.' }, 'continue-exam')
         return
       }
-      const total = recordsRef.current.reduce((sum, record) => sum + record.evaluation.score, 0)
-      const mapped = gradeFromTotal(total)
-      const result: FinalAssessment = {
-        total,
-        grade: mapped.grade,
-        gradeLabel: mapped.label,
-        summary: stringValue(args.overall_assessment) || 'Procjena je izvedena iz pet odgovora u simuliranom usmenom ispitu.',
-        strengths: stringValue(args.main_strengths) || recordsRef.current.map((record) => record.evaluation.strengths).filter(Boolean).join(' '),
-        recommendations: stringValue(args.recommendations) || recordsRef.current.map((record) => record.evaluation.omissions).filter(Boolean).join(' '),
-      }
+      const result = buildFinalAssessment(recordsRef.current, args)
       setFinalAssessment(result)
       completionRef.current = true
+      awaitingFinishResponseRef.current = false
       answerTool(channel, event.call_id, {
         completed: true,
-        total,
-        approximate_grade: mapped.grade,
+        total: result.total,
+        approximate_grade: result.grade,
         reminder: 'Ocjena je samo neobvezujuće algoritamsko mišljenje; konačnu ocjenu donosi nastavnik.',
-      })
+      }, 'final-spoken-summary')
     }
   }
 
@@ -254,6 +287,17 @@ export function FinalOralExam() {
         setAssistantText('')
         if (spoken && !containsMainQuestion(spoken, questionsRef.current)) setProfessorPrompt(spoken)
         else if (containsMainQuestion(spoken, questionsRef.current)) setProfessorPrompt('')
+        const pending = pendingResponseRef.current
+        if (pending) {
+          pendingResponseRef.current = null
+          setStatus('thinking')
+          createPendingResponse(channel, pending)
+          break
+        }
+        if (awaitingFinishResponseRef.current && recordsRef.current.length === QUESTION_COUNT) {
+          completeWithRecordedAssessment()
+          break
+        }
         if (completionRef.current) {
           setStatus('completed')
           window.setTimeout(closeConnection, 250)
@@ -263,6 +307,10 @@ export function FinalOralExam() {
         break
       }
       case 'error':
+        if (recordsRef.current.length === QUESTION_COUNT) {
+          completeWithRecordedAssessment()
+          break
+        }
         setError(readError(event))
         setStatus('error')
         break
@@ -282,6 +330,8 @@ export function FinalOralExam() {
     recordsRef.current = []
     assistantTextRef.current = ''
     completionRef.current = false
+    pendingResponseRef.current = null
+    awaitingFinishResponseRef.current = false
     setQuestions(selected)
     setQuestionIndex(0)
     setRecords([])
@@ -438,6 +488,31 @@ function ExamReport({ records, assessment, onRestart }: { records: ExamRecord[];
     <div className="exam-transcript"><div className="section-heading"><span className="eyebrow">ZAPISNIK ZAVRŠNOGA RAZGOVORA</span><h3>Sažetak i podloga vrednovanja</h3><p>Zapisnik je tijekom razgovora bio skriven. Sada prikazuje svih pet pitanja, sažetke odgovora, eventualnu pomoć i pojedinačna obrazloženja.</p></div>{records.map((record, index) => <article key={record.question.id}><header><span>{index + 1}</span><div><small>Cjelina {record.question.chapterId}</small><h4>{record.question.question}</h4></div><strong>{record.evaluation.score} / 20</strong></header><dl><div><dt>Sažetak odgovora</dt><dd>{record.answer}</dd></div>{record.hint && <div className="transcript-hint"><dt>Pružena pomoć</dt><dd>{record.hint}</dd></div>}<div><dt>Vrednovanje</dt><dd>{record.evaluation.feedback}</dd></div><div><dt>Uočene praznine</dt><dd>{record.evaluation.omissions || 'Nisu utvrđene bitne praznine u odnosu na očekivanu osnovu.'}</dd></div></dl></article>)}</div>
     <button type="button" className="primary-button exam-restart" onClick={onRestart}><RotateCcw /> Nova nasumična provjera</button>
   </section>
+}
+
+function buildFinalAssessment(records: ExamRecord[], args: JsonRecord = {}): FinalAssessment {
+  const total = records.reduce((sum, record) => sum + record.evaluation.score, 0)
+  const mapped = gradeFromTotal(total)
+  const recordedStrengths = distinctText(records.map((record) => record.evaluation.strengths)).slice(0, 3).join(' ')
+  const recordedRecommendations = distinctText(records.map((record) => record.evaluation.omissions || record.evaluation.feedback)).slice(0, 3).join(' ')
+  return {
+    total,
+    grade: mapped.grade,
+    gradeLabel: mapped.label,
+    summary: stringValue(args.overall_assessment) || `Procjena je izvedena iz svih pet odgovora. Ostvareno je ${total} od 100 bodova, što odgovara neobvezujućem prijedlogu ocjene ${mapped.grade} (${mapped.label}).`,
+    strengths: stringValue(args.main_strengths) || recordedStrengths || 'Odgovori su dovršeni i mogu poslužiti kao podloga za daljnje ciljano učenje.',
+    recommendations: stringValue(args.recommendations) || recordedRecommendations || 'Nastavite povezivati temeljne pojmove iz različitih cjelina i obrazlagati ih vlastitim primjerima.',
+  }
+}
+
+function distinctText(values: string[]) {
+  const seen = new Set<string>()
+  return values.map((value) => value.trim()).filter((value) => {
+    const normalized = value.toLocaleLowerCase('hr-HR')
+    if (!value || seen.has(normalized)) return false
+    seen.add(normalized)
+    return true
+  })
 }
 
 function isRecord(value: unknown): value is JsonRecord {
