@@ -305,6 +305,20 @@ type SpeechRecognitionLike = {
   onerror: (() => void) | null
 }
 
+function conversationContext(content: ChapterContent, scope: 'topic' | 'chapter' | 'book') {
+  const selected = scope === 'book'
+    ? Object.values(chapterContents).filter((chapter): chapter is ChapterContent => Boolean(chapter))
+    : [content]
+  return selected.map((chapter) => [
+    `CJELINA ${chapter.id}: ${chapter.title} (str. ${chapter.pages})`,
+    `Sažetak: ${chapter.summary}`,
+    ...chapter.steps.map((step) => `${step.title}: ${step.body} ${step.takeaway} [${step.source}]`),
+    `Ključni pojmovi: ${chapter.keywords.map((item) => `${item.term}: ${item.definition}`).join('; ')}`,
+    `Urednički/istraživački dodatak (${chapter.editorialUpdate.checkedAt}): ${chapter.editorialUpdate.title}. ${chapter.editorialUpdate.body}`,
+    `Izvori: ${chapter.sources.map((source) => `${source.label} — ${source.detail}`).join('; ')}`,
+  ].join('\n')).join('\n\n')
+}
+
 function answerFromBook(question: string, content: ChapterContent, scope: 'topic' | 'chapter' | 'book') {
   const normalized = question.toLocaleLowerCase('hr').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   const words = normalized.split(/[^a-z0-9čćđšž]+/).filter((word) => word.length > 3)
@@ -335,6 +349,8 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState<ConversationMessage[]>([])
   const [isListening, setIsListening] = useState(false)
+  const [isAnswering, setIsAnswering] = useState(false)
+  const [conversationError, setConversationError] = useState('')
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const prompts = content.id === 2
     ? [
@@ -402,17 +418,34 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   ]
   const selectedScope = voiceScopes.find((scope) => scope.key === voiceScope) ?? voiceScopes[0]
 
-  const askQuestion = (text: string, speak = false) => {
+  const askQuestion = async (text: string, speak = false) => {
     const cleanQuestion = text.trim()
-    if (!cleanQuestion) return
-    const answer = answerFromBook(cleanQuestion, content, voiceScope)
-    setMessages((current) => [...current, { role: 'user', text: cleanQuestion }, { role: 'assistant', ...answer }])
+    if (!cleanQuestion || isAnswering) return
+    const currentHistory = messages
+    setMessages((current) => [...current, { role: 'user', text: cleanQuestion }])
     setQuestion('')
-    if (speak && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(answer.text)
-      utterance.lang = 'hr-HR'
-      window.speechSynthesis.speak(utterance)
+    setConversationError('')
+    setIsAnswering(true)
+    try {
+      const result = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question: cleanQuestion, context: conversationContext(content, voiceScope), history: currentHistory }),
+      })
+      const payload = await result.json()
+      if (!result.ok) throw new Error(payload?.error || 'Odgovor trenutačno nije dostupan.')
+      const answer = { text: String(payload.text), source: String(payload.source || 'Odabrani izvor udžbenika') }
+      setMessages((current) => [...current, { role: 'assistant', ...answer }])
+      if (speak && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(answer.text)
+        utterance.lang = 'hr-HR'
+        window.speechSynthesis.speak(utterance)
+      }
+    } catch (error) {
+      setConversationError(error instanceof Error ? error.message : 'Razgovor trenutačno nije dostupan.')
+    } finally {
+      setIsAnswering(false)
     }
   }
 
@@ -457,7 +490,7 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
     {conversationType && <ConversationModal type={conversationType} onClose={() => setConversationType(null)}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
         <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
-        <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => askQuestion(prompt)}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} /><form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" /><button type="submit" disabled={!question.trim()} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor se traži samo u sadržaju udžbenika. Vanjski izvori nisu automatski uključeni.</small></section>
+        <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => void askQuestion(prompt)} disabled={isAnswering}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} />{isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor iz odabranih izvora…</span></div>}{conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}<form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); void askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" disabled={isAnswering} /><button type="submit" disabled={!question.trim() || isAnswering} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor oblikuje AI isključivo iz sadržaja odabranog opsega. Vanjski izvori nisu automatski uključeni.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
         <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odaberite opseg, pritisnite mikrofon i izgovorite pitanje. Vodič će odgovor pronaći u udžbeniku i pročitati ga naglas.</p></div><div className={`voice-status ${isListening ? 'active' : ''}`}><Mic /><span><small>Status mikrofona</small><strong>{isListening ? 'Slušam…' : 'Spreman'}</strong></span></div></div>
 
@@ -474,6 +507,8 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
         </div>
 
         <ConversationHistory messages={messages} />
+        {isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor i zatim će ga pročitati…</span></div>}
+        {conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}
         <div className="voice-state-preview" aria-label="Stanja usmenog razgovora"><span><i>1</i>Slušam</span><ChevronRight /><span><i>2</i>Tražim u izvoru</span><ChevronRight /><span><i>3</i>Govorim</span></div>
         <p className="conversation-boundary"><LockKeyhole /><span><strong>Granica odgovora ostaje vidljiva.</strong> Vanjski izvori ne uključuju se automatski. Ako vlastiti izvori nisu dovoljni, vodič to mora jasno reći i zatražiti dopuštenje prije vanjskog pretraživanja.</span></p>
       </section>}
