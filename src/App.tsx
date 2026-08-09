@@ -356,6 +356,9 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   const voiceChannelRef = useRef<RTCDataChannel | null>(null)
   const voiceStreamRef = useRef<MediaStream | null>(null)
   const voiceAudioRef = useRef<HTMLAudioElement | null>(null)
+  const voiceDisconnectTimerRef = useRef<number | null>(null)
+  const voiceUserSpeakingRef = useRef(false)
+  const voiceResponseActiveRef = useRef(false)
   const prompts = content.id === 2
     ? [
         'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
@@ -448,6 +451,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   }
 
   function closeVoiceConnection() {
+    if (voiceDisconnectTimerRef.current !== null) {
+      window.clearTimeout(voiceDisconnectTimerRef.current)
+      voiceDisconnectTimerRef.current = null
+    }
+    voiceUserSpeakingRef.current = false
+    voiceResponseActiveRef.current = false
     voiceChannelRef.current?.close()
     voiceChannelRef.current = null
     voicePeerRef.current?.close()
@@ -468,7 +477,11 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   }
 
   function handleVoiceEvent(raw: string) {
-    let event: { type?: string; error?: { message?: string } }
+    let event: {
+      type?: string
+      error?: { message?: string; code?: string; event_id?: string }
+      response?: { status?: string; status_details?: { reason?: string } }
+    }
     try {
       event = JSON.parse(raw)
     } catch {
@@ -476,10 +489,16 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
     }
     switch (event.type) {
       case 'input_audio_buffer.speech_started':
+        voiceUserSpeakingRef.current = true
         setVoiceStatus('listening')
+        setVoiceError('')
         break
       case 'input_audio_buffer.speech_stopped':
+        voiceUserSpeakingRef.current = false
+        setVoiceStatus('thinking')
+        break
       case 'response.created':
+        voiceResponseActiveRef.current = true
         setVoiceStatus('thinking')
         break
       case 'response.output_audio.delta':
@@ -488,12 +507,31 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
         break
       case 'response.output_audio.done':
       case 'response.audio.done':
-      case 'response.done':
-        setVoiceStatus('ready')
+        if (!voiceUserSpeakingRef.current) setVoiceStatus('ready')
         break
+      case 'response.done': {
+        voiceResponseActiveRef.current = false
+        const status = event.response?.status
+        const reason = event.response?.status_details?.reason
+        if (status === 'incomplete' && reason === 'max_output_tokens') {
+          const channel = voiceChannelRef.current
+          if (channel?.readyState === 'open') {
+            channel.send(JSON.stringify({
+              type: 'response.create',
+              response: { instructions: 'Nastavi točno od mjesta na kojem je prethodni odgovor prekinut. Ne ponavljaj uvod ni već izrečene dijelove i dovrši započetu misao.' },
+            }))
+            setVoiceStatus('thinking')
+            break
+          }
+        }
+        setVoiceStatus(voiceUserSpeakingRef.current ? 'listening' : 'ready')
+        break
+      }
       case 'error':
         setVoiceError(event.error?.message || 'Došlo je do pogreške u glasovnoj sesiji.')
-        setVoiceStatus('error')
+        // Realtime pogreška pojedinog događaja ne zatvara nužno sesiju.
+        // Zadržavamo istu vezu i povijest dok je podatkovni kanal otvoren.
+        setVoiceStatus(voiceChannelRef.current?.readyState === 'open' ? 'ready' : 'error')
         break
     }
   }
@@ -518,7 +556,29 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
         void audio.play().catch(() => undefined)
       }
       peer.onconnectionstatechange = () => {
-        if (peer.connectionState === 'failed' || peer.connectionState === 'disconnected') {
+        if (voicePeerRef.current !== peer) return
+        if (peer.connectionState === 'connected') {
+          if (voiceDisconnectTimerRef.current !== null) {
+            window.clearTimeout(voiceDisconnectTimerRef.current)
+            voiceDisconnectTimerRef.current = null
+          }
+          setVoiceError('')
+          setVoiceStatus('ready')
+          return
+        }
+        if (peer.connectionState === 'disconnected') {
+          if (voiceDisconnectTimerRef.current !== null) return
+          setVoiceStatus('connecting')
+          voiceDisconnectTimerRef.current = window.setTimeout(() => {
+            voiceDisconnectTimerRef.current = null
+            if (voicePeerRef.current !== peer || peer.connectionState !== 'disconnected') return
+            setVoiceError('Glasovna veza nije se uspjela obnoviti. Pokrenite razgovor ponovno.')
+            setVoiceStatus('error')
+            closeVoiceConnection()
+          }, 8000)
+          return
+        }
+        if (peer.connectionState === 'failed') {
           setVoiceError('Glasovna veza je prekinuta. Pokrenite razgovor ponovno.')
           setVoiceStatus('error')
           closeVoiceConnection()
@@ -535,9 +595,19 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
       voiceChannelRef.current = channel
       channel.onopen = () => setVoiceStatus('ready')
       channel.onmessage = (event) => handleVoiceEvent(event.data)
+      channel.onclose = () => {
+        if (voiceChannelRef.current !== channel) return
+        voiceChannelRef.current = null
+        if (voicePeerRef.current === peer && peer.connectionState !== 'closed') {
+          setVoiceError('Veza s glasovnim AI vodičem je zatvorena. Pokrenite razgovor ponovno.')
+          setVoiceStatus('error')
+          closeVoiceConnection()
+        }
+      }
       channel.onerror = () => {
-        setVoiceError('Veza s glasovnim AI vodičem je prekinuta.')
-        setVoiceStatus('error')
+        if (voiceChannelRef.current === channel) {
+          setVoiceError('Došlo je do poteškoće u glasovnoj vezi. Pokušavam zadržati razgovor aktivnim.')
+        }
       }
 
       const offer = await peer.createOffer()
@@ -575,8 +645,9 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   function interruptVoiceAnswer() {
     const channel = voiceChannelRef.current
     if (!channel || channel.readyState !== 'open') return
-    channel.send(JSON.stringify({ type: 'response.cancel' }))
+    if (voiceResponseActiveRef.current) channel.send(JSON.stringify({ type: 'response.cancel' }))
     channel.send(JSON.stringify({ type: 'output_audio_buffer.clear' }))
+    voiceResponseActiveRef.current = false
     setVoiceStatus('ready')
   }
 
