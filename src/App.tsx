@@ -292,9 +292,50 @@ function Flashcards({ content }: { content: ChapterContent }) {
   </>
 }
 
+type ConversationMessage = { role: 'user' | 'assistant'; text: string; source?: string }
+type SpeechRecognitionEventLike = { results: ArrayLike<{ 0: { transcript: string } }> }
+type SpeechRecognitionLike = {
+  lang: string
+  interimResults: boolean
+  continuous: boolean
+  start: () => void
+  stop: () => void
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null
+  onend: (() => void) | null
+  onerror: (() => void) | null
+}
+
+function answerFromBook(question: string, content: ChapterContent, scope: 'topic' | 'chapter' | 'book') {
+  const normalized = question.toLocaleLowerCase('hr').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  const words = normalized.split(/[^a-z0-9čćđšž]+/).filter((word) => word.length > 3)
+  const contents = scope === 'book'
+    ? Object.values(chapterContents).filter((chapter): chapter is ChapterContent => Boolean(chapter))
+    : [content]
+  const candidates = contents.flatMap((chapter) => [
+    ...chapter.keywords.map((item) => ({ text: `${item.term} — ${item.definition}`, source: `Cjelina ${chapter.id} · ključni pojam „${item.term}”` })),
+    ...chapter.steps.map((item) => ({ text: `${item.title}: ${item.body} ${item.takeaway}`, source: `Cjelina ${chapter.id} · ${item.source}` })),
+    { text: chapter.summary, source: `Cjelina ${chapter.id} · sažetak` },
+    { text: `${chapter.editorialUpdate.title}: ${chapter.editorialUpdate.body}`, source: `Cjelina ${chapter.id} · urednički dodatak (${chapter.editorialUpdate.checkedAt})` },
+  ])
+  const ranked = candidates.map((candidate) => {
+    const haystack = candidate.text.toLocaleLowerCase('hr').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    return { ...candidate, score: words.reduce((score, word) => score + (haystack.includes(word) ? 1 : 0), 0) }
+  }).sort((a, b) => b.score - a.score)
+  const best = ranked[0]
+  if (!best || best.score === 0) return {
+    text: 'U odabranom izvoru nisam pronašao dovoljno pouzdanu osnovu za odgovor. Pokušajte pitanje povezati s konkretnim pojmom iz cjeline ili proširite opseg na cijeli udžbenik. Vanjske izvore nisam uključio.',
+    source: 'Granica izvora · odgovor nije pronađen',
+  }
+  return { text: best.text, source: best.source }
+}
+
 function ConversationPreview({ content }: { content: ChapterContent }) {
   const [conversationType, setConversationType] = useState<'written' | 'voice' | null>(null)
   const [voiceScope, setVoiceScope] = useState<'topic' | 'chapter' | 'book'>('topic')
+  const [question, setQuestion] = useState('')
+  const [messages, setMessages] = useState<ConversationMessage[]>([])
+  const [isListening, setIsListening] = useState(false)
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const prompts = content.id === 2
     ? [
         'Zašto slobodno vrijeme bez prometne infrastrukture nije dovoljno za razvoj turizma?',
@@ -361,24 +402,64 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   ]
   const selectedScope = voiceScopes.find((scope) => scope.key === voiceScope) ?? voiceScopes[0]
 
+  const askQuestion = (text: string, speak = false) => {
+    const cleanQuestion = text.trim()
+    if (!cleanQuestion) return
+    const answer = answerFromBook(cleanQuestion, content, voiceScope)
+    setMessages((current) => [...current, { role: 'user', text: cleanQuestion }, { role: 'assistant', ...answer }])
+    setQuestion('')
+    if (speak && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(answer.text)
+      utterance.lang = 'hr-HR'
+      window.speechSynthesis.speak(utterance)
+    }
+  }
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+    const browserWindow = window as typeof window & { webkitSpeechRecognition?: new () => SpeechRecognitionLike; SpeechRecognition?: new () => SpeechRecognitionLike }
+    const Recognition = browserWindow.SpeechRecognition ?? browserWindow.webkitSpeechRecognition
+    if (!Recognition) return
+    const recognition = new Recognition()
+    recognition.lang = 'hr-HR'
+    recognition.interimResults = false
+    recognition.continuous = false
+    recognition.onresult = (event) => askQuestion(event.results[0][0].transcript, true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => setIsListening(false)
+    recognitionRef.current = recognition
+    setIsListening(true)
+    recognition.start()
+  }
+
+  useEffect(() => () => {
+    recognitionRef.current?.stop()
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [])
+
   return <>
     <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pismeni ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
 
     <div className="conversation-mode-selector" role="group" aria-label="Odaberite način razgovora">
-      <button type="button" onClick={() => setConversationType('written')} aria-haspopup="dialog" aria-label="Otvori objašnjenje pismenog razgovora u skočnom prozoru">
-        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Otvara objašnjenje u skočnom prozoru</small></span>
+      <button type="button" onClick={() => setConversationType('written')} aria-haspopup="dialog" aria-label="Otvori pismeni razgovor u skočnom prozoru">
+        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Postavite pitanje i nastavite razgovor</small></span>
       </button>
-      <button type="button" onClick={() => setConversationType('voice')} aria-haspopup="dialog" aria-label="Otvori objašnjenje usmenog razgovora u skočnom prozoru">
-        <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Otvara objašnjenje u skočnom prozoru</small></span>
+      <button type="button" onClick={() => setConversationType('voice')} aria-haspopup="dialog" aria-label="Otvori usmeni razgovor u skočnom prozoru">
+        <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Govorite i poslušajte odgovor</small></span>
       </button>
     </div>
 
     {conversationType && <ConversationModal type={conversationType} onClose={() => setConversationType(null)}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
         <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
-        <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} disabled><MessageCircle />{prompt}</button>)}</div><label htmlFor="chapter-question">Vaše pitanje</label><div className="disabled-composer"><input id="chapter-question" value="AI usluga još nije povezana" disabled /><button disabled aria-label="Pošalji pitanje"><Send /></button></div><small>Sučelje je prototipski dovršeno. AI usluga aktivirat će se nakon zasebne potvrde modela, citiranja i zaštite podataka.</small></section>
+        <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => askQuestion(prompt)}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} /><form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" /><button type="submit" disabled={!question.trim()} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor se traži samo u sadržaju udžbenika. Vanjski izvori nisu automatski uključeni.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
-        <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odabir možete promijeniti prije svakoga razgovora. Širi opseg omogućuje povezivanje više dijelova knjige, ali odgovor i dalje mora pokazati iz kojega je sloja izveden.</p></div><div className="voice-status"><Mic /><span><small>Status veze</small><strong>Još nije aktivirana</strong></span></div></div>
+        <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · OPSEG IZVORA</span><h3>Koliko široko vodič smije tražiti odgovor?</h3><p>Odaberite opseg, pritisnite mikrofon i izgovorite pitanje. Vodič će odgovor pronaći u udžbeniku i pročitati ga naglas.</p></div><div className={`voice-status ${isListening ? 'active' : ''}`}><Mic /><span><small>Status mikrofona</small><strong>{isListening ? 'Slušam…' : 'Spreman'}</strong></span></div></div>
 
         <div className="voice-scope-selector" role="radiogroup" aria-label="Odaberite opseg izvora za usmeni razgovor">
           {voiceScopes.map((scope, index) => <button key={scope.key} className={voiceScope === scope.key ? 'active' : ''} onClick={() => setVoiceScope(scope.key)} role="radio" aria-checked={voiceScope === scope.key}>
@@ -389,14 +470,20 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
         <div className="voice-console">
           <div className="voice-orb"><Mic /></div>
           <div className="voice-console-copy"><span className="eyebrow">ODABRANI OPSEG</span><h3>{selectedScope.label}</h3><p>{selectedScope.description}</p><div className="voice-source-layers"><span><BookOpen />Kanonski tekst 1.0</span><span><Sparkles />Datirani urednički dodatci</span></div></div>
-          <div className="voice-action"><button disabled><Mic /> Pokreni usmeni razgovor</button><small>Glasovna veza OpenAI Realtime/WebRTC bit će uključena nakon tehničke i podatkovne konfiguracije.</small></div>
+          <div className="voice-action"><button type="button" className={isListening ? 'active' : ''} onClick={toggleListening}><Mic /> {isListening ? 'Zaustavi slušanje' : 'Postavi pitanje glasom'}</button><small>{('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) ? 'Preglednik će zatražiti dopuštenje za mikrofon.' : 'Ovaj preglednik nema glasovni unos; koristite Chrome ili Edge.'}</small></div>
         </div>
 
-        <div className="voice-state-preview" aria-label="Predviđena stanja usmenog razgovora"><span><i>1</i>Slušam</span><ChevronRight /><span><i>2</i>Razmišljam</span><ChevronRight /><span><i>3</i>Govorim</span></div>
+        <ConversationHistory messages={messages} />
+        <div className="voice-state-preview" aria-label="Stanja usmenog razgovora"><span><i>1</i>Slušam</span><ChevronRight /><span><i>2</i>Tražim u izvoru</span><ChevronRight /><span><i>3</i>Govorim</span></div>
         <p className="conversation-boundary"><LockKeyhole /><span><strong>Granica odgovora ostaje vidljiva.</strong> Vanjski izvori ne uključuju se automatski. Ako vlastiti izvori nisu dovoljni, vodič to mora jasno reći i zatražiti dopuštenje prije vanjskog pretraživanja.</span></p>
       </section>}
     </ConversationModal>}
   </>
+}
+
+function ConversationHistory({ messages }: { messages: ConversationMessage[] }) {
+  if (!messages.length) return <div className="conversation-empty"><MessageCircle /><span>Razgovor će se prikazati ovdje.</span></div>
+  return <div className="conversation-history" aria-live="polite">{messages.map((message, index) => <article key={`${message.role}-${index}`} className={message.role}><strong>{message.role === 'user' ? 'Vi' : 'AI vodič'}</strong><p>{message.text}</p>{message.source && <small><BookOpen />{message.source}</small>}</article>)}</div>
 }
 
 function ConversationModal({ type, onClose, children }: { type: 'written' | 'voice'; onClose: () => void; children: React.ReactNode }) {
