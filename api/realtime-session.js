@@ -2,7 +2,7 @@ const MAX_CONTEXT = 60000
 const MAX_SDP = 200000
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.1'
+const ROUTE_VERSION = '2026-08-09.2'
 
 function deploymentInfo() {
   return {
@@ -23,9 +23,10 @@ function parseBody(request) {
 function sessionInstructions(context, scopeLabel) {
   return `Ti si glasovni AI vodič hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”.
 Govori isključivo hrvatski, prirodno, smireno i razgovorno, kao iskusan sveučilišni nastavnik u živom dijalogu.
-Odgovori odmah na pitanje, najčešće u 2 do 4 kratke i cjelovite rečenice prikladne za slušanje.
+Odgovori odmah na pitanje i prilagodi duljinu složenosti pitanja. Dovrši započetu misao i rečenicu; nemoj umjetno stati nakon nekoliko rečenica.
 Nemoj čitati naslove, oznake, zvjezdice, popise ni tehničke podatke. Nemoj stvarati transkript niti ga spominjati.
 Razgovor je dvosmjeran: nakon odgovora prepusti riječ korisniku. Ako korisnik progovori dok govoriš, odmah prestani i poslušaj novi govorni potez.
+Ako korisnik kaže „nastavi”, „dalje” ili slično nakon prekida, nastavi točno od posljednje izgovorene misli bez ponavljanja uvoda ili već izrečenih dijelova.
 Odgovor temelji isključivo na dopuštenim izvorima u nastavku. Ne koristi opće znanje i ne izmišljaj.
 Razlikuj kanonski tekst od uredničkog ili istraživačkog dodatka. Ako izvori nisu dovoljni, to kratko i jasno reci.
 Izvor spomeni samo kada je koristan za vjerodostojnost ili kada ga korisnik zatraži.
@@ -84,12 +85,19 @@ export default async function handler(request, response) {
     model,
     instructions: sessionInstructions(context, scopeLabel),
     output_modalities: ['audio'],
-    max_output_tokens: 420,
+    // Veći prostor sprječava prekid govora usred odgovora; same upute i dalje
+    // drže odgovor razgovornim i primjerenim pitanju.
+    max_output_tokens: 900,
     audio: {
       input: {
+        // Ugrađeni laptop mikrofon ponaša se kao udaljeni izvor. Filtriranje
+        // prije VAD-a smanjuje lažne prekide od zvučnika i pozadinske buke.
+        noise_reduction: { type: 'far_field' },
         turn_detection: {
-          type: 'semantic_vad',
-          eagerness: 'high',
+          type: 'server_vad',
+          threshold: 0.72,
+          prefix_padding_ms: 300,
+          silence_duration_ms: 700,
           create_response: true,
           interrupt_response: true,
         },
