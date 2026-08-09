@@ -6,7 +6,7 @@ const MAX_QUESTION = 1200
 const MAX_BASIS = 2600
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.v2-port.1'
+const ROUTE_VERSION = '2026-08-09.v2-port.2'
 
 function parseBody(request) {
   if (typeof request.body !== 'string') return request.body
@@ -19,6 +19,10 @@ function parseBody(request) {
 
 function text(value, limit) {
   return String(value || '').replace(/\s+/g, ' ').trim().slice(0, limit)
+}
+
+function sdpText(value) {
+  return typeof value === 'string' ? value.trim().slice(0, MAX_SDP) : ''
 }
 
 function parseQuestions(value) {
@@ -139,7 +143,7 @@ export default async function handler(request, response) {
 
   const body = parseBody(request)
   if (!body) return response.status(400).json({ error: 'Tijelo zahtjeva nije ispravan JSON.' })
-  const sdp = text(body.sdp, MAX_SDP)
+  const sdp = sdpText(body.sdp)
   const questions = parseQuestions(body.questions)
   if (!sdp.startsWith('v=0') || !sdp.includes('m=audio')) return response.status(400).json({ error: 'Preglednik nije poslao valjanu glasovnu vezu.' })
   if (!questions) return response.status(400).json({ error: 'Završna provjera mora sadržavati pet valjanih pitanja iz pet različitih cjelina.' })
