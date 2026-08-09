@@ -20,6 +20,7 @@ export const chapters: ChapterSummary[] = [
   { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'available' },
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '50–52', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'available' },
   { id: 11, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
+  { id: 12, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
 ]
 
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'

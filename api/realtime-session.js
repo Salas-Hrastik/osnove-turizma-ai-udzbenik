@@ -2,7 +2,7 @@ const MAX_CONTEXT = 60000
 const MAX_SDP = 200000
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.2'
+const ROUTE_VERSION = '2026-08-09.3'
 
 function deploymentInfo() {
   return {
@@ -35,6 +35,16 @@ Ne govori o API-ju, modelu, kontekstu ni tehničkoj pozadini.
 ODABRANI OPSEG: ${scopeLabel}
 
 DOPUŠTENI IZVORI:
+${context}`
+}
+
+function examInstructions(context) {
+  return `Ti si glasovni AI ispitivač završne provjere hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”.
+Govori isključivo hrvatski, prirodno, smireno i razgovorno. Izgovori samo tekst koji dobiješ u pojedinom zahtjevu klijenta, bez dodavanja novih pitanja, činjenica ili ocjena.
+Ne čitaj oznake, zvjezdice, tehničke podatke ni transkript. Ne spominji API, model ili tehničku pozadinu.
+Ako student progovori dok govoriš, odmah prepusti riječ. Sadržajna procjena i slijed pitanja kontroliraju se odvojeno.
+
+PODLOGA ZAVRŠNE PROVJERE:
 ${context}`
 }
 
@@ -75,6 +85,7 @@ export default async function handler(request, response) {
   const sdp = String(body.sdp || '').slice(0, MAX_SDP)
   const context = String(body.context || '').slice(0, MAX_CONTEXT)
   const scopeLabel = String(body.scopeLabel || 'Odabrani dio udžbenika').slice(0, 160)
+  const examMode = body.examMode === true
   if (!sdp.startsWith('v=0') || !sdp.includes('m=audio')) {
     return response.status(400).json({ error: 'Preglednik nije poslao valjanu glasovnu vezu.' })
   }
@@ -83,7 +94,7 @@ export default async function handler(request, response) {
   const session = {
     type: 'realtime',
     model,
-    instructions: sessionInstructions(context, scopeLabel),
+    instructions: examMode ? examInstructions(context) : sessionInstructions(context, scopeLabel),
     output_modalities: ['audio'],
     // Veći prostor sprječava prekid govora usred odgovora; same upute i dalje
     // drže odgovor razgovornim i primjerenim pitanju.
@@ -93,12 +104,13 @@ export default async function handler(request, response) {
         // Ugrađeni laptop mikrofon ponaša se kao udaljeni izvor. Filtriranje
         // prije VAD-a smanjuje lažne prekide od zvučnika i pozadinske buke.
         noise_reduction: { type: 'far_field' },
+        ...(examMode ? { transcription: { model: 'gpt-4o-mini-transcribe', language: 'hr', prompt: 'Sveučilišni usmeni ispit iz turizma i ugostiteljstva na hrvatskom jeziku.' } } : {}),
         turn_detection: {
           type: 'server_vad',
           threshold: 0.72,
           prefix_padding_ms: 300,
-          silence_duration_ms: 700,
-          create_response: true,
+          silence_duration_ms: examMode ? 1000 : 700,
+          create_response: !examMode,
           interrupt_response: true,
         },
       },

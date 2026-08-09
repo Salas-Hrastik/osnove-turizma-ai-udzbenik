@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterContents, chapters } from './data/book'
+import { FinalOralExam } from './FinalOralExam'
 import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
 type MediaKind = 'audio' | 'video' | 'presentation'
@@ -27,6 +28,7 @@ function App() {
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
   const chapterContent = chapterContents[chapterId]
   const hasContent = Boolean(chapterContent)
+  const isFinalAssessment = chapter.status === 'assessment'
 
   const selectChapter = (id: number) => {
     setShowCover(false)
@@ -115,13 +117,13 @@ function App() {
               <button className="summary-button" onClick={() => setSummaryOpen(true)}><Sparkles /> Sažetak cjeline</button>
             </section>
 
-            <nav className="mode-tabs" aria-label="Načini rada">
+            {!isFinalAssessment && <nav className="mode-tabs" aria-label="Načini rada">
               {modes.map(({ name, label, icon: Icon }) => (
                 <button key={name} className={mode === name ? 'active' : ''} aria-pressed={mode === name} onClick={() => selectMode(name)} disabled={!hasContent && name !== 'Prouči'}>
                   <Icon /><span>{label}</span>
                 </button>
               ))}
-            </nav>
+            </nav>}
             {mode === 'Gledaj i slušaj' && chapterContent?.media && <>
               <MediaOverview content={chapterContent} />
               <MediaSubmenu content={chapterContent} onSelect={openMedia} />
@@ -129,11 +131,11 @@ function App() {
           </div>
 
           <div className="main-body-scroll" ref={mainBodyRef}>
-            <div className={`content-grid ${mode !== 'Prouči' ? 'without-guide' : ''}`}>
+            <div className={`content-grid ${mode !== 'Prouči' || isFinalAssessment ? 'without-guide' : ''}`}>
               <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''}`}>
-                {!chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
+                {isFinalAssessment ? <FinalOralExam /> : !chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
-              {mode === 'Prouči' && <aside className="guide-card">
+              {mode === 'Prouči' && !isFinalAssessment && <aside className="guide-card">
                 <div className="guide-avatar"><Bot /></div>
                 <span className="eyebrow">STALNI VODIČ</span>
                 <h3>Kako proučiti ovu cjelinu?</h3>
@@ -151,7 +153,7 @@ function App() {
         </main>
       </div>
 
-      {summaryOpen && <SummaryModal title={chapter.title} pages={chapter.pages} summary={chapterContent?.summary ?? chapter.outcome} outcomes={chapterContent?.outcomes ?? []} hasContent={hasContent} onClose={() => setSummaryOpen(false)} />}
+      {summaryOpen && <SummaryModal title={chapter.title} pages={chapter.pages} summary={chapterContent?.summary ?? chapter.outcome} outcomes={isFinalAssessment ? ['odgovoriti na pet nasumično odabranih pitanja iz različitih cjelina', 'povezati pojmove i obrazložiti odgovor vlastitim riječima', 'upotrijebiti sugestivnu pomoć za nastavak nepotpunoga odgovora', 'protumačiti završni zapisnik i preporuke za daljnje učenje'] : chapterContent?.outcomes ?? []} hasContent={hasContent || isFinalAssessment} onClose={() => setSummaryOpen(false)} />}
       {selectedMedia && chapterContent?.media && <SelectedMediaModal media={selectedMedia} content={chapterContent} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setSelectedMedia(null)} />}
     </div>
   )
