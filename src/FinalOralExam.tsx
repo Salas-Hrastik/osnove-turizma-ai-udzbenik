@@ -5,6 +5,7 @@ import { chapterContents } from './data/book'
 import type { ChapterContent } from './types'
 
 const QUESTION_COUNT = 5
+const FINAL_AUDIO_DRAIN_MS = 30000
 
 type ExamStatus = 'idle' | 'connecting' | 'ready' | 'listening' | 'thinking' | 'speaking' | 'completed' | 'error'
 type JsonRecord = Record<string, unknown>
@@ -106,6 +107,7 @@ export function FinalOralExam() {
   const streamRef = useRef<MediaStream | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const disconnectTimerRef = useRef<number | null>(null)
+  const finalAudioTimerRef = useRef<number | null>(null)
   const questionsRef = useRef<OralQuestion[]>([])
   const recordsRef = useRef<ExamRecord[]>([])
   const assistantTextRef = useRef('')
@@ -122,6 +124,10 @@ export function FinalOralExam() {
     if (disconnectTimerRef.current !== null) {
       window.clearTimeout(disconnectTimerRef.current)
       disconnectTimerRef.current = null
+    }
+    if (finalAudioTimerRef.current !== null) {
+      window.clearTimeout(finalAudioTimerRef.current)
+      finalAudioTimerRef.current = null
     }
     const channel = channelRef.current
     channelRef.current = null
@@ -181,6 +187,20 @@ export function FinalOralExam() {
     awaitingFinishResponseRef.current = false
     setStatus('completed')
     window.setTimeout(closeConnection, 250)
+  }
+
+  function completeAfterFinalNarration() {
+    completionRef.current = true
+    awaitingFinishResponseRef.current = false
+    streamRef.current?.getAudioTracks().forEach((track) => {
+      track.enabled = false
+    })
+    setStatus('completed')
+    if (finalAudioTimerRef.current !== null) window.clearTimeout(finalAudioTimerRef.current)
+    finalAudioTimerRef.current = window.setTimeout(() => {
+      finalAudioTimerRef.current = null
+      closeConnection()
+    }, FINAL_AUDIO_DRAIN_MS)
   }
 
   function handleTool(event: JsonRecord, channel: RTCDataChannel) {
@@ -299,8 +319,7 @@ export function FinalOralExam() {
           break
         }
         if (completionRef.current) {
-          setStatus('completed')
-          window.setTimeout(closeConnection, 250)
+          completeAfterFinalNarration()
         } else {
           setStatus('ready')
         }
