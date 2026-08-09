@@ -2,7 +2,7 @@ const MAX_CONTEXT = 60000
 const MAX_SDP = 200000
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.4'
+const ROUTE_VERSION = '2026-08-09.5'
 
 function deploymentInfo() {
   return {
@@ -108,7 +108,10 @@ export default async function handler(request, response) {
           type: 'server_vad',
           threshold: 0.72,
           prefix_padding_ms: 300,
-          silence_duration_ms: examMode ? 1000 : 700,
+          // U ispitu prirodne kratke stanke unutar odgovora nisu završetak
+          // govornog poteza. Aplikacija tek nakon dovršenog segmenta zasebno
+          // mjeri vrijeme do pomoći i potvrde završetka.
+          silence_duration_ms: examMode ? 1500 : 700,
           create_response: !examMode,
           interrupt_response: true,
         },

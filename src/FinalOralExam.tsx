@@ -5,8 +5,8 @@ import { chapterContents } from './data/book'
 import type { ChapterContent } from './types'
 
 const QUESTION_COUNT = 5
-const HELP_PAUSE_MS = 4500
-const COMPLETION_PAUSE_MS = 9000
+const HELP_PAUSE_MS = 5000
+const COMPLETION_PAUSE_MS = 12000
 const CONFIRMATION_REMINDER_MS = 8000
 
 type ExamPhase = 'intro' | 'connecting' | 'asking' | 'answering' | 'evaluating' | 'feedback' | 'confirming' | 'finishing' | 'complete' | 'error'
@@ -103,10 +103,6 @@ function cleanAnswer(value: string) {
     .trim()
 }
 
-function isExplicitlyFinished(value: string) {
-  return /\b(gotov(?:a)? sam|to je sve|završio sam|završila sam)\b/iu.test(value)
-}
-
 function isAffirmative(value: string) {
   return /\b(da|jesam|dovršio sam|dovršila sam|gotov sam|gotova sam|završio sam|završila sam)\b/iu.test(value)
 }
@@ -145,10 +141,14 @@ export function FinalOralExam() {
   const recordsRef = useRef<ExamRecord[]>([])
   const pendingSpokenRef = useRef<SpokenKind | null>(null)
   const confirmationReminderUsedRef = useRef(false)
+  const pauseGenerationRef = useRef(0)
+  const studentHasSpokenRef = useRef(false)
+  const lastSpeechStoppedAtRef = useRef(0)
 
   const currentQuestion = questions[questionIndex]
 
   function clearPauseTimer() {
+    pauseGenerationRef.current += 1
     if (pauseTimerRef.current !== null) {
       window.clearTimeout(pauseTimerRef.current)
       pauseTimerRef.current = null
@@ -206,6 +206,8 @@ export function FinalOralExam() {
     questionIndexRef.current = index
     setQuestionIndex(index)
     answerSegmentsRef.current = []
+    studentHasSpokenRef.current = false
+    lastSpeechStoppedAtRef.current = 0
     hintUsedRef.current = false
     hintTextRef.current = ''
     setCurrentHint('')
@@ -215,6 +217,7 @@ export function FinalOralExam() {
   }
 
   function giveHint(hint: string) {
+    clearPauseTimer()
     hintUsedRef.current = true
     hintTextRef.current = hint
     setCurrentHint(hint)
@@ -222,18 +225,47 @@ export function FinalOralExam() {
     sendSpoken(hint, 'hint')
   }
 
-  function scheduleListeningPause() {
+  function scheduleCompletionPause(wait = COMPLETION_PAUSE_MS) {
     clearPauseTimer()
-    const wait = hintUsedRef.current ? COMPLETION_PAUSE_MS : HELP_PAUSE_MS
+    if (!studentHasSpokenRef.current) return
+    const generation = pauseGenerationRef.current
     pauseTimerRef.current = window.setTimeout(() => {
-      if (phaseRef.current !== 'answering' || responseActiveRef.current || evaluatingRef.current) return
-      if (hintUsedRef.current) {
-        askForCompletion()
+      if (generation !== pauseGenerationRef.current || phaseRef.current !== 'answering' || responseActiveRef.current || evaluatingRef.current) return
+      askForCompletion()
+    }, wait)
+  }
+
+  async function considerPausedAnswer(generation: number) {
+    const question = questionsRef.current[questionIndexRef.current]
+    const answer = cleanAnswer(answerSegmentsRef.current.join(' '))
+    if (!question || !answer || generation !== pauseGenerationRef.current || phaseRef.current !== 'answering') return
+    try {
+      const evaluation = await requestEvaluation(question, answer, true)
+      if (generation !== pauseGenerationRef.current || phaseRef.current !== 'answering' || responseActiveRef.current) return
+      if (!evaluation.complete) {
+        giveHint(evaluation.hint || `Možete li odgovor povezati s pojmovima ${question.hintTerms.join(', ')}?`)
         return
       }
-      const question = questionsRef.current[questionIndexRef.current]
-      giveHint(`Kao pomoć, razmislite kako su s pitanjem povezani pojmovi ${question.hintTerms.join(', ')}.`)
-    }, wait)
+      const silentFor = Math.max(0, Date.now() - lastSpeechStoppedAtRef.current)
+      scheduleCompletionPause(Math.max(1200, COMPLETION_PAUSE_MS - silentFor))
+    } catch {
+      if (generation !== pauseGenerationRef.current || phaseRef.current !== 'answering' || responseActiveRef.current) return
+      giveHint(`Možete li odgovor povezati s pojmovima ${question.hintTerms.join(', ')}?`)
+    }
+  }
+
+  function scheduleListeningPause() {
+    clearPauseTimer()
+    if (!studentHasSpokenRef.current) return
+    if (hintUsedRef.current) {
+      scheduleCompletionPause()
+      return
+    }
+    const generation = pauseGenerationRef.current
+    pauseTimerRef.current = window.setTimeout(() => {
+      if (generation !== pauseGenerationRef.current || phaseRef.current !== 'answering' || responseActiveRef.current || evaluatingRef.current) return
+      void considerPausedAnswer(generation)
+    }, HELP_PAUSE_MS)
   }
 
   function scheduleConfirmationReminder() {
@@ -254,13 +286,13 @@ export function FinalOralExam() {
     sendSpoken('Jeste li dovršili odgovor? Recite da ili ne.', 'confirmation')
   }
 
-  async function requestEvaluation(question: OralQuestion, answer: string) {
+  async function requestEvaluation(question: OralQuestion, answer: string, provisional = false) {
     const response = await fetch('/api/oral-exam', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         mode: 'answer',
-        provisional: false,
+        provisional,
         question: question.question,
         chapterId: question.chapterId,
         chapterTitle: question.chapterTitle,
@@ -341,7 +373,6 @@ export function FinalOralExam() {
     if (kind === 'question') {
       if (phaseRef.current !== 'asking') return
       changePhase('answering')
-      scheduleListeningPause()
       return
     }
     if (kind === 'hint') {
@@ -385,6 +416,9 @@ export function FinalOralExam() {
         }
         if (phaseRef.current !== 'confirming') changePhase('answering')
         break
+      case 'input_audio_buffer.speech_stopped':
+        if (phaseRef.current === 'answering') lastSpeechStoppedAtRef.current = Date.now()
+        break
       case 'conversation.item.input_audio_transcription.completed': {
         if (!['asking', 'answering', 'feedback', 'confirming'].includes(phaseRef.current)) break
         const rawTranscript = String(event.transcript || '')
@@ -403,12 +437,13 @@ export function FinalOralExam() {
           break
         }
         const segment = cleanAnswer(rawTranscript)
-        if (segment) answerSegmentsRef.current.push(segment)
-        const finished = isExplicitlyFinished(rawTranscript)
+        if (segment) {
+          answerSegmentsRef.current.push(segment)
+          studentHasSpokenRef.current = true
+          if (!lastSpeechStoppedAtRef.current) lastSpeechStoppedAtRef.current = Date.now()
+        }
         changePhase('answering')
-        clearPauseTimer()
-        if (finished) pauseTimerRef.current = window.setTimeout(askForCompletion, 250)
-        else scheduleListeningPause()
+        scheduleListeningPause()
         break
       }
       case 'response.created':
@@ -449,6 +484,8 @@ export function FinalOralExam() {
     questionIndexRef.current = 0
     recordsRef.current = []
     answerSegmentsRef.current = []
+    studentHasSpokenRef.current = false
+    lastSpeechStoppedAtRef.current = 0
     hintUsedRef.current = false
     confirmationReminderUsedRef.current = false
     setQuestions(selected)
