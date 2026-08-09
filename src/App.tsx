@@ -844,13 +844,43 @@ function PresentationModal({ presentation, slideIndex, onSlideChange, onClose }:
 
 function Quiz({ content }: { content: ChapterContent }) {
   const [answers, setAnswers] = useState<Record<number, number>>({})
-  const [submitted, setSubmitted] = useState(false)
   const score = useMemo(() => content.questions.filter((q, i) => answers[i] === q.correct).length, [answers, content.questions])
-  const reset = () => { setAnswers({}); setSubmitted(false) }
+  const answeredCount = Object.keys(answers).length
+  const allAnswered = answeredCount === content.questions.length
+  const reset = () => setAnswers({})
   return <>
-    <div className="section-heading"><span className="eyebrow">PROVJERI · 5 PITANJA</span><h2>Samoprovjera cjeline</h2><p>Odaberite odgovor na svako pitanje. Nakon predaje dobit ćete objašnjenje, ne samo rezultat.</p></div>
-    <div className="quiz-list">{content.questions.map((q, qIndex) => <article className="quiz-card" key={q.question}><div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div><div className="answers">{q.options.map((option, optionIndex) => <label key={option} className={submitted ? optionIndex === q.correct ? 'correct' : answers[qIndex] === optionIndex ? 'wrong' : '' : ''}><input type="radio" name={`q-${content.id}-${qIndex}`} checked={answers[qIndex] === optionIndex} onChange={() => !submitted && setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))} />{option}</label>)}</div>{submitted && <p className="explanation"><strong>Objašnjenje:</strong> {q.explanation}</p>}</article>)}</div>
-    <div className="quiz-actions">{submitted ? <><div className="score"><strong>{score} / {content.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <button className="primary-button" disabled={Object.keys(answers).length !== content.questions.length} onClick={() => setSubmitted(true)}>Predaj odgovore</button>}</div>
+    <div className="section-heading"><span className="eyebrow">PROVJERI · 5 PITANJA</span><h2>Samoprovjera cjeline</h2><p>Odaberite jedan odgovor. Odmah ćete vidjeti točan odgovor i njegovo obrazloženje.</p></div>
+    <div className="quiz-list">{content.questions.map((q, qIndex) => {
+      const answered = answers[qIndex] !== undefined
+      const selectedAnswer = answers[qIndex]
+      return <article className="quiz-card" key={q.question}>
+        <div className="quiz-title"><span>{qIndex + 1}</span><h3>{q.question}</h3></div>
+        <div className="answers">{q.options.map((option, optionIndex) => {
+          const answerState = answered
+            ? optionIndex === q.correct
+              ? 'correct'
+              : selectedAnswer === optionIndex
+                ? 'wrong'
+                : ''
+            : ''
+          return <label key={option} className={answerState}>
+            <input
+              type="radio"
+              name={`q-${content.id}-${qIndex}`}
+              checked={selectedAnswer === optionIndex}
+              disabled={answered}
+              onChange={() => setAnswers((current) => ({ ...current, [qIndex]: optionIndex }))}
+            />
+            {option}
+          </label>
+        })}</div>
+        {answered && <div className="explanation" role="status">
+          <strong>{selectedAnswer === q.correct ? 'Točno.' : 'Točan odgovor označen je zeleno.'}</strong>
+          <span><strong>Obrazloženje:</strong> {q.explanation}</span>
+        </div>}
+      </article>
+    })}</div>
+    <div className="quiz-actions">{allAnswered ? <><div className="score"><strong>{score} / {content.questions.length}</strong><span>{score >= 4 ? 'Vrlo dobro razumijevanje cjeline.' : 'Preporuka: vratite se na korake koje treba ponoviti.'}</span></div><button className="primary-button" onClick={reset}><RotateCcw /> Ponovi</button></> : <div className="quiz-progress" aria-live="polite">Odgovoreno: <strong>{answeredCount} / {content.questions.length}</strong></div>}</div>
   </>
 }
 

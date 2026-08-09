@@ -162,17 +162,19 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .flashcard-definition { display:block; margin:0; color:#536064; font-size:13px; line-height:1.5; font-weight:400; }
 .flashcard.open { min-height:160px; background:white; border-color:#b8a9d0; }
 .quiz-list { display:grid; gap:16px; }
-.quiz-card { padding:22px; border:1px solid var(--line); border-radius:14px; background:white; }
+.quiz-card { padding:22px; border:1px solid var(--line); border-radius:14px; background:white; line-height:1.25; }
 .quiz-title { display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; }
 .quiz-title span { width:30px; height:30px; border-radius:9px; display:grid; place-items:center; background:var(--mint); color:var(--green); font-weight:700; }
-.quiz-title h3 { margin:3px 0 16px; font-size:16px; }
+.quiz-title h3 { margin:3px 0 12px; font-size:16px; line-height:1.25; }
 .answers { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-left:46px; }
-.answers label { padding:11px 12px; border:1px solid var(--line); border-radius:9px; cursor:pointer; font-size:13px; display:flex; gap:8px; align-items:center; }
+.answers label { padding:10px 12px; border:1px solid var(--line); border-radius:9px; cursor:pointer; font-size:13px; line-height:1.25; display:flex; gap:8px; align-items:center; }
+.answers label:has(input:disabled) { cursor:default; }
 .answers label:has(input:checked) { border-color:var(--green); background:#eef6f1; }
-.answers label.correct { background:#e3f4e7; border-color:#6baa78; }
+.answers label.correct { background:#dff3e4; border-color:#4f9b62; color:#174f2b; font-weight:700; }
 .answers label.wrong { background:#fae8e5; border-color:#d37d72; }
-.explanation { margin:14px 0 0 46px; padding:12px 14px; background:#f3f6f4; border-radius:9px; color:#536267; font-size:13px; line-height:1.5; }
+.explanation { margin:10px 0 0 46px; padding:10px 14px; background:#f3f6f4; border-left:3px solid #6baa78; border-radius:9px; color:#536267; font-size:13px; line-height:1.3; display:grid; gap:4px; }
 .quiz-actions { display:flex; justify-content:flex-end; gap:16px; align-items:center; margin-top:22px; }
+.quiz-progress { color:var(--muted); font-size:13px; }
 .primary-button:disabled { opacity:.4; cursor:not-allowed; }
 .score { display:flex; flex-direction:column; text-align:right; }
 .score strong { font:700 24px Georgia, 'Times New Roman', serif; color:var(--green); }
