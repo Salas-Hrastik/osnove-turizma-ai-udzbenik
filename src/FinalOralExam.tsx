@@ -368,7 +368,10 @@ export function FinalOralExam() {
         let message = 'Završni glasovni razgovor trenutačno nije moguće pokrenuti.'
         try {
           const payload: unknown = JSON.parse(raw)
-          if (isRecord(payload) && typeof payload.error === 'string') message = payload.error
+          if (isRecord(payload) && typeof payload.error === 'string') {
+            message = payload.error
+            if (typeof payload.detail === 'string' && payload.detail.trim()) message += ` ${payload.detail}`
+          }
         } catch {
           if (raw.trim()) message = raw.replace(/\s+/g, ' ').slice(0, 180)
         }

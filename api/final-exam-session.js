@@ -6,7 +6,7 @@ const MAX_QUESTION = 1200
 const MAX_BASIS = 2600
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.v2-port.2'
+const ROUTE_VERSION = '2026-08-09.v2-port.3'
 
 function parseBody(request) {
   if (typeof request.body !== 'string') return request.body
@@ -22,7 +22,10 @@ function text(value, limit) {
 }
 
 function sdpText(value) {
-  return typeof value === 'string' ? value.trim().slice(0, MAX_SDP) : ''
+  // SDP is a line-oriented protocol whose records, including the final one,
+  // are terminated by CRLF. Do not trim or otherwise normalize the browser's
+  // offer before forwarding it to the Realtime endpoint.
+  return typeof value === 'string' ? value.slice(0, MAX_SDP) : ''
 }
 
 function parseQuestions(value) {
@@ -127,6 +130,20 @@ function openAiError(status) {
   return `Završni glasovni razgovor trenutačno nije moguće otvoriti (${status}).`
 }
 
+function openAiDetail(value) {
+  try {
+    const parsed = JSON.parse(value)
+    const message = parsed?.error?.message
+    const param = parsed?.error?.param
+    if (typeof message !== 'string' || !message.trim()) return ''
+    const cleanMessage = message.replace(/\s+/g, ' ').trim().slice(0, 240)
+    const cleanParam = typeof param === 'string' ? param.replace(/\s+/g, ' ').trim().slice(0, 120) : ''
+    return cleanParam ? `${cleanMessage} (parametar: ${cleanParam})` : cleanMessage
+  } catch {
+    return ''
+  }
+}
+
 export default async function handler(request, response) {
   const apiKey = process.env.OPENAI_API_KEY
   const model = process.env.OPENAI_REALTIME_MODEL || DEFAULT_MODEL
@@ -189,7 +206,7 @@ export default async function handler(request, response) {
     const answer = await upstream.text()
     if (!upstream.ok) {
       console.error('Final exam Realtime session failed', { status: upstream.status, model, detail: answer.slice(0, 500) })
-      return response.status(upstream.status).json({ error: openAiError(upstream.status) })
+      return response.status(upstream.status).json({ error: openAiError(upstream.status), detail: openAiDetail(answer) })
     }
     response.setHeader('content-type', 'application/sdp')
     response.setHeader('cache-control', 'no-store')
