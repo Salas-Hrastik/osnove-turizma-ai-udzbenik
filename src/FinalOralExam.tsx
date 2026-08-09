@@ -5,8 +5,8 @@ import { chapterContents } from './data/book'
 import type { ChapterContent } from './types'
 
 const QUESTION_COUNT = 5
-const ANSWER_PAUSE_MS = 5500
-const INITIAL_HELP_MS = 8000
+const HELP_PAUSE_MS = 4500
+const COMPLETION_PAUSE_MS = 9000
 const CONFIRMATION_REMINDER_MS = 8000
 
 type ExamPhase = 'intro' | 'connecting' | 'asking' | 'answering' | 'evaluating' | 'feedback' | 'confirming' | 'finishing' | 'complete' | 'error'
@@ -116,7 +116,7 @@ function isNegative(value: string) {
 }
 
 function spokenQuestion(question: OralQuestion, index: number) {
-  return `Pitanje ${index + 1}. ${question.question}`
+  return `Tema je ${question.chapterTitle}. Pitanje ${index + 1}: ${question.question}`
 }
 
 export function FinalOralExam() {
@@ -196,7 +196,7 @@ export function FinalOralExam() {
         conversation: 'none',
         output_modalities: ['audio'],
         metadata: { exam_kind: kind },
-        instructions: `Izgovori prirodno i razgovorno na hrvatskom, bez naslova i bez dodavanja novih činjenica: ${text}`,
+        instructions: `Ne odgovaraj na sadržaj i ne dodaj komentar. Izgovori prirodno na hrvatskom isključivo tekst između oznaka <govor> i </govor>, a zatim odmah prestani govoriti.\n<govor>${text}</govor>`,
       },
     }))
   }
@@ -222,13 +222,18 @@ export function FinalOralExam() {
     sendSpoken(hint, 'hint')
   }
 
-  function scheduleInitialHelp() {
+  function scheduleListeningPause() {
     clearPauseTimer()
+    const wait = hintUsedRef.current ? COMPLETION_PAUSE_MS : HELP_PAUSE_MS
     pauseTimerRef.current = window.setTimeout(() => {
-      if (phaseRef.current !== 'answering' || answerSegmentsRef.current.length || hintUsedRef.current || evaluatingRef.current) return
+      if (phaseRef.current !== 'answering' || responseActiveRef.current || evaluatingRef.current) return
+      if (hintUsedRef.current) {
+        askForCompletion()
+        return
+      }
       const question = questionsRef.current[questionIndexRef.current]
-      giveHint(`Pomoćno pitanje: kako biste s postavljenim pitanjem povezali pojmove ${question.hintTerms.join(', ')}?`)
-    }, INITIAL_HELP_MS)
+      giveHint(`Kao pomoć, razmislite kako su s pitanjem povezani pojmovi ${question.hintTerms.join(', ')}.`)
+    }, wait)
   }
 
   function scheduleConfirmationReminder() {
@@ -249,13 +254,13 @@ export function FinalOralExam() {
     sendSpoken('Jeste li dovršili odgovor? Recite da ili ne.', 'confirmation')
   }
 
-  async function requestEvaluation(question: OralQuestion, answer: string, provisional: boolean) {
+  async function requestEvaluation(question: OralQuestion, answer: string) {
     const response = await fetch('/api/oral-exam', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         mode: 'answer',
-        provisional,
+        provisional: false,
         question: question.question,
         chapterId: question.chapterId,
         chapterTitle: question.chapterTitle,
@@ -269,33 +274,6 @@ export function FinalOralExam() {
     const payload = await response.json()
     if (!response.ok) throw new Error(payload?.error || 'Odgovor nije moguće vrednovati.')
     return payload as AnswerEvaluation
-  }
-
-  async function reviewCurrentAnswer() {
-    if (evaluatingRef.current) return
-    const question = questionsRef.current[questionIndexRef.current]
-    const answer = cleanAnswer(answerSegmentsRef.current.join(' '))
-    if (!question || !answer) return
-    evaluatingRef.current = true
-    clearPauseTimer()
-    changePhase('evaluating')
-    setError('')
-    try {
-      const evaluation = await requestEvaluation(question, answer, true)
-      if (!hintUsedRef.current && !evaluation.complete) {
-        const hint = evaluation.hint || `Kako biste odgovor povezali s pojmovima ${question.hintTerms.join(', ')}?`
-        evaluatingRef.current = false
-        giveHint(hint)
-        return
-      }
-
-      evaluatingRef.current = false
-      askForCompletion()
-    } catch (evaluationError) {
-      evaluatingRef.current = false
-      setError(evaluationError instanceof Error ? evaluationError.message : 'Odgovor trenutačno nije moguće provjeriti.')
-      changePhase('error')
-    }
   }
 
   async function finalizeCurrentAnswer() {
@@ -312,7 +290,7 @@ export function FinalOralExam() {
     changePhase('evaluating')
     setError('')
     try {
-      const evaluation = await requestEvaluation(question, answer, false)
+      const evaluation = await requestEvaluation(question, answer)
 
       const record = { question, answer, hint: hintTextRef.current || undefined, evaluation }
       const nextRecords = [...recordsRef.current, record]
@@ -363,13 +341,13 @@ export function FinalOralExam() {
     if (kind === 'question') {
       if (phaseRef.current !== 'asking') return
       changePhase('answering')
-      scheduleInitialHelp()
+      scheduleListeningPause()
       return
     }
     if (kind === 'hint') {
       if (phaseRef.current !== 'feedback') return
       changePhase('answering')
-      if (!answerSegmentsRef.current.length) scheduleInitialHelp()
+      scheduleListeningPause()
       return
     }
     if (kind === 'confirmation') {
@@ -379,7 +357,7 @@ export function FinalOralExam() {
     }
     if (kind === 'continue') {
       changePhase('answering')
-      scheduleInitialHelp()
+      scheduleListeningPause()
       return
     }
     if (kind === 'final') {
@@ -414,23 +392,23 @@ export function FinalOralExam() {
           clearPauseTimer()
           if (isNegative(rawTranscript)) {
             changePhase('answering')
-            sendSpoken('U redu, nastavite odgovor.', 'continue')
+            sendSpoken('U redu, slušam.', 'continue')
             break
           }
           if (isAffirmative(rawTranscript)) {
             void finalizeCurrentAnswer()
             break
           }
+          sendSpoken('Nisam razumio potvrdu. Jeste li dovršili odgovor? Recite da ili ne.', 'confirmation')
+          break
         }
         const segment = cleanAnswer(rawTranscript)
         if (segment) answerSegmentsRef.current.push(segment)
         const finished = isExplicitlyFinished(rawTranscript)
         changePhase('answering')
         clearPauseTimer()
-        pauseTimerRef.current = window.setTimeout(() => {
-          if (finished) askForCompletion()
-          else void reviewCurrentAnswer()
-        }, finished ? 250 : ANSWER_PAUSE_MS)
+        if (finished) pauseTimerRef.current = window.setTimeout(askForCompletion, 250)
+        else scheduleListeningPause()
         break
       }
       case 'response.created':
@@ -535,7 +513,7 @@ export function FinalOralExam() {
       const offer = await peer.createOffer()
       await peer.setLocalDescription(offer)
       if (!offer.sdp) throw new Error('Preglednik nije stvorio valjanu glasovnu vezu.')
-      const context = selected.map((question) => `Cjelina ${question.chapterId}: ${question.chapterTitle}\nPitanje: ${question.question}\nOčekivana osnova: ${question.expectedAnswer}`).join('\n\n')
+      const context = 'Glasovni kanal završne provjere služi samo izgovoru pojedinačnih rečenica koje mu šalje upravljačka aplikacija.'
       const response = await fetch('/api/realtime-session', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },

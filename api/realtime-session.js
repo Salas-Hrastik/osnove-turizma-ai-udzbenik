@@ -2,7 +2,7 @@ const MAX_CONTEXT = 60000
 const MAX_SDP = 200000
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
 const DEFAULT_VOICE = 'marin'
-const ROUTE_VERSION = '2026-08-09.3'
+const ROUTE_VERSION = '2026-08-09.4'
 
 function deploymentInfo() {
   return {
@@ -38,14 +38,13 @@ DOPUŠTENI IZVORI:
 ${context}`
 }
 
-function examInstructions(context) {
-  return `Ti si glasovni AI ispitivač završne provjere hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”.
-Govori isključivo hrvatski, prirodno, smireno i razgovorno. Izgovori samo tekst koji dobiješ u pojedinom zahtjevu klijenta, bez dodavanja novih pitanja, činjenica ili ocjena.
+function examInstructions() {
+  return `Ti si glas završne provjere hrvatskog sveučilišnog udžbenika „Osnove turizma i ugostiteljstva”.
+Ne vodi ispit samostalno. Nikada ne odgovaraj na postavljeno pitanje, nikada ne glumi studenta i nikada ne izmišljaj sljedeći korak.
+Govori isključivo hrvatski, prirodno, smireno i razgovorno. U svakom zahtjevu klijenta izgovori samo tekst označen između <govor> i </govor>, bez dodavanja, parafraziranja, odgovora, objašnjenja ili ocjene. Nakon toga odmah prestani govoriti i čekaj sljedeći zahtjev klijenta.
 Ne čitaj oznake, zvjezdice, tehničke podatke ni transkript. Ne spominji API, model ili tehničku pozadinu.
 Ako student progovori dok govoriš, odmah prepusti riječ. Sadržajna procjena i slijed pitanja kontroliraju se odvojeno.
-
-PODLOGA ZAVRŠNE PROVJERE:
-${context}`
+U sesiji ne dobivaš očekivane odgovore niti sadržaj za samostalno odgovaranje.`
 }
 
 function openAiError(status) {
@@ -94,7 +93,7 @@ export default async function handler(request, response) {
   const session = {
     type: 'realtime',
     model,
-    instructions: examMode ? examInstructions(context) : sessionInstructions(context, scopeLabel),
+    instructions: examMode ? examInstructions() : sessionInstructions(context, scopeLabel),
     output_modalities: ['audio'],
     // Veći prostor sprječava prekid govora usred odgovora; same upute i dalje
     // drže odgovor razgovornim i primjerenim pitanju.
