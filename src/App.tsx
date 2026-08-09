@@ -457,17 +457,21 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
     }
     voiceUserSpeakingRef.current = false
     voiceResponseActiveRef.current = false
-    voiceChannelRef.current?.close()
+    const channel = voiceChannelRef.current
     voiceChannelRef.current = null
-    voicePeerRef.current?.close()
+    channel?.close()
+    const peer = voicePeerRef.current
     voicePeerRef.current = null
-    voiceStreamRef.current?.getTracks().forEach((track) => track.stop())
+    peer?.close()
+    const stream = voiceStreamRef.current
     voiceStreamRef.current = null
-    if (voiceAudioRef.current) {
-      voiceAudioRef.current.pause()
-      voiceAudioRef.current.srcObject = null
-    }
+    stream?.getTracks().forEach((track) => track.stop())
+    const audio = voiceAudioRef.current
     voiceAudioRef.current = null
+    if (audio) {
+      audio.pause()
+      audio.srcObject = null
+    }
   }
 
   function stopVoiceConversation() {
