@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Award, BookOpen, CheckCircle2, ClipboardList, HelpCircle, LockKeyhole, Mic, RotateCcw, Sparkles, Square } from 'lucide-react'
+import { BookOpen, CheckCircle2, LockKeyhole, Mic, RotateCcw, Sparkles, Square } from 'lucide-react'
 import { chapterContents } from './data/book'
 import type { ChapterContent } from './types'
 
@@ -9,7 +9,7 @@ const ANSWER_PAUSE_MS = 5500
 const INITIAL_HELP_MS = 10000
 
 type ExamPhase = 'intro' | 'connecting' | 'asking' | 'answering' | 'evaluating' | 'feedback' | 'finishing' | 'complete' | 'error'
-type SpokenKind = 'question' | 'hint' | 'feedback' | 'final'
+type SpokenKind = 'question' | 'hint' | 'final'
 
 type OralQuestion = {
   id: string
@@ -56,18 +56,6 @@ type RealtimeEvent = {
     status_details?: { reason?: string }
     metadata?: { exam_kind?: SpokenKind }
   }
-}
-
-const phaseText: Record<ExamPhase, string> = {
-  intro: 'Ispit nije pokrenut',
-  connecting: 'Povezujem mikrofon…',
-  asking: 'AI ispitivač postavlja pitanje',
-  answering: 'Slušam vaš odgovor',
-  evaluating: 'Vrednujem cjelovit odgovor',
-  feedback: 'Obrazlažem vrednovanje',
-  finishing: 'Oblikujem završni sud',
-  complete: 'Završna provjera je dovršena',
-  error: 'Provjera je prekinuta',
 }
 
 function secureShuffle<T>(items: T[]) {
@@ -127,7 +115,7 @@ export function FinalOralExam() {
   const [questions, setQuestions] = useState<OralQuestion[]>([])
   const [questionIndex, setQuestionIndex] = useState(0)
   const [records, setRecords] = useState<ExamRecord[]>([])
-  const [currentAnswerPreview, setCurrentAnswerPreview] = useState(false)
+  const [currentHint, setCurrentHint] = useState('')
   const [error, setError] = useState('')
   const [finalAssessment, setFinalAssessment] = useState<FinalAssessment | null>(null)
 
@@ -205,7 +193,7 @@ export function FinalOralExam() {
     answerSegmentsRef.current = []
     hintUsedRef.current = false
     hintTextRef.current = ''
-    setCurrentAnswerPreview(false)
+    setCurrentHint('')
     setPhase('asking')
     sendSpoken(spokenQuestion(questionsRef.current[index], index), 'question')
   }
@@ -218,6 +206,7 @@ export function FinalOralExam() {
       const hint = `Za početak pokušajte povezati odgovor s pojmovima ${question.hintTerms.join(', ')}.`
       hintUsedRef.current = true
       hintTextRef.current = hint
+      setCurrentHint(hint)
       setPhase('feedback')
       sendSpoken(hint, 'hint')
     }, INITIAL_HELP_MS)
@@ -260,6 +249,7 @@ export function FinalOralExam() {
         const hint = evaluation.hint || `Pokušajte povezati odgovor s pojmovima ${question.hintTerms.join(', ')}.`
         hintUsedRef.current = true
         hintTextRef.current = hint
+        setCurrentHint(hint)
         evaluatingRef.current = false
         setPhase('feedback')
         sendSpoken(hint, 'hint')
@@ -271,9 +261,9 @@ export function FinalOralExam() {
       recordsRef.current = nextRecords
       setRecords(nextRecords)
       evaluatingRef.current = false
-      setPhase('feedback')
-      const feedback = `Vrednovanje odgovora: ${evaluation.feedback} Ostvareno je ${evaluation.score} od 20 bodova.`
-      sendSpoken(feedback, 'feedback')
+      const nextIndex = questionIndexRef.current + 1
+      if (nextIndex < QUESTION_COUNT) askQuestion(nextIndex)
+      else void finishExam()
     } catch (evaluationError) {
       evaluatingRef.current = false
       setError(evaluationError instanceof Error ? evaluationError.message : 'Vrednovanje trenutačno nije dostupno.')
@@ -321,12 +311,6 @@ export function FinalOralExam() {
       setPhase('answering')
       return
     }
-    if (kind === 'feedback') {
-      const nextIndex = questionIndexRef.current + 1
-      if (nextIndex < QUESTION_COUNT) askQuestion(nextIndex)
-      else void finishExam()
-      return
-    }
     if (kind === 'final') {
       closeConnection()
       setPhase('complete')
@@ -351,13 +335,11 @@ export function FinalOralExam() {
           pendingSpokenRef.current = null
         }
         setPhase('answering')
-        setCurrentAnswerPreview(true)
         break
       case 'conversation.item.input_audio_transcription.completed': {
         if (!['asking', 'answering'].includes(phaseRef.current)) break
         const segment = cleanAnswer(String(event.transcript || ''))
         if (segment) answerSegmentsRef.current.push(segment)
-        setCurrentAnswerPreview(answerSegmentsRef.current.length > 0)
         const finished = isExplicitlyFinished(String(event.transcript || ''))
         clearPauseTimer()
         pauseTimerRef.current = window.setTimeout(() => void evaluateCurrentAnswer(finished || hintUsedRef.current), finished ? 200 : ANSWER_PAUSE_MS)
@@ -400,6 +382,7 @@ export function FinalOralExam() {
     setQuestions(selected)
     setQuestionIndex(0)
     setRecords([])
+    setCurrentHint('')
     setFinalAssessment(null)
     setError('')
     setPhase('connecting')
@@ -499,6 +482,7 @@ export function FinalOralExam() {
     setQuestions([])
     setRecords([])
     setFinalAssessment(null)
+    setCurrentHint('')
     setError('')
   }
 
@@ -509,44 +493,36 @@ export function FinalOralExam() {
   useEffect(() => () => closeConnection(), [])
 
   const active = !['intro', 'complete', 'error'].includes(phase)
-  const progress = phase === 'complete' ? QUESTION_COUNT : Math.min(questionIndex + 1, QUESTION_COUNT)
+  const showQuestion = Boolean(currentQuestion) && !['intro', 'connecting', 'finishing', 'complete', 'error'].includes(phase)
 
   return <>
     <section className="final-exam" aria-labelledby="final-exam-title">
       <header className="final-exam-heading">
-        <div><span className="eyebrow">CJELINA 12 · SIMULACIJA ZAVRŠNOGA RAZGOVORA</span><h2 id="final-exam-title">Pet pitanja za cjelovitu provjeru znanja</h2><p>Pri svakom pokretanju sustav nasumično bira pet različitih prethodnih cjelina. AI ispitivač postavlja pitanja jedno po jedno, sluša cjelovit odgovor, prema potrebi daje sugestivnu pomoć te obrazlaže vrednovanje.</p></div>
-        <div className={`exam-status ${active ? 'active' : ''}`}><Mic /><span><small>Status</small><strong>{phaseText[phase]}</strong></span></div>
+        <div><span className="eyebrow">CJELINA 12 · ZAVRŠNI USMENI RAZGOVOR</span><h2 id="final-exam-title">Pet pitanja, jedno po jedno</h2><p>AI postavlja pitanje i čeka Vaš odgovor. Ako dulje zastanete, dobit ćete kratku sugestiju. Nakon odgovora odmah slijedi sljedeće pitanje.</p></div>
       </header>
 
-      <div className="exam-principles">
-        <article><HelpCircle /><span><strong>Jedna pomoć</strong><small>Dulja stanka pokreće sugestiju samo kada odgovor još nije sadržajno zaokružen.</small></span></article>
-        <article><ClipboardList /><span><strong>Nevidljivi zapisnik</strong><small>Transkript se vodi u memoriji tijekom razgovora i prikazuje tek nakon petoga pitanja.</small></span></article>
-        <article><Award /><span><strong>Neobvezujuća ocjena</strong><small>Algoritamski rezultat pomaže učenju; nastavnik zadržava isključivu ovlast konačnoga ocjenjivanja.</small></span></article>
-      </div>
+      {phase === 'intro' && <div className="exam-start"><div className="exam-start-icon"><Mic /></div><h3>Spremni?</h3><p>Nakon svakoga pitanja odgovorite svojim riječima. Sustav će prepoznati završetak odgovora i nastaviti dalje.</p><button type="button" className="primary-button" onClick={() => void startExam()}><Mic /> Pokreni razgovor</button></div>}
 
-      {active && <div className="exam-progress" aria-label={`Napredak: pitanje ${progress} od ${QUESTION_COUNT}`}><div>{Array.from({ length: QUESTION_COUNT }, (_, index) => <span key={index} className={index < progress ? 'done' : index === questionIndex ? 'current' : ''}>{index + 1}</span>)}</div><strong>{progress} / {QUESTION_COUNT}</strong></div>}
-
-      {phase === 'intro' && <div className="exam-start"><div className="exam-start-icon"><Mic /></div><h3>Spremni za završni razgovor?</h3><p>Za provjeru su potrebni mikrofon i mirno okruženje. Nakon svakoga pitanja odgovorite svojim riječima. Možete reći „gotov sam” ili pritisnuti „Završi odgovor”.</p><button type="button" className="primary-button" onClick={() => void startExam()}><Mic /> Pokreni završnu provjeru</button></div>}
-
-      {active && <div className={`exam-console phase-${phase}`}><div className="exam-orb"><Mic /></div><div><span className="eyebrow">TRENUTAČNA RADNJA</span><h3>{phaseText[phase]}</h3><p>{phase === 'answering' ? (currentAnswerPreview ? 'Odgovor se bilježi nevidljivo. Nastavite govoriti ili završite odgovor.' : 'Odgovorite svojim riječima; kratke stanke ne prekidaju odgovor.') : phase === 'evaluating' ? 'Uspoređujem odgovor s očekivanim pojmovima i obrazloženjem iz odabrane cjeline.' : 'Ispit ostaje u jednoj povezanoj glasovnoj sesiji.'}</p></div><div className="exam-actions">{phase === 'answering' && <button type="button" onClick={() => void evaluateCurrentAnswer(true)} disabled={!currentAnswerPreview}><CheckCircle2 /> Završi odgovor</button>}<button type="button" className="secondary" onClick={stopExam}><Square /> Prekini ispit</button></div></div>}
+      {active && <div className="exam-simple-session" aria-live="polite"><span><Mic />{phase === 'connecting' ? 'Pripremam prvo pitanje…' : phase === 'finishing' ? 'Pripremam završni osvrt…' : 'Usmeni razgovor je u tijeku'}</span><button type="button" onClick={stopExam}><Square /> Prekini</button></div>}
 
       {error && <div className="exam-error"><LockKeyhole /><span><strong>Provjera nije dovršena.</strong>{error}</span><button type="button" onClick={() => void startExam()}><RotateCcw /> Pokušaj ponovno</button></div>}
 
       {phase === 'complete' && finalAssessment && <ExamReport records={records} assessment={finalAssessment} onRestart={() => void startExam()} />}
 
-      <p className="exam-privacy"><LockKeyhole /> Audio se prenosi samo dok traje provjera. Transkript se ne sprema na poslužitelj i ne prikazuje se prije završnoga izvješća.</p>
+      <p className="exam-privacy"><LockKeyhole /> Zapis razgovora ostaje skriven do završnoga osvrta i ne sprema se na poslužitelj.</p>
     </section>
 
-    {active && currentQuestion && ['asking', 'answering'].includes(phase) && <QuestionPopup question={currentQuestion} index={questionIndex} hint={hintUsedRef.current ? hintTextRef.current : ''} />}
+    {showQuestion && currentQuestion && <QuestionPopup question={currentQuestion} index={questionIndex} hint={currentHint} />}
   </>
 }
 
 function QuestionPopup({ question, index, hint }: { question: OralQuestion; index: number; hint: string }) {
-  return createPortal(<aside className="exam-question-popup" role="dialog" aria-live="polite" aria-label={`Pitanje ${index + 1} od ${QUESTION_COUNT}`}>
-    <div><span>PITANJE {index + 1} / {QUESTION_COUNT}</span><small>Cjelina {question.chapterId} · {question.chapterTitle}</small></div>
+  return createPortal(<div className="exam-question-layer"><aside className="exam-question-popup" role="dialog" aria-live="polite" aria-label={`Pitanje ${index + 1} od ${QUESTION_COUNT}`}>
+    <div><span>PITANJE {index + 1} OD {QUESTION_COUNT}</span><small>Cjelina {question.chapterId}</small></div>
     <p>{question.question}</p>
-    {hint && <div className="exam-popup-hint"><Sparkles /><span><strong> sugestivna pomoć</strong>{hint}</span></div>}
-  </aside>, document.body)
+    {hint && <div className="exam-popup-hint"><Sparkles /><span><strong>Pomoć</strong>{hint}</span></div>}
+    <footer><Mic /> Odgovorite usmeno</footer>
+  </aside></div>, document.body)
 }
 
 function ExamReport({ records, assessment, onRestart }: { records: ExamRecord[]; assessment: FinalAssessment; onRestart: () => void }) {
