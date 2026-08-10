@@ -85,7 +85,16 @@ function App() {
             <strong>{book.title}</strong>
           </span>
         </a>
-        <div className="source-badge"><span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong></div>
+        <a
+          className="source-badge"
+          href="/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.0.docx"
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Otvori kanonski tekst udžbenika, verzija ${book.canonicalVersion}`}
+          title="Otvori kanonski tekst udžbenika"
+        >
+          <span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong>
+        </a>
       </header>
 
       <div className="workspace">

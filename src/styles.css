@@ -36,7 +36,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .brand-copy strong { font-family:Georgia, 'Times New Roman', serif; font-size:20px; }
 .eyebrow { font-size:11px; font-weight:700; letter-spacing:.14em; color:#6c807e; }
 .topbar .eyebrow { color:#b8d3cb; }
-.source-badge { margin-left:auto; display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid #ffffff22; border-radius:10px; }
+.source-badge { margin-left:auto; display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid #ffffff22; border-radius:10px; color:inherit; text-decoration:none; cursor:pointer; transition:background-color .16s ease,border-color .16s ease,transform .16s ease; }
+.source-badge:hover { background:#ffffff0d; border-color:#ffffff46; transform:translateY(-1px); }
 .source-badge span { color:#b8d3cb; font-size:12px; }
 .source-badge strong { color:#f6cf88; }
 .workspace { display:grid; grid-template-columns:300px minmax(0,1fr); height:calc(100vh - 76px); min-height:0; overflow:hidden; }
