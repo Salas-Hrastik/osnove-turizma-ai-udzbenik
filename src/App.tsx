@@ -11,6 +11,38 @@ type MediaKind = 'audio' | 'video' | 'presentation'
 
 const canonicalDocumentPath = '/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.1.docx'
 
+type CanonicalGuideItem = {
+  id: string
+  label: string
+  page: number
+  meta: string
+  chapter?: number
+}
+
+const canonicalGuideItems: CanonicalGuideItem[] = [
+  { id: 'cover', label: 'Naslovnica', page: 1, meta: 'Početak dokumenta' },
+  { id: 'contents', label: 'Sadržaj', page: 3, meta: 'Pregled rukopisa' },
+  { id: 'foreword', label: 'Predgovor', page: 9, meta: 'Urednički okvir' },
+  { id: 'sources', label: 'Napomena o izvorima', page: 10, meta: 'Podaci i citiranje' },
+  { id: 'outcomes', label: 'Mapiranje ishoda učenja', page: 12, meta: 'Ishodi po poglavljima' },
+  ...chapters.flatMap((chapter): CanonicalGuideItem[] => {
+    const printedPage = Number.parseInt(chapter.pages, 10)
+    if (!Number.isFinite(printedPage)) return []
+
+    const chapterItem: CanonicalGuideItem = {
+      id: `chapter-${chapter.id}`,
+      label: chapter.title,
+      page: printedPage + 1,
+      meta: `Cjelina ${chapter.id} · tiskana str. ${printedPage}`,
+      chapter: chapter.id,
+    }
+
+    return chapter.id === 11
+      ? [{ id: 'selective-tourism', label: 'Selektivne vrste turizma', page: 89, meta: 'Poglavlje 11 · uvod' }, chapterItem]
+      : [chapterItem]
+  }),
+]
+
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
   { name: 'Gledaj i slušaj', label: 'Gledaj i slušaj', icon: Headphones },
@@ -852,7 +884,10 @@ function MediaModal({ title, label, onClose, children }: { title: string; label:
 
 function CanonicalTextModal({ onClose }: { onClose: () => void }) {
   const documentContainerRef = useRef<HTMLDivElement>(null)
+  const documentViewerRef = useRef<HTMLDivElement>(null)
   const [documentState, setDocumentState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -874,7 +909,10 @@ function CanonicalTextModal({ onClose }: { onClose: () => void }) {
           renderFootnotes: true,
           renderEndnotes: true,
         })
-        if (active) setDocumentState('ready')
+        if (active) {
+          setPageCount(documentContainerRef.current.querySelectorAll('section.docx').length)
+          setDocumentState('ready')
+        }
       } catch (error) {
         console.error('Prikaz kanonskog teksta nije uspio.', error)
         if (active) setDocumentState('error')
@@ -885,15 +923,66 @@ function CanonicalTextModal({ onClose }: { onClose: () => void }) {
     return () => { active = false }
   }, [])
 
+  const navigateToPage = (page: number) => {
+    const viewer = documentViewerRef.current
+    const pages = documentContainerRef.current?.querySelectorAll<HTMLElement>('section.docx')
+    const target = pages?.[page - 1]
+    if (!viewer || !target) return
+
+    viewer.scrollTo({ top: Math.max(0, target.offsetTop - 18), behavior: 'smooth' })
+    setCurrentPage(page)
+  }
+
+  const trackCurrentPage = () => {
+    const viewer = documentViewerRef.current
+    const pages = documentContainerRef.current?.querySelectorAll<HTMLElement>('section.docx')
+    if (!viewer || !pages?.length) return
+
+    const readingLine = viewer.scrollTop + Math.min(150, viewer.clientHeight * 0.24)
+    let visiblePage = 1
+    pages.forEach((page, index) => {
+      if (page.offsetTop <= readingLine) visiblePage = index + 1
+    })
+    setCurrentPage(visiblePage)
+  }
+
+  const activeGuideItem = canonicalGuideItems.reduce((active, item) => item.page <= currentPage ? item : active, canonicalGuideItems[0])
+
   return <MediaModal title={book.title} label={`KANONSKI TEKST · VERZIJA ${book.canonicalVersion}`} onClose={onClose}>
-    <div className="canonical-document-viewer" aria-busy={documentState === 'loading'}>
-      {documentState === 'loading' && <div className="canonical-document-status">Učitavanje kanonskog teksta…</div>}
-      {documentState === 'error' && <div className="canonical-document-status error">Dokument trenutačno nije moguće prikazati. Zatvorite prozor i pokušajte ponovno.</div>}
-      <div
-        ref={documentContainerRef}
-        className={`canonical-document-pages ${documentState === 'ready' ? 'ready' : ''}`}
-        aria-label={`Kanonski tekst udžbenika ${book.title}`}
-      />
+    <div className="canonical-document-layout">
+      <aside className="canonical-document-guide" aria-label="Vodič kroz kanonski tekst">
+        <div className="canonical-guide-heading">
+          <span className="eyebrow">VODIČ KROZ UDŽBENIK</span>
+          <h3>Odaberite cjelinu</h3>
+          <p>Kliknite naslov za izravan prijelaz na odgovarajuću stranicu.</p>
+        </div>
+        <nav aria-label="Sadržaj kanonskog dokumenta">
+          {canonicalGuideItems.map((item) => <button
+            key={item.id}
+            type="button"
+            className={activeGuideItem.id === item.id ? 'active' : ''}
+            onClick={() => navigateToPage(item.page)}
+            disabled={documentState !== 'ready'}
+            aria-current={activeGuideItem.id === item.id ? 'location' : undefined}
+          >
+            <span className="canonical-guide-marker">{item.chapter ?? '•'}</span>
+            <span><strong>{item.label}</strong><small>{item.meta}</small></span>
+          </button>)}
+        </nav>
+        <div className="canonical-guide-position" aria-live="polite">
+          <span>{activeGuideItem.label}</span>
+          <strong>Stranica dokumenta {currentPage}{pageCount ? ` / ${pageCount}` : ''}</strong>
+        </div>
+      </aside>
+      <div ref={documentViewerRef} className="canonical-document-viewer" aria-busy={documentState === 'loading'} onScroll={trackCurrentPage}>
+        {documentState === 'loading' && <div className="canonical-document-status">Učitavanje kanonskog teksta…</div>}
+        {documentState === 'error' && <div className="canonical-document-status error">Dokument trenutačno nije moguće prikazati. Zatvorite prozor i pokušajte ponovno.</div>}
+        <div
+          ref={documentContainerRef}
+          className={`canonical-document-pages ${documentState === 'ready' ? 'ready' : ''}`}
+          aria-label={`Kanonski tekst udžbenika ${book.title}`}
+        />
+      </div>
     </div>
   </MediaModal>
 }
