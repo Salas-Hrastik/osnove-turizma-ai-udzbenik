@@ -1,4 +1,5 @@
 import type { ChapterContent, ChapterSummary } from '../types'
+import { specialInterestMedia } from './specialInterestMedia'
 
 export const specialInterestChapterSummaries: ChapterSummary[] = [
   { id: 11, title: 'Vrste turizma posebnih interesa: Kulturni turizam', pages: '89–95', outcome: 'Objasniti kulturni turizam, oblikovati participativni kulturno-turistički proizvod i uravnotežiti tržišnu valorizaciju s očuvanjem baštine.', status: 'available' },
@@ -14,6 +15,7 @@ const checkedAt = '12. kolovoza 2026.'
 export const specialInterestChapterContents: Record<number, ChapterContent> = {
   11: {
     ...specialInterestChapterSummaries[0],
+    media: specialInterestMedia[11],
     summary: 'Kulturni turizam pretvara materijalnu i nematerijalnu baštinu, umjetnost, događanja i kreativne aktivnosti u doživljaj koji povezuje posjetitelja i lokalnu zajednicu. Konkurentnost više ne proizlazi iz samog posjedovanja resursa, nego iz interpretacije, participacije, tržišne spremnosti i odgovorne ravnoteže između zaštite i komercijalizacije.',
     outcomes: ['razlikovati konceptualnu i tehničku definiciju kulturnog turizma', 'razvrstati kulturno-turističke proizvode i segmente kulturnih turista', 'primijeniti participaciju, storytelling i model Stories–Senses–Sophistication', 'predložiti razvoj kulturnog proizvoda koji čuva autentičnost i uključuje lokalnu zajednicu'],
     keywords: [
@@ -48,6 +50,7 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
   },
   12: {
     ...specialInterestChapterSummaries[1],
+    media: specialInterestMedia[12],
     summary: 'Enogastronomski turizam obuhvaća putovanja i iskustva povezana s kušanjem, učenjem i uživanjem u lokalnoj hrani, piću i kulinarskoj tradiciji. Njegova vrijednost proizlazi iz povezivanja gastronomskog identiteta, poljoprivrede, ugostiteljstva, interpretacije i distribucije u održiv lanac lokalne vrijednosti.',
     outcomes: ['definirati enogastronomski turizam i razlikovati ga od običnog objedovanja', 'segmentirati gastroturiste prema motivaciji i stavovima', 'usporediti razvoj proizvoda u urbanoj, ruralnoj i obalnoj destinaciji', 'oblikovati enogastronomski itinerer povezan s lokalnim proizvođačima i održivošću'],
     keywords: [
@@ -82,6 +85,7 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
   },
   13: {
     ...specialInterestChapterSummaries[2],
+    media: specialInterestMedia[13],
     summary: 'Nautički turizam je sustav doživljaja plovidbe i višednevnog boravka na plovilu, lučke infrastrukture, čartera, kružnih putovanja i pratećih usluga. Hrvatski razvoj ovisi o ravnoteži javnog statusa pomorskog dobra, kvalitete usluge, profitabilnosti sektora i nosivog kapaciteta jadranskog ekosustava.',
     outcomes: ['razlikovati plovidbu kao transport od nautičkog turističkog doživljaja', 'objasniti status pomorskog dobra i posljedice za korištenje obale', 'usporediti jahting, čarter i različite oblike kruzinga', 'predložiti mjere razvoja usmjerene na kvalitetu i nosivi kapacitet'],
     keywords: [
@@ -116,6 +120,7 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
   },
   14: {
     ...specialInterestChapterSummaries[3],
+    media: specialInterestMedia[14],
     summary: 'City break turizam obuhvaća kratka putovanja u gradska središta, najčešće od dva do četiri noćenja, motivirana kombinacijom kulture, događanja, gastronomije, zabave i rekreacije. Za kontinentalnu Hrvatsku predstavlja priliku za cjelogodišnju potražnju, ali traži dostupnost, prepoznatljiv događaj, kvalitetan smještaj i povezivanje grada sa zaleđem.',
     outcomes: ['definirati city break turizam i objasniti njegov rast', 'povezati resurse, manifestacije i motive urbanih gostiju', 'dijagnosticirati sindrom kratkog boravka i infrastrukturna ograničenja', 'oblikovati integralni gradski proizvod koji produljuje boravak i disperzira potrošnju'],
     keywords: [
@@ -150,6 +155,7 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
   },
   15: {
     ...specialInterestChapterSummaries[4],
+    media: specialInterestMedia[15],
     summary: 'Zdravstveni turizam povezuje turizam i zdravstvene usluge kroz wellness, lječilišni i medicinski turizam. Hrvatska raspolaže prirodnim ljekovitim činiteljima, stručnim kadrom i dostupnošću europskim tržištima, ali konkurentsku prednost može ostvariti tek uz modernizaciju, akreditaciju, koordinaciju sektora i izgradnju povjerenja korisnika.',
     outcomes: ['razlikovati wellness, lječilišni i medicinski turizam', 'objasniti povijesnu i resursnu osnovu zdravstvenog turizma u Hrvatskoj', 'segmentirati korisnike prema motivima, tržištu i očekivanoj kvaliteti', 'procijeniti ulogu akreditacije i predložiti razvojne mjere'],
     keywords: [
@@ -184,6 +190,7 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
   },
   16: {
     ...specialInterestChapterSummaries[5],
+    media: specialInterestMedia[16],
     summary: 'MICE turizam obuhvaća sastanke, poticajna putovanja, kongrese i izložbe. Odlikuju ga profesionalni motiv, viša potrošnja, poslovanje izvan glavne sezone i složen lanac specijaliziranih dionika. Hrvatska može jačati konkurentnost ulaganjem u namjensku infrastrukturu, dostupnost, standarde kvalitete, kongresne urede i mjerljive održive događaje.',
     outcomes: ['razložiti kraticu MICE i razlikovati glavne kategorije događaja', 'usporediti poslovni i odmorišni turizam', 'objasniti uloge PCO-a, DMC-a i kongresnog ureda', 'procijeniti infrastrukturni jaz i oblikovati konkurentnu kandidaturu destinacije'],
     keywords: [
