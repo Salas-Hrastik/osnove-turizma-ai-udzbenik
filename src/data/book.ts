@@ -1,26 +1,28 @@
 import type { ChapterContent, ChapterSummary } from '../types'
+import { specialInterestChapterContents, specialInterestChapterSummaries } from './specialInterestChapters'
 
 export const book = {
   title: 'Osnove turizma i ugostiteljstva',
   author: 'prof. dr. sc. Drago Ružić',
   publisher: 'Veleučilište Baltazar',
-  canonicalVersion: '1.0',
-  canonicalDate: '3. kolovoza 2026.',
+  canonicalVersion: '1.1',
+  canonicalDate: '12. kolovoza 2026.',
 }
 
 export const chapters: ChapterSummary[] = [
-  { id: 1, title: 'Uvod u turizam i ugostiteljstvo', pages: '6–11', outcome: 'Definirati temeljne pojmove, razlikovati statističke kategorije putnika te objasniti odnos turizma i ugostiteljstva.', status: 'available' },
-  { id: 2, title: 'Povijesni razvoj turizma', pages: '12–16', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
-  { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '17–21', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
-  { id: 4, title: 'Oblici i vrste turizma', pages: '22–25', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
-  { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '26–29', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
-  { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '30–35', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
-  { id: 7, title: 'Učinci turizma', pages: '36–40', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'available' },
-  { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '41–45', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'available' },
-  { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '46–49', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'available' },
-  { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '50–52', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'available' },
-  { id: 11, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
-  { id: 12, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
+  { id: 1, title: 'Uvod u turizam i ugostiteljstvo', pages: '13–21', outcome: 'Definirati temeljne pojmove, razlikovati statističke kategorije putnika te objasniti odnos turizma i ugostiteljstva.', status: 'available' },
+  { id: 2, title: 'Povijesni razvoj turizma', pages: '22–29', outcome: 'Objasniti razvojne faze putovanja i prepoznati preduvjete nastanka masovnog turizma.', status: 'available' },
+  { id: 3, title: 'Turistički motivi i ponašanje potražnje', pages: '30–37', outcome: 'Analizirati motive turista pomoću psiholoških i socioloških modela.', status: 'available' },
+  { id: 4, title: 'Oblici i vrste turizma', pages: '38–44', outcome: 'Klasificirati oblike turizma i procijeniti prikladnost specijalizacije destinacije.', status: 'available' },
+  { id: 5, title: 'Turističko tržište i poslovno posredovanje', pages: '45–51', outcome: 'Objasniti mehanizme ponude i potražnje te izračunati učinke distribucijskog miksa.', status: 'available' },
+  { id: 6, title: 'Ugostiteljstvo — operacije i poslovni modeli', pages: '52–60', outcome: 'Primijeniti operativne pokazatelje i usporediti poslovne modele u hotelijerstvu.', status: 'available' },
+  { id: 7, title: 'Učinci turizma', pages: '61–69', outcome: 'Procijeniti gospodarske, društveno-kulturne i ekološke učinke turizma.', status: 'available' },
+  { id: 8, title: 'Održivi razvoj i strateško upravljanje destinacijom', pages: '70–76', outcome: 'Kritički prosuditi strategije održivosti i sustave certificiranja.', status: 'available' },
+  { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '77–83', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'available' },
+  { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '84–87', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'available' },
+  ...specialInterestChapterSummaries,
+  { id: 17, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
+  { id: 18, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
 ]
 
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
@@ -67,7 +69,7 @@ export const chapterOne: ChapterContent = {
         'Posjetitelj s najmanje jednim noćenjem jest turist; bez noćenja jest izletnik.',
       ],
       takeaway: 'Najprije utvrdite ulazi li osoba u statistički obuhvat posjetitelja, a tek zatim je razvrstajte kao turista ili izletnika.',
-      source: 'Kanonski izvor 1.0, str. 7–8',
+      source: 'Kanonski izvor 1.1, str. 14',
     },
     {
       title: 'Promatraj turizam kao sustav',
@@ -79,7 +81,7 @@ export const chapterOne: ChapterContent = {
         'Promjena tečaja, prometne povezanosti ili sigurnosti izvan destinacije može promijeniti njezin rezultat.',
       ],
       takeaway: 'Destinacija nikada ne posluje izolirano: njezina potražnja ovisi i o uvjetima na polazištu i putu turista.',
-      source: 'Kanonski izvor 1.0, str. 8; Leiper, 1979.',
+      source: 'Kanonski izvor 1.1, str. 15; Leiper, 1979.',
     },
     {
       title: 'Razlikuj turizam i ugostiteljstvo',
@@ -91,7 +93,7 @@ export const chapterOne: ChapterContent = {
         'Menadžer upravlja dijelom ukupnog doživljaja, pa kvaliteta zahtijeva suradnju dionika.',
       ],
       takeaway: 'Vrhunska pojedinačna usluga ne može sama nadomjestiti slabosti cijeloga destinacijskog lanca vrijednosti.',
-      source: 'Kanonski izvor 1.0, str. 8–9',
+      source: 'Kanonski izvor 1.1, str. 16',
     },
     {
       title: 'Tumači pokazatelje prije odluke',
@@ -103,7 +105,7 @@ export const chapterOne: ChapterContent = {
         'Prostorna koncentracija, ovisnost o emitivnim tržištima i struktura smještaja važniji su od same veličine prometa.',
       ],
       takeaway: 'Pokazatelj koji odaberemo usmjerava odluke: broj noćenja potiče obujam, a prihod, zadovoljstvo stanovnika i sezonska raspodjela potiču drukčiju politiku.',
-      source: 'Kanonski izvor 1.0, str. 9–11; DZS, 2026.',
+      source: 'Kanonski izvor 1.1, str. 17–19; DZS, 2026.',
     },
   ],
   dataSnapshot: [
@@ -133,7 +135,7 @@ export const chapterOne: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 6–11' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 13–21' },
     { label: 'Državni zavod za statistiku', detail: 'TUR-2025-1-2, objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/2025/hr/97093' },
     { label: 'UN Tourism', detail: 'International tourist arrivals, objavljeno 20. siječnja 2026.', url: 'https://www.unwto.org/news/international-tourist-arrivals-up-4%25-in-2025-reflecting-strong-travel-demand-around-the-world' },
   ],
@@ -269,7 +271,7 @@ export const chapterTwo: ChapterContent = {
         'Povijesni imidž i prostorni obrasci i danas usmjeravaju razvoj destinacije.',
       ],
       takeaway: 'Nijedan od triju preduvjeta nije dovoljan sam za sebe; turizam nastaje tek njihovim povezivanjem.',
-      source: 'Kanonski izvor 1.0, str. 12–13',
+      source: 'Kanonski izvor 1.1, str. 22–23',
     },
     {
       title: 'Prati put od antike do Grand Toura',
@@ -281,7 +283,7 @@ export const chapterTwo: ChapterContent = {
         'Putni vodiči, suveniri i javno predstavljanje putovanja imaju korijene u toj fazi.',
       ],
       takeaway: 'Mnogi suvremeni turistički obrasci imaju povijesne prethodnike, iako ih danas ubrzavaju tehnologija i šira dostupnost.',
-      source: 'Kanonski izvor 1.0, str. 13–14',
+      source: 'Kanonski izvor 1.1, str. 23–24',
     },
     {
       title: 'Objasni nastanak organiziranoga i masovnog turizma',
@@ -293,7 +295,7 @@ export const chapterTwo: ChapterContent = {
         'Masovni turizam donio je rast, ali i sezonalnost, standardizaciju te pritisak na prostor i zajednicu.',
       ],
       takeaway: 'Masovni turizam nije nastao jednom inovacijom, nego spojem tehnologije, društvenih prava, dohotka i organizirane prodaje.',
-      source: 'Kanonski izvor 1.0, str. 14–15',
+      source: 'Kanonski izvor 1.1, str. 24–26',
     },
     {
       title: 'Poveži postmasovno doba i hrvatski razvoj',
@@ -305,7 +307,7 @@ export const chapterTwo: ChapterContent = {
         'Digitalne platforme, Schengen i euro mijenjaju dostupnost, distribuciju i strukturu suvremene potražnje.',
       ],
       takeaway: 'Povijesni identitet može biti razvojni resurs samo kada ga destinacija prevede u relevantan suvremeni doživljaj.',
-      source: 'Kanonski izvor 1.0, str. 15–16',
+      source: 'Kanonski izvor 1.1, str. 27–29',
     },
   ],
   dataSnapshot: [
@@ -335,7 +337,7 @@ export const chapterTwo: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 12–16' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 22–29' },
     { label: 'Boris Vukonić', detail: 'Povijest hrvatskog turizma, Prometej, 2005.' },
     { label: 'John K. Walton (ur.)', detail: 'Histories of Tourism: Representation, Identity and Conflict, 2005.' },
   ],
@@ -495,7 +497,7 @@ export const chapterThree: ChapterContent = {
         'Segment postaje marketinški uporabljiv tek kada se motiv poveže s proizvodom i porukom.',
       ],
       takeaway: 'Dob i prihod govore tko može putovati; motivi i vrijednosti bolje objašnjavaju što će izabrati.',
-      source: 'Kanonski izvor 1.0, str. 17–18',
+      source: 'Kanonski izvor 1.1, str. 30–31',
     },
     {
       title: 'Primijeni tri psihološka modela',
@@ -507,7 +509,7 @@ export const chapterThree: ChapterContent = {
         'Plogov kontinuum proteže se od psihocentričnih prema alocentričnim turistima, dok se većina nalazi u sredini.',
       ],
       takeaway: 'Modeli nisu zakoni, nego različite analitičke leće koje zajedno daju potpuniju sliku potražnje.',
-      source: 'Kanonski izvor 1.0, str. 18–19; Maslow, 1943.; Crompton, 1979.; Plog, 1974./2001.',
+      source: 'Kanonski izvor 1.1, str. 31–32; Maslow, 1943.; Crompton, 1979.; Plog, 1974./2001.',
     },
     {
       title: 'Uključi društveni pogled i autentičnost',
@@ -519,7 +521,7 @@ export const chapterThree: ChapterContent = {
         'Nesklad između objavljene slike i stvarnosti povećava rizik nezadovoljstva nakon dolaska.',
       ],
       takeaway: 'Promidžbena slika nije samo komunikacija o proizvodu — ona postaje dio očekivanoga proizvoda.',
-      source: 'Kanonski izvor 1.0, str. 19; Cohen, 1972.; MacCannell, 1976.; Urry, 1990.',
+      source: 'Kanonski izvor 1.1, str. 33; Cohen, 1972.; MacCannell, 1976.; Urry, 1990.',
     },
     {
       title: 'Analiziraj odluku i izvedi marketinšku implikaciju',
@@ -531,7 +533,7 @@ export const chapterThree: ChapterContent = {
         'Mlađi segmenti očekuju vizualno informiranje, digitalnu samouslugu i provjerljive dokaze održivosti.',
       ],
       takeaway: 'Zadovoljstvo se gradi kvalitetom izvedbe i preciznošću obećanja; pretjerano obećanje može poništiti objektivno dobru uslugu.',
-      source: 'Kanonski izvor 1.0, str. 19–21',
+      source: 'Kanonski izvor 1.1, str. 33–36',
     },
   ],
   dataSnapshot: [
@@ -561,7 +563,7 @@ export const chapterThree: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 17–21' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 30–37' },
     { label: 'John L. Crompton', detail: 'Motivations for pleasure vacation, Annals of Tourism Research, 1979.' },
     { label: 'Stanley C. Plog', detail: 'Why destination areas rise and fall in popularity, 2001.' },
     { label: 'John Urry i Jonas Larsen', detail: 'The Tourist Gaze 3.0, 2011.' },
@@ -722,7 +724,7 @@ export const chapterFour: ChapterContent = {
         'Za tržišno pozicioniranje najvažniji je dominantni motiv koji privlači gosta, a ne popis svih aktivnosti koje obavlja.',
       ],
       takeaway: 'Istu osobu možemo razvrstati na više načina; svrha klasifikacije određuje kriterij koji je u određenoj odluci najkorisniji.',
-      source: 'Kanonski izvor 1.0, str. 22–23',
+      source: 'Kanonski izvor 1.1, str. 38–39',
     },
     {
       title: 'Usporedi obalni i kontinentalni turizam',
@@ -734,7 +736,7 @@ export const chapterFour: ChapterContent = {
         'Obala upravlja preopterećenjem u vrhuncu, dok kontinent mora povećati prepoznatljivost i prometnu dostupnost.',
       ],
       takeaway: 'Mala baza i viša stopa rasta nisu isto što i velik tržišni udio; prostornu ravnotežu treba mjeriti i apsolutnim i relativnim pokazateljima.',
-      source: 'Kanonski izvor 1.0, str. 23; DZS, 2026.',
+      source: 'Kanonski izvor 1.1, str. 39–40; DZS, 2026.',
     },
     {
       title: 'Razlikuj selektivne oblike',
@@ -746,7 +748,7 @@ export const chapterFour: ChapterContent = {
         'Ruralni, agroturistički, nautički, vjerski, sportski i gastronomski proizvodi razlikuju se prema resursu, motivu i načinu stvaranja vrijednosti.',
       ],
       takeaway: 'Svaki boravak u prirodi nije ekoturizam, kao što svaki boravak na selu nije agroturizam; naziv mora odgovarati stvarnoj izvedbi.',
-      source: 'Kanonski izvor 1.0, str. 23–24',
+      source: 'Kanonski izvor 1.1, str. 40–42',
     },
     {
       title: 'Izaberi održivu specijalizaciju',
@@ -758,7 +760,7 @@ export const chapterFour: ChapterContent = {
         'Specijalizacija smanjuje izravnu cjenovnu konkurenciju, ali povećava ovisnost o užem segmentu i zato traži upravljanje rizikom.',
       ],
       takeaway: 'Dobra specijalizacija nije pomodna oznaka, nego dokazivo podudaranje resursa, tržišne potrebe, vremena korištenja i nosivosti prostora.',
-      source: 'Kanonski izvor 1.0, str. 24–25',
+      source: 'Kanonski izvor 1.1, str. 42–44',
     },
   ],
   dataSnapshot: [
@@ -788,7 +790,7 @@ export const chapterFour: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 22–25' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 38–44' },
     { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025., objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/2025/hr/97093' },
     { label: 'Marina Novelli (ur.)', detail: 'Niche Tourism: Contemporary Issues, Trends and Cases, 2005.' },
     { label: 'Srećko Geić', detail: 'Menadžment selektivnih oblika turizma, 2011.' },
@@ -943,7 +945,7 @@ export const chapterFive: ChapterContent = {
         'Dinamičko određivanje cijena prilagođava cijenu preostaloj ponudi i očekivanoj potražnji.',
       ],
       takeaway: 'U turizmu ista cijena tijekom cijele godine rijetko optimalno koristi fiksni i neuskladištivi kapacitet.',
-      source: 'Kanonski izvor 1.0, str. 26–27',
+      source: 'Kanonski izvor 1.1, str. 45–46',
     },
     {
       title: 'Pretvori tržište u upotrebljive segmente',
@@ -955,7 +957,7 @@ export const chapterFive: ChapterContent = {
         'Bihevioralni kriterij prati motiv, učestalost, kanal rezervacije, vjernost i potrošnju.',
       ],
       takeaway: '„Ljubitelji prirode” preširoka su oznaka; precizan segment povezuje podrijetlo, dob, motiv, termin, duljinu boravka i kanal rezervacije.',
-      source: 'Kanonski izvor 1.0, str. 27',
+      source: 'Kanonski izvor 1.1, str. 46–47',
     },
     {
       title: 'Upravljaj distribucijskim lancem i njegovim troškom',
@@ -967,7 +969,7 @@ export const chapterFive: ChapterContent = {
         'Neto prihod po sobi jednak je prodajnoj cijeni umanjenoj za proviziju i ostale troškove kanala.',
       ],
       takeaway: 'Cilj nije potpuno uklanjanje posrednika, nego miks u kojemu platforme pomažu akviziciji, a izravni kanal zadržavanju gosta.',
-      source: 'Kanonski izvor 1.0, str. 27–28',
+      source: 'Kanonski izvor 1.1, str. 47–48',
     },
     {
       title: 'Poveži platforme, regulaciju i lokalni učinak',
@@ -979,7 +981,7 @@ export const chapterFive: ChapterContent = {
         'Satelitski račun DZS-a mjeri izravni doprinos, dok WTTC modelira ukupne učinke; te brojke nisu izravno usporedive.',
       ],
       takeaway: 'Tržišni doseg, trošak kanala, podatkovna transparentnost i lokalno zadržana vrijednost moraju se promatrati u jednoj odluci.',
-      source: 'Kanonski izvor 1.0, str. 28–29; Uredba (EU) 2024/1028; DZS, 2025.',
+      source: 'Kanonski izvor 1.1, str. 48–51; Uredba (EU) 2024/1028; DZS, 2025.',
     },
   ],
   dataSnapshot: [
@@ -1010,7 +1012,7 @@ export const chapterFive: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 26–29' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 45–51' },
     { label: 'EUR-Lex', detail: 'Uredba (EU) 2024/1028, primjena od 20. svibnja 2026.', url: 'https://eur-lex.europa.eu/eli/reg/2024/1028/oj/hrv' },
     { label: 'Ministarstvo turizma i sporta', detail: 'Predstavljanje prijedloga novoga Zakona o ugostiteljskoj djelatnosti, 17. travnja 2026.', url: 'https://mints.gov.hr/vijesti/ministar-glavina-predstavio-novi-zakon-o-ugostiteljskoj-djelatnosti-uvodimo-jasan-okvir-za-suzbijanje-neregistriranog-kratkorocnog-najma-smjestaja/24259' },
     { label: 'Državni zavod za statistiku', detail: 'Satelitski račun turizma za Republiku Hrvatsku u 2022., objavljeno 10. travnja 2025.', url: 'https://podaci.dzs.hr/2024/hr/103106' },
@@ -1172,7 +1174,7 @@ export const chapterSix: ChapterContent = {
         'Na hotele i sličan smještaj odnosilo se 15,0 % stalnih postelja, na kampove 22,9 %, a na odmarališta i slične objekte za kraći odmor 61,9 %.',
       ],
       takeaway: 'Struktura u kojoj prevladavaju brojni mali i raspršeni kapaciteti otežava ujednačavanje kvalitete, upravljanje podacima i koordinaciju destinacijskoga proizvoda.',
-      source: 'Kanonski izvor 1.0, str. 30–31; DZS, 2026.; NKD 2025.',
+      source: 'Kanonski izvor 1.1, str. 52–54; DZS, 2026.; NKD 2025.',
     },
     {
       title: 'Uskladi organizaciju hotela i poslovni model',
@@ -1184,7 +1186,7 @@ export const chapterSix: ChapterContent = {
         'Što se više rizika i operativne odgovornosti prenese na drugoga, vlasnik u pravilu zadržava manje kontrole i potencijalnoga prinosa.',
       ],
       takeaway: 'Ne postoji univerzalno najbolji model: izbor ovisi o tome nedostaju li vlasniku kapital, tržišni sustav, operativno znanje ili spremnost na rizik.',
-      source: 'Kanonski izvor 1.0, str. 31–32',
+      source: 'Kanonski izvor 1.1, str. 54–55',
     },
     {
       title: 'Izračunaj rezultat i prepoznaj granice pokazatelja',
@@ -1196,7 +1198,7 @@ export const chapterSix: ChapterContent = {
         'GOPPAR uključuje bruto operativnu dobit po raspoloživoj sobi, a RevPASH u restoranu mjeri prihod po raspoloživom sjedalu i satu.',
       ],
       takeaway: 'Visoka zauzetost ostvarena preniskom cijenom može povećati troškove i smanjiti dobit; RevPAR je tržišni kompas, ali nije konačan sudac uspješnosti.',
-      source: 'Kanonski izvor 1.0, str. 32–33',
+      source: 'Kanonski izvor 1.1, str. 55–57',
     },
     {
       title: 'Pretvori standard u doživljaj i održiv proces',
@@ -1208,7 +1210,7 @@ export const chapterSix: ChapterContent = {
         'Tehnologija treba preuzeti rutinske zadatke i osloboditi vrijeme za odnos s gostom; smanjenje broja ljudi bez promjene procesa može sniziti kvalitetu.',
       ],
       takeaway: 'Zvjezdice opisuju provjerljiv standard, a lojalnost nastaje dosljednom izvedbom, empatijom i malim naporom gosta duž cijeloga putovanja.',
-      source: 'Kanonski izvor 1.0, str. 33–35; urednička nadopuna o mjerenju iskustva i tehnologiji.',
+      source: 'Kanonski izvor 1.1, str. 57–59; urednička nadopuna o mjerenju iskustva i tehnologiji.',
     },
   ],
   dataSnapshot: [
@@ -1239,7 +1241,7 @@ export const chapterSix: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 30–35' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 52–60' },
     { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025. — smještajni kapaciteti, objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/media/ctwkrcot/tur-2025-1-2-dolasci-i-no%C4%87enja-turista-u-komercijalnom-smje%C5%A1taju-u-2025.pdf' },
     { label: 'Narodne novine', detail: 'Pravilnik o razvrstavanju, kategorizaciji i posebnim standardima ugostiteljskih objekata iz skupine Hoteli, NN 56/2016.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2016_06_56_1451.html' },
     { label: 'Narodne novine', detail: 'Nacionalna klasifikacija djelatnosti 2025. — NKD 2025., NN 47/2024.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2024_04_47_800.html' },
@@ -1397,7 +1399,7 @@ export const chapterSeven: ChapterContent = {
         'Uvoz hrane, energije i opreme, provizije stranim platformama i repatrijacija dobiti povećavaju odljev i smanjuju multiplikator.',
       ],
       takeaway: 'Za gospodarski učinak presudno je koliko puta turistički euro kruži lokalno prije nego što napusti destinaciju.',
-      source: 'Kanonski izvor 1.0, str. 36–37',
+      source: 'Kanonski izvor 1.1, str. 61–63',
     },
     {
       title: 'Procijeni društvenu bilancu i stav zajednice',
@@ -1409,7 +1411,7 @@ export const chapterSeven: ChapterContent = {
         'Teorija društvene razmjene pokazuje da se potpora održava vidljivom, pravednom i lokalno raspoređenom koristi.',
       ],
       takeaway: 'Otpor zajednice najčešće nije iznenadan: nastaje kada se rani i mjerljivi signali nezadovoljstva dugo zanemaruju.',
-      source: 'Kanonski izvor 1.0, str. 37–38; Doxey, 1975.',
+      source: 'Kanonski izvor 1.1, str. 63–64; Doxey, 1975.',
     },
     {
       title: 'Dijagnosticiraj razvojnu fazu destinacije',
@@ -1421,7 +1423,7 @@ export const chapterSeven: ChapterContent = {
         'Stagnacija upućuje na dosegnut vrhunac, zastarijevanje imidža i moguće prekoračenje nosivog kapaciteta.',
       ],
       takeaway: 'Najjeftiniji je zaokret prije stagnacije: razvojna faza služi kao dijagnoza za pravodobnu odluku, a ne kao neizbježna sudbina.',
-      source: 'Kanonski izvor 1.0, str. 38; Butler, 1980.',
+      source: 'Kanonski izvor 1.1, str. 64–65; Butler, 1980.',
     },
     {
       title: 'Mjeri pritisak i upravljaj prije preopterećenja',
@@ -1433,7 +1435,7 @@ export const chapterSeven: ChapterContent = {
         'Uravnotežen nadzor obuhvaća gospodarske, društvene, okolišne i upravljačke pokazatelje, a ne samo dolaske i noćenja.',
       ],
       takeaway: 'Destinacija koja mjeri samo promet upravlja obujmom; destinacija koja mjeri učinke može upravljati kvalitetom života i vrijednošću turizma.',
-      source: 'Kanonski izvor 1.0, str. 38–40; urednička aktualizacija službenih pokazatelja.',
+      source: 'Kanonski izvor 1.1, str. 65–69; urednička aktualizacija službenih pokazatelja.',
     },
   ],
   dataSnapshot: [
@@ -1464,7 +1466,7 @@ export const chapterSeven: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 36–40' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 61–69' },
     { label: 'Državni zavod za statistiku', detail: 'Satelitski račun turizma za Republiku Hrvatsku u 2022. — ispravak, 10. travnja 2025.', url: 'https://podaci.dzs.hr/2024/hr/103106' },
     { label: 'Državni zavod za statistiku', detail: 'Dolasci i noćenja turista u komercijalnom smještaju u 2025., objavljeno 26. veljače 2026.', url: 'https://podaci.dzs.hr/2025/hr/97093' },
     { label: 'UNESCO World Heritage Centre', detail: 'Decision 47 COM 7B.102 — Old City of Dubrovnik.', url: 'https://whc.unesco.org/en/decisions/8826/' },
@@ -1614,7 +1616,7 @@ export const chapterEight: ChapterContent = {
         'Upravljački stup uključuje institucije, transparentnost, odgovornost, podatke i stvarno sudjelovanje dionika.',
       ],
       takeaway: 'Održivost nije obećanje ni konačna oznaka: ona je dokaziv smjer promjene odnosa koristi i pritiska.',
-      source: 'Kanonski izvor 1.0, str. 41–42',
+      source: 'Kanonski izvor 1.1, str. 70–71',
     },
     {
       title: 'Razdvoji mjerenje, izvješćivanje i certifikaciju',
@@ -1626,7 +1628,7 @@ export const chapterEight: ChapterContent = {
         'Samoprocjena i plaćena oznaka bez audita ne dokazuju učinak te mogu postati greenwashing.',
       ],
       takeaway: 'Mjerenje pokazuje promjenu, izvješćivanje je čini vidljivom, a certifikacija neovisno provjerava usklađenost sa standardom.',
-      source: 'Kanonski izvor 1.0, str. 42; Europska komisija, ETIS; GSTC kriteriji.',
+      source: 'Kanonski izvor 1.1, str. 71; Europska komisija, ETIS; GSTC kriteriji.',
     },
     {
       title: 'Pretvori propise i nacionalne ciljeve u destinacijske odluke',
@@ -1638,7 +1640,7 @@ export const chapterEight: ChapterContent = {
         'Četiri hrvatska strateška cilja nisu formulirana kao rast dolazaka, nego kao uravnoteženost, očuvanje, konkurentnost i otpornost.',
       ],
       takeaway: 'Propis određuje minimalnu obvezu, ali destinacijski cilj i tržišni odnos određuju koje podatke treba stvarno voditi.',
-      source: 'Kanonski izvor 1.0, str. 42–43; Direktive (EU) 2025/794 i 2026/470; NN 2/2023.',
+      source: 'Kanonski izvor 1.1, str. 71–73; Direktive (EU) 2025/794 i 2026/470; NN 2/2023.',
     },
     {
       title: 'Zatvori strateški ciklus i uključi dionike',
@@ -1650,7 +1652,7 @@ export const chapterEight: ChapterContent = {
         'DMO se pomiče od promocije prema upravljanju posjetiteljima, nosivim kapacitetom, podatcima, rizicima i odnosima među dionicima.',
       ],
       takeaway: 'Strategija postaje upravljački instrument tek kada ima nositelja, resurse, pokazatelj, javno praćenje i mogućnost korekcije.',
-      source: 'Kanonski izvor 1.0, str. 43–45; Zakon o turizmu, NN 156/2023.',
+      source: 'Kanonski izvor 1.1, str. 73–76; Zakon o turizmu, NN 156/2023.',
     },
   ],
   dataSnapshot: [
@@ -1681,7 +1683,7 @@ export const chapterEight: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 41–45' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 70–76' },
     { label: 'Europska unija', detail: 'Direktiva (EU) 2026/470 o izmjenama zahtjeva za korporativno izvješćivanje o održivosti i dubinsku analizu.', url: 'https://eur-lex.europa.eu/eli/dir/2026/470/oj/eng' },
     { label: 'Vijeće Europske unije', detail: 'Konačno usvajanje pojednostavljenja izvješćivanja i dubinske analize, 24. veljače 2026.', url: 'https://www.consilium.europa.eu/en/press/press-releases/2026/02/24/council-signs-off-simplification-of-sustainability-reporting-and-due-diligence-requirements-to-boost-eu-competitiveness/' },
     { label: 'Narodne novine', detail: 'Strategija razvoja održivog turizma do 2030. godine, NN 2/2023.', url: 'https://narodne-novine.nn.hr/clanci/sluzbeni/2023_01_2_18.html' },
@@ -1766,7 +1768,7 @@ export const chapterNine: ChapterContent = {
         'Oporavak uključuje obnovu, povratak tržišta, analizu naučenog i promjenu sustava kako se ista ranjivost ne bi ponovila.',
       ],
       takeaway: 'Otpornost nije improvizacija tijekom krize, nego sposobnost izgrađena prevencijom, pripremom, diversifikacijom i učenjem.',
-      source: 'Kanonski izvor 1.0, str. 46–47',
+      source: 'Kanonski izvor 1.1, str. 77–79',
     },
     {
       title: 'Primijeni umjetnu inteligenciju uz jasne granice i ljudski nadzor',
@@ -1778,7 +1780,7 @@ export const chapterNine: ChapterContent = {
         'Od 2. kolovoza 2026. primjenjuju se obveze transparentnosti Akta o umjetnoj inteligenciji, dok su pojedine obveze za visokorizične sustave odgođene.',
       ],
       takeaway: 'Najbolja primjena automatizira rutinu i pojačava prosudbu zaposlenika, ali ne skriva identitet sustava niti ukida ljudsku odgovornost.',
-      source: 'Kanonski izvor 1.0, str. 47–48; Uredbe (EU) 2024/1689 i 2026/1744.',
+      source: 'Kanonski izvor 1.1, str. 79–80; Uredbe (EU) 2024/1689 i 2026/1744.',
     },
     {
       title: 'Upravljaj podacima i platformama, a ne samo tehnologijom',
@@ -1790,7 +1792,7 @@ export const chapterNine: ChapterContent = {
         'Platformizacija smanjuje ulaznu barijeru malim pružateljima, ali povećava ovisnost o proviziji, pravilima vidljivosti i nesigurnim oblicima rada.',
       ],
       takeaway: 'Tehnologija postaje pametna tek kada su podaci upravljani, odluke odgovorne, a koristi i rizici vidljivi svim važnim dionicima.',
-      source: 'Kanonski izvor 1.0, str. 48–49',
+      source: 'Kanonski izvor 1.1, str. 80–81',
     },
     {
       title: 'Ugradi klimatsku prilagodbu u proizvod i poslovni plan',
@@ -1802,7 +1804,7 @@ export const chapterNine: ChapterContent = {
         'Protupožarna zaštita, večernji i unutarnji sadržaji te razvoj kontinentalne i gorske ponude diversificiraju klimatski rizik.',
       ],
       takeaway: 'Klimatska prilagodba povezuje sigurnost, resurse, sezonalnost i tržišni portfelj u jedinstven plan otpornosti.',
-      source: 'Kanonski izvor 1.0, str. 49',
+      source: 'Kanonski izvor 1.1, str. 81–83',
     },
   ],
   dataSnapshot: [
@@ -1833,7 +1835,7 @@ export const chapterNine: ChapterContent = {
     ],
   },
   sources: [
-    { label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 46–49' },
+    { label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 77–83' },
     { label: 'EUR-Lex', detail: 'Konsolidirani tekst Uredbe (EU) 2024/1689, stanje 27. srpnja 2026.', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX%3A02024R1689-20260727' },
     { label: 'EUR-Lex', detail: 'Uredba (EU) 2026/1744 — izmjene rokova i pojednostavljenje Akta o umjetnoj inteligenciji.', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ%3AL_202601744' },
     { label: 'Europska komisija', detail: 'AI Act — regulatorni okvir i aktualni raspored primjene.', url: 'https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai' },
@@ -1903,15 +1905,15 @@ export const chapterTen: ChapterContent = {
     { term: 'Anticipativnost', definition: 'Sposobnost prepoznavanja slabih signala i pripreme za više mogućih budućnosti.' },
   ],
   steps: [
-    { title: 'Promatraj turizam kao povezanu mrežu', body: 'Ista pojava mijenja značenje ovisno o čvoru iz kojeg je promatramo. Rast noćenja može povećati prihod, ali i pritisak na stanovanje, radnu snagu, prostor i infrastrukturu.', points: ['Poveži gosta, poduzeća, radnike, stanovnike, javnu upravu i okoliš.', 'Razlikuj neposredne, odgođene i prelijevajuće učinke.', 'Za svaku odluku provjeri tko dobiva korist, tko snosi trošak i tko nema glas.', 'Pokazatelje obujma dopuni pokazateljima vrijednosti, kvalitete života i nosivosti.'], takeaway: 'U turističkom sustavu lokalna odluka gotovo uvijek proizvodi šire posljedice.', source: 'Kanonski izvor 1.0, str. 50' },
-    { title: 'Obrazloži etičku odluku', body: 'Etička prosudba ne svodi se na osobni dojam. Potrebno je imenovati vrijednosti u sukobu, pogođene skupine, raspoložive alternative i posljedice svake opcije.', points: ['Klimatska odgovornost suprotstavlja mobilnost i prihod okolišnom trošku.', 'Turizam i stanovanje traže ravnotežu privatne koristi i prava zajednice.', 'Uvjeti rada provjeravaju može li poslovni model opstati bez prebacivanja troška na radnike.', 'Podaci, privatnost, autentičnost i pristupačnost zahtijevaju transparentna pravila i uključivanje korisnika.'], takeaway: 'Dobra odluka ne skriva sukob vrijednosti, nego ga čini vidljivim i odgovorno obrazlaže izbor.', source: 'Kanonski izvor 1.0, str. 50–51' },
-    { title: 'Testiraj strategiju kroz scenarije do 2035.', body: 'Scenariji nastavka obrasca, regulirane preraspodjele i prekida pomažu provjeriti hoće li današnja strategija ostati korisna u različitim budućnostima.', points: ['Scenarij A produžuje današnje trendove uz postupnu tehnologizaciju i blagu regulaciju.', 'Scenarij B uvodi snažniju regulaciju, poreze, ograničenja kapaciteta i obujam stagnacije.', 'Scenarij C uključuje veći zdravstveni, klimatski ili sigurnosni poremećaj i opstanak samo prilagodljivih sustava.', 'Robusne mjere poput učinkovitosti resursa, povjerenja, podataka i razvoja ljudi vrijede u sva tri scenarija.'], takeaway: 'Scenarij nije prognoza; on je stres-test današnje odluke.', source: 'Kanonski izvor 1.0, str. 51–52' },
-    { title: 'Izgradi profil menadžera novog doba', body: 'Budući menadžer ne bira između analitike i rada s ljudima. Povezuje sustavno razumijevanje, podatkovnu i digitalnu pismenost, etičku osjetljivost, suradnju i anticipativnost.', points: ['Sustavno mišljenje otkriva povratne petlje i neželjene učinke.', 'Podatkovna pismenost razlikuje signal od metodološke pogreške.', 'Digitalna kompetencija uključuje mogućnosti, ograničenja i regulaciju tehnologije.', 'Etička prosudba, rad s dionicima i anticipativnost pretvaraju znanje u odgovornu odluku.'], takeaway: 'Uspješan menadžer sutrašnjice donosi odluke i kada nema sigurnog odgovora, ali ih zna obrazložiti i preispitati.', source: 'Kanonski izvor 1.0, str. 52' },
+    { title: 'Promatraj turizam kao povezanu mrežu', body: 'Ista pojava mijenja značenje ovisno o čvoru iz kojeg je promatramo. Rast noćenja može povećati prihod, ali i pritisak na stanovanje, radnu snagu, prostor i infrastrukturu.', points: ['Poveži gosta, poduzeća, radnike, stanovnike, javnu upravu i okoliš.', 'Razlikuj neposredne, odgođene i prelijevajuće učinke.', 'Za svaku odluku provjeri tko dobiva korist, tko snosi trošak i tko nema glas.', 'Pokazatelje obujma dopuni pokazateljima vrijednosti, kvalitete života i nosivosti.'], takeaway: 'U turističkom sustavu lokalna odluka gotovo uvijek proizvodi šire posljedice.', source: 'Kanonski izvor 1.1, str. 84–85' },
+    { title: 'Obrazloži etičku odluku', body: 'Etička prosudba ne svodi se na osobni dojam. Potrebno je imenovati vrijednosti u sukobu, pogođene skupine, raspoložive alternative i posljedice svake opcije.', points: ['Klimatska odgovornost suprotstavlja mobilnost i prihod okolišnom trošku.', 'Turizam i stanovanje traže ravnotežu privatne koristi i prava zajednice.', 'Uvjeti rada provjeravaju može li poslovni model opstati bez prebacivanja troška na radnike.', 'Podaci, privatnost, autentičnost i pristupačnost zahtijevaju transparentna pravila i uključivanje korisnika.'], takeaway: 'Dobra odluka ne skriva sukob vrijednosti, nego ga čini vidljivim i odgovorno obrazlaže izbor.', source: 'Kanonski izvor 1.1, str. 85' },
+    { title: 'Testiraj strategiju kroz scenarije do 2035.', body: 'Scenariji nastavka obrasca, regulirane preraspodjele i prekida pomažu provjeriti hoće li današnja strategija ostati korisna u različitim budućnostima.', points: ['Scenarij A produžuje današnje trendove uz postupnu tehnologizaciju i blagu regulaciju.', 'Scenarij B uvodi snažniju regulaciju, poreze, ograničenja kapaciteta i obujam stagnacije.', 'Scenarij C uključuje veći zdravstveni, klimatski ili sigurnosni poremećaj i opstanak samo prilagodljivih sustava.', 'Robusne mjere poput učinkovitosti resursa, povjerenja, podataka i razvoja ljudi vrijede u sva tri scenarija.'], takeaway: 'Scenarij nije prognoza; on je stres-test današnje odluke.', source: 'Kanonski izvor 1.1, str. 86' },
+    { title: 'Izgradi profil menadžera novog doba', body: 'Budući menadžer ne bira između analitike i rada s ljudima. Povezuje sustavno razumijevanje, podatkovnu i digitalnu pismenost, etičku osjetljivost, suradnju i anticipativnost.', points: ['Sustavno mišljenje otkriva povratne petlje i neželjene učinke.', 'Podatkovna pismenost razlikuje signal od metodološke pogreške.', 'Digitalna kompetencija uključuje mogućnosti, ograničenja i regulaciju tehnologije.', 'Etička prosudba, rad s dionicima i anticipativnost pretvaraju znanje u odgovornu odluku.'], takeaway: 'Uspješan menadžer sutrašnjice donosi odluke i kada nema sigurnog odgovora, ali ih zna obrazložiti i preispitati.', source: 'Kanonski izvor 1.1, str. 86–87' },
   ],
   dataSnapshot: [{ label: 'Etičke dileme', value: '6', change: 'vrijednosti u sukobu' }, { label: 'Scenariji do 2035.', value: '3', change: 'A · B · C' }, { label: 'Ključne kompetencije', value: '6', change: 'analitika + ljudi' }, { label: 'Robusna odluka', value: '3/3', change: 'korisna u svim scenarijima' }],
   appliedActivity: { title: 'Stres-test strategije destinacije', intro: 'Destinacija planira povećati smještajne kapacitete i uvesti platformu za personalizaciju ponude.', tasks: ['Nacrtajte najmanje šest čvorova sustava i tri povratne veze.', 'Imenujte dvije etičke dileme i pogođene skupine.', 'Procijenite odluku u scenarijima A, B i C.', 'Predložite tri robusne mjere koje ostaju korisne u sva tri scenarija.'], note: 'Ocjenjuje se kvaliteta obrazloženja i povezivanja posljedica, a ne izbor unaprijed zadanoga odgovora.' },
   editorialUpdate: { title: 'Od prognoze prema anticipativnom upravljanju', checkedAt: '7. kolovoza 2026.', body: 'Velika neizvjesnost ne opravdava pasivnost. Organizacije mogu kombinirati pokazatelje ranog upozorenja, scenarije, portfelj malih eksperimenata i unaprijed dogovorene pragove za promjenu odluke.', implications: ['Uz svaki scenarij odrediti signale koji pokazuju da se približava.', 'Preferirati mjere koje stvaraju vrijednost i bez ostvarivanja jedne prognoze.', 'Periodično preispitati pretpostavke, a ne samo rezultate.'] },
-  sources: [{ label: 'Kanonski izvor 1.0', detail: 'Osnove turizma i ugostiteljstva, str. 50–52' }],
+  sources: [{ label: 'Kanonski izvor 1.1', detail: 'Osnove turizma i ugostiteljstva, str. 84–87' }],
   questions: [
     { question: 'Što najbolje opisuje sistemsko mišljenje?', options: ['Praćenje samo prihoda', 'Promatranje veza i odgođenih posljedica', 'Izbjegavanje podataka', 'Predviđanje jedne sigurne budućnosti'], correct: 1, explanation: 'Sistemsko mišljenje povezuje aktere, povratne petlje te neposredne i odgođene posljedice.' },
     { question: 'Zašto etička dilema nema jednostavno rješenje?', options: ['Jer nema dionika', 'Jer su u sukobu legitimne vrijednosti', 'Jer propisi nisu važni', 'Jer se ne mogu opisati posljedice'], correct: 1, explanation: 'Etička dilema nastaje kada svaka opcija štiti jednu, a ugrožava drugu legitimnu vrijednost.' },
@@ -1941,8 +1943,8 @@ export const chapterTen: ChapterContent = {
   },
 }
 
-export const chapterEleven: ChapterContent = {
-  ...chapters[10],
+export const chapterSeventeen: ChapterContent = {
+  ...chapters[16],
   summary: 'Ovaj uredničko-stručni dodatak izvan kanonskog rukopisa analizira sezonalnost 61 mediteranske NUTS-2 regije. Jadranska Hrvatska izdvaja se najvišom koncentracijom noćenja u vršnom tromjesečju. Analiza pokazuje da klima objašnjava zajednički okvir, ali strukturne razlike snažnije oblikuju intenzitet sezonalnosti: smještajni miks, organizacija ponude, proizvodi izvan ljeta i koordinacija destinacije.',
   outcomes: ['razlikovati Gini koeficijent i udio trećega tromjesečja kao mjere sezonalnosti', 'protumačiti položaj Jadranske Hrvatske u uzorku 61 mediteranske regije', 'procijeniti utjecaj smještajnoga miksa i institucionalne koordinacije', 'predložiti mjere diversifikacije i profesionalizacije ponude'],
   keywords: [
@@ -1965,7 +1967,7 @@ export const chapterEleven: ChapterContent = {
   ],
   dataSnapshot: [{ label: 'Uspoređene regije', value: '61', change: 'mediteranske NUTS-2' }, { label: 'Jadranska Hrvatska — Gini', value: '0,664', change: 'najviša koncentracija' }, { label: 'Noćenja u Q3', value: '76,6 %', change: 'srpanj–rujan' }, { label: 'Ključne poluge', value: '4', change: 'miks · ponuda · diversifikacija · DMO' }],
   appliedActivity: { title: 'Dijagnoza sezonalnosti vlastite destinacije', intro: 'Upotrijebite mjesečna noćenja, strukturu kapaciteta i kalendar dostupnosti proizvoda.', tasks: ['Izračunajte Q3 udio i nacrtajte mjesečnu raspodjelu.', 'Usporedite rad hotela, kampova i obiteljskog smještaja kroz godinu.', 'Odredite tri uska grla izvan ljetne sezone.', 'Predložite paket mjera s nositeljima, rokovima i pokazateljima.'], note: 'Niži Q3 nije sam sebi cilj: provjerite raste li ukupna lokalno zadržana vrijednost i smanjuje li se opterećenje zajednice.' },
-  editorialUpdate: { title: 'Stručni dodatak izvan kanonskog rukopisa', checkedAt: '7. kolovoza 2026.', body: 'Ova cjelina temelji se na priloženom analitičkom radu o ranjivosti i konkurentnosti Jadranske Hrvatske. Brojke i zaključci nisu dio kanonskih stranica udžbenika, nego zasebna suvremena nadogradnja koja pokazuje kako se koncepti sezonalnosti, otpornosti i destinacijskog upravljanja primjenjuju na regionalne podatke.', implications: ['Kanonski sadržaj prvih deset cjelina ostaje nepromijenjen.', 'Rezultate tumačiti na razini analiziranih NUTS-2 regija.', 'Za lokalne odluke dopuniti analizu podacima pojedine destinacije.'] },
+  editorialUpdate: { title: 'Stručni dodatak izvan kanonskog rukopisa', checkedAt: '7. kolovoza 2026.', body: 'Ova cjelina temelji se na priloženom analitičkom radu o ranjivosti i konkurentnosti Jadranske Hrvatske. Brojke i zaključci nisu dio kanonskih stranica udžbenika, nego zasebna suvremena nadogradnja koja pokazuje kako se koncepti sezonalnosti, otpornosti i destinacijskog upravljanja primjenjuju na regionalne podatke.', implications: ['Kanonski sadržaj cjelina 1–16 ostaje jasno odvojen od ovoga dodatka.', 'Rezultate tumačiti na razini analiziranih NUTS-2 regija.', 'Za lokalne odluke dopuniti analizu podacima pojedine destinacije.'] },
   sources: [{ label: 'Priloženi stručni rad', detail: 'Ranjivost i konkurentnost Jadranske Hrvatske u kontekstu sezonalnosti mediteranskih regija.' }],
   questions: [
     { question: 'Što pokazuje Q3 udio?', options: ['Udio hotelskih kreveta', 'Udio godišnjih noćenja od srpnja do rujna', 'Prosječnu cijenu u trećem kvartalu', 'Broj NUTS-2 regija'], correct: 1, explanation: 'Q3 je izravna mjera koncentracije noćenja u vršnom ljetnom tromjesečju.' },
@@ -2008,5 +2010,6 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   8: chapterEight,
   9: chapterNine,
   10: chapterTen,
-  11: chapterEleven,
+  ...specialInterestChapterContents,
+  17: chapterSeventeen,
 }

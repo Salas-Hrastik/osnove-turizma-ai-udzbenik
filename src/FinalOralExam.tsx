@@ -68,7 +68,7 @@ function secureShuffle<T>(items: T[]) {
 
 function selectQuestions() {
   const sourceChapters = Object.values(chapterContents)
-    .filter((chapter): chapter is ChapterContent => chapter !== undefined && chapter.id <= 11 && chapter.questions.length > 0)
+    .filter((chapter): chapter is ChapterContent => chapter !== undefined && chapter.questions.length > 0)
   return secureShuffle(sourceChapters).slice(0, QUESTION_COUNT).map((chapter) => {
     const question = secureShuffle(chapter.questions)[0]
     const expected = question.options[question.correct]

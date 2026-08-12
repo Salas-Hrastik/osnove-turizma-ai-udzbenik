@@ -9,7 +9,7 @@ import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from '
 
 type MediaKind = 'audio' | 'video' | 'presentation'
 
-const canonicalDocumentPath = '/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.0.docx'
+const canonicalDocumentPath = '/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.1.docx'
 
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
@@ -153,7 +153,7 @@ function App() {
                 <span className="eyebrow">STALNI VODIČ</span>
                 <h3>Kako proučiti ovu cjelinu?</h3>
                 <p>{guideText(mode, hasContent)}</p>
-                <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst 1.0</span></div>
+                <div className="guide-source"><BookOpen /><span><strong>Izvor odgovora</strong>Kanonski tekst {book.canonicalVersion}</span></div>
               </aside>}
             </div>
 
@@ -246,6 +246,20 @@ function Study({ content }: { content: ChapterContent }) {
               description: 'Pokazatelji sažimaju ciklus kriznog upravljanja, skupine primjene umjetne inteligencije te aktualne datume europskih obveza transparentnosti i visokorizičnih sustava.',
               appendComparison: false,
             }
+        : content.id >= 11 && content.id <= 16
+          ? {
+              eyebrow: 'KANONSKA SINTEZA',
+              title: 'Četiri dimenzije za upravljanje turizmom posebnih interesa',
+              description: 'Pokazatelji sažimaju definiciju, tržišnu strukturu, dionike i razvojne poluge obrađene vrste turizma.',
+              appendComparison: false,
+            }
+        : content.id === 17
+          ? {
+              eyebrow: 'ISTRAŽIVAČKI NALAZI',
+              title: 'Sezonalnost Jadranske Hrvatske u mediteranskom kontekstu',
+              description: 'Pokazatelji izdvajaju opseg usporedbe, koncentraciju noćenja i ključne strukturne poluge promjene.',
+              appendComparison: false,
+            }
       : {
           eyebrow: 'SLUŽBENI PODACI · HRVATSKA 2025.',
           title: 'Veličina prometa nije cijela slika',
@@ -253,7 +267,7 @@ function Study({ content }: { content: ChapterContent }) {
           appendComparison: true,
         }
   return <>
-    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR 1.0</span><h2>Četiri koraka do razumijevanja</h2><p>{content.summary}</p></div>
+    <div className="section-heading"><span className="eyebrow">PROUČI · KANONSKI IZVOR {book.canonicalVersion}</span><h2>Četiri koraka do razumijevanja</h2><p>{content.summary}</p></div>
     <section className="outcome-panel" aria-labelledby="outcomes-title">
       <div><span className="eyebrow">ISHODI UČENJA</span><h3 id="outcomes-title">Nakon ove cjeline moći ćete</h3></div>
       <ul>{content.outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>
@@ -429,12 +443,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
       label: 'Cijela cjelina',
       title: content.title,
       description: `Vodič povezuje sva četiri nastavna koraka, pojmove, podatke i urednički dodatak cjeline ${content.id}.`,
-      source: `Kanonski izvor 1.0 · str. ${content.pages}`,
+      source: `Kanonski izvor ${book.canonicalVersion} · str. ${content.pages}`,
     },
     {
       key: 'book' as const,
       label: 'Cijeli udžbenik',
-      title: 'Svih 10 nastavnih cjelina',
+      title: 'Sve dostupne nastavne cjeline',
       description: 'Vodič traži poveznice u cijelom kanonskom tekstu te u jasno označenim uredničkim dodatcima.',
       source: 'Najširi unutarnji izvor znanja',
     },
@@ -694,7 +708,7 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
 
     {conversationType && <ConversationModal type={conversationType} onClose={closeConversation}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
-        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora 1.0.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
+        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora {book.canonicalVersion}.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
         <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => void askQuestion(prompt)} disabled={isAnswering}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} />{isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor iz odabranih izvora…</span></div>}{conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}<form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); void askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" disabled={isAnswering} /><button type="submit" disabled={!question.trim() || isAnswering} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor oblikuje AI isključivo iz sadržaja odabranog opsega. Vanjski izvori nisu automatski uključeni.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
         <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · IZRAVNI DIJALOG</span><h3>Razgovarajte prirodno s AI vodičem</h3><p>Odaberite opseg i pokrenite razgovor. Vodič vas sluša, odgovara prirodnim glasom i automatski prepušta riječ kada ponovno progovorite.</p></div><div className={`voice-status ${voiceStatus !== 'idle' ? 'active' : ''}`}><Mic /><span><small>Status razgovora</small><strong>{voiceStatusText[voiceStatus]}</strong></span></div></div>
@@ -707,7 +721,7 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
 
         <div className={`voice-console voice-${voiceStatus}`}>
           <div className="voice-orb"><Mic /></div>
-          <div className="voice-console-copy"><span className="eyebrow">ODABRANI OPSEG</span><h3>{selectedScope.label}</h3><p>{selectedScope.description}</p><div className="voice-source-layers"><span><BookOpen />Kanonski tekst 1.0</span><span><Sparkles />Datirani urednički dodatci</span></div></div>
+          <div className="voice-console-copy"><span className="eyebrow">ODABRANI OPSEG</span><h3>{selectedScope.label}</h3><p>{selectedScope.description}</p><div className="voice-source-layers"><span><BookOpen />Kanonski tekst {book.canonicalVersion}</span><span><Sparkles />Datirani urednički dodatci</span></div></div>
           <div className="voice-action">
             {!voiceActive ? <button type="button" onClick={() => void startVoiceConversation()} disabled={voiceStatus === 'connecting'}><Mic /> {voiceStatus === 'connecting' ? 'Povezujem…' : 'Pokreni razgovor'}</button> : <>
               {(voiceStatus === 'speaking' || voiceStatus === 'thinking') && <button type="button" className="interrupt" onClick={interruptVoiceAnswer}>Prekini odgovor</button>}
@@ -771,7 +785,7 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
 }
 
 function MediaViewer({ content }: { content: ChapterContent }) {
-  if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedija je prenesena" text="Izvorne datoteke nalaze se u samostalnom Supabase spremniku. Njihovi točni nazivi još se povezuju s ovim prikazom." />
+  if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedijski paket je predviđen" text="Za ovu novu cjelinu pripremljena su mjesta za audio, video i prezentaciju. Mediji će se aktivirati nakon izrade i prijenosa izvornih datoteka." />
   return null
 }
 
@@ -961,7 +975,7 @@ function SummaryModal({ title, pages, summary, outcomes, hasContent, onClose }: 
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [onClose])
 
-  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{hasContent ? 'Kanonski izvor 1.0' : 'Potvrđena matrica cjelina'}</strong>{hasContent ? `Stranice ${pages}` : 'Sadržaj cjeline u pripremi'}</span></div></section></div>
+  return <div className="modal-backdrop" role="presentation" onMouseDown={onClose}><section className="summary-modal" role="dialog" aria-modal="true" aria-labelledby="summary-title" onMouseDown={(event) => event.stopPropagation()}><button className="icon-button modal-close" onClick={onClose} aria-label="Zatvori sažetak"><X /></button><span className="eyebrow">SAŽETAK CJELINE</span><h2 id="summary-title">{title}</h2><p>{summary}</p>{outcomes.length > 0 && <ul className="modal-outcomes">{outcomes.map((outcome) => <li key={outcome}><CheckCircle2 />{outcome}</li>)}</ul>}<div className="modal-meta"><BookOpen /><span><strong>{hasContent ? `Kanonski izvor ${book.canonicalVersion}` : 'Potvrđena matrica cjelina'}</strong>{hasContent ? `Stranice ${pages}` : 'Sadržaj cjeline u pripremi'}</span></div></section></div>
 }
 
 function guideText(mode: Mode, hasContent: boolean) {
