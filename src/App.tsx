@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { renderAsync } from 'docx-preview'
 import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, CircleHelp, FileAudio, FileVideo, Headphones, Keyboard, LockKeyhole, Menu, MessageCircle, Mic, Presentation, RotateCcw, Send, Sparkles, X } from 'lucide-react'
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterContents, chapters } from './data/book'
@@ -7,6 +8,8 @@ import { FinalOralExam } from './FinalOralExam'
 import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
 type MediaKind = 'audio' | 'video' | 'presentation'
+
+const canonicalDocumentPath = '/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.0.docx'
 
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
@@ -22,6 +25,7 @@ function App() {
   const [mode, setMode] = useState<Mode>('Prouči')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [summaryOpen, setSummaryOpen] = useState(false)
+  const [canonicalTextOpen, setCanonicalTextOpen] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState<MediaKind | null>(null)
   const [slideIndex, setSlideIndex] = useState(0)
   const mainBodyRef = useRef<HTMLDivElement>(null)
@@ -85,16 +89,16 @@ function App() {
             <strong>{book.title}</strong>
           </span>
         </a>
-        <a
+        <button
+          type="button"
           className="source-badge"
-          href="/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.0.docx"
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`Otvori kanonski tekst udžbenika, verzija ${book.canonicalVersion}`}
-          title="Otvori kanonski tekst udžbenika"
+          onClick={() => setCanonicalTextOpen(true)}
+          aria-haspopup="dialog"
+          aria-label={`Pregledaj kanonski tekst udžbenika, verzija ${book.canonicalVersion}`}
+          title="Pregledaj kanonski tekst udžbenika"
         >
           <span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong>
-        </a>
+        </button>
       </header>
 
       <div className="workspace">
@@ -163,6 +167,7 @@ function App() {
       </div>
 
       {summaryOpen && <SummaryModal title={chapter.title} pages={chapter.pages} summary={chapterContent?.summary ?? chapter.outcome} outcomes={isFinalAssessment ? ['odgovoriti na pet nasumično odabranih pitanja iz različitih cjelina', 'povezati pojmove i obrazložiti odgovor vlastitim riječima', 'upotrijebiti sugestivnu pomoć za nastavak nepotpunoga odgovora', 'protumačiti završni zapisnik i preporuke za daljnje učenje'] : chapterContent?.outcomes ?? []} hasContent={hasContent || isFinalAssessment} onClose={() => setSummaryOpen(false)} />}
+      {canonicalTextOpen && <CanonicalTextModal onClose={() => setCanonicalTextOpen(false)} />}
       {selectedMedia && chapterContent?.media && <SelectedMediaModal media={selectedMedia} content={chapterContent} slideIndex={slideIndex} onSlideChange={setSlideIndex} onClose={() => setSelectedMedia(null)} />}
     </div>
   )
@@ -829,6 +834,54 @@ function MediaModal({ title, label, onClose, children }: { title: string; label:
   }, [onClose])
 
   return createPortal(<div className="modal-backdrop media-modal-backdrop" role="presentation" onMouseDown={onClose}><section className="media-modal" role="dialog" aria-modal="true" aria-labelledby="media-modal-title" onMouseDown={(event) => event.stopPropagation()}><header className="media-modal-header"><div><span className="eyebrow">{label}</span><h2 id="media-modal-title">{title}</h2></div><button className="icon-button media-modal-close" onClick={onClose} aria-label="Zatvori skočni prozor" autoFocus><X /></button></header>{children}</section></div>, document.body)
+}
+
+function CanonicalTextModal({ onClose }: { onClose: () => void }) {
+  const documentContainerRef = useRef<HTMLDivElement>(null)
+  const [documentState, setDocumentState] = useState<'loading' | 'ready' | 'error'>('loading')
+
+  useEffect(() => {
+    let active = true
+
+    const renderCanonicalText = async () => {
+      try {
+        const response = await fetch(canonicalDocumentPath)
+        if (!response.ok) throw new Error(`Dokument nije dostupan (${response.status}).`)
+
+        const documentBlob = await response.blob()
+        if (!active || !documentContainerRef.current) return
+
+        documentContainerRef.current.replaceChildren()
+        await renderAsync(documentBlob, documentContainerRef.current, documentContainerRef.current, {
+          breakPages: true,
+          ignoreLastRenderedPageBreak: false,
+          renderHeaders: true,
+          renderFooters: true,
+          renderFootnotes: true,
+          renderEndnotes: true,
+        })
+        if (active) setDocumentState('ready')
+      } catch (error) {
+        console.error('Prikaz kanonskog teksta nije uspio.', error)
+        if (active) setDocumentState('error')
+      }
+    }
+
+    void renderCanonicalText()
+    return () => { active = false }
+  }, [])
+
+  return <MediaModal title={book.title} label={`KANONSKI TEKST · VERZIJA ${book.canonicalVersion}`} onClose={onClose}>
+    <div className="canonical-document-viewer" aria-busy={documentState === 'loading'}>
+      {documentState === 'loading' && <div className="canonical-document-status">Učitavanje kanonskog teksta…</div>}
+      {documentState === 'error' && <div className="canonical-document-status error">Dokument trenutačno nije moguće prikazati. Zatvorite prozor i pokušajte ponovno.</div>}
+      <div
+        ref={documentContainerRef}
+        className={`canonical-document-pages ${documentState === 'ready' ? 'ready' : ''}`}
+        aria-label={`Kanonski tekst udžbenika ${book.title}`}
+      />
+    </div>
+  </MediaModal>
 }
 
 function PresentationModal({ presentation, slideIndex, onSlideChange, onClose }: { presentation: PresentationFile; slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {
