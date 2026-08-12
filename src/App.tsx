@@ -772,7 +772,7 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
 
 function MediaViewer({ content }: { content: ChapterContent }) {
   if (!content.media) return <ComingSoon icon={<Headphones />} title="Multimedija je prenesena" text="Izvorne datoteke nalaze se u samostalnom Supabase spremniku. Njihovi točni nazivi još se povezuju s ovim prikazom." />
-  return <div className="media-note"><CheckCircle2 /><strong>Samostalna medijska infrastruktura</strong></div>
+  return null
 }
 
 function MediaOverview({ content }: { content: ChapterContent }) {

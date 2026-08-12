@@ -91,7 +91,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .content-grid { flex:1 0 auto; width:100%; max-width:1320px; min-height:0; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:24px; align-items:stretch; }
 .content-grid.without-guide { grid-template-columns:minmax(0,1fr); }
 .learning-area { min-height:0; background:var(--cream); border:1px solid var(--line); border-radius:18px; padding:26px clamp(24px,3.5vw,46px) clamp(24px,3.5vw,46px); box-shadow:0 14px 36px #24463d0c; }
-.media-learning-area { min-height:210px; display:flex; flex-direction:column; justify-content:space-evenly; gap:24px; padding-top:28px; }
+.media-learning-area { min-height:0; border:0; background:transparent; padding:0; box-shadow:none; }
 .media-learning-area .media-submenu { width:100%; margin:0; }
 .section-heading { margin-bottom:28px; }
 .section-heading h2 { font:700 29px Georgia, 'Times New Roman', serif; margin:6px 0 8px; }
@@ -396,9 +396,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .slide-interpretation { padding:19px 21px; border-left:4px solid #df9d58; border-radius:0 11px 11px 0; background:#fbf4e9; }
 .slide-interpretation h4 { margin:5px 0 7px; font:700 20px Georgia, 'Times New Roman', serif; }
 .slide-interpretation p { margin:0; color:#536568; font-size:13px; line-height:1.65; }
-.media-note { display:flex; align-items:center; gap:12px; margin:0; padding:18px; border:1px solid #c8ddd3; border-radius:12px; background:#eef5f1; }
-.media-note>svg { flex:0 0 auto; width:21px; color:var(--green); }
-.media-note strong { color:var(--green); }
 .chapter-pager { flex:0 0 auto; width:100%; max-width:1320px; margin:14px auto 0; display:flex; align-items:center; justify-content:space-between; color:var(--muted); }
 .chapter-pager button { border:1px solid var(--line); background:#fbfcf9; color:var(--green); border-radius:10px; padding:10px 14px; display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:600; }
 .chapter-pager button:disabled { opacity:.35; cursor:not-allowed; }
