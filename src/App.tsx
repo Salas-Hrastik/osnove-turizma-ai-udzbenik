@@ -145,7 +145,7 @@ function App() {
 
           <div className="main-body-scroll" ref={mainBodyRef}>
             <div className={`content-grid ${mode !== 'Prouči' || isFinalAssessment ? 'without-guide' : ''}`}>
-              <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''} ${isFinalAssessment ? 'assessment-learning-area' : ''}`}>
+              <section className={`learning-area ${mode === 'Gledaj i slušaj' ? 'media-learning-area' : ''} ${mode === 'Razgovaraj' ? 'conversation-learning-area' : ''} ${isFinalAssessment ? 'assessment-learning-area' : ''}`}>
                 {isFinalAssessment ? <FinalOralExam /> : !chapterContent ? <PlannedChapter title={chapter.title} outcome={chapter.outcome} /> : <ChapterMode key={chapter.id} mode={mode} content={chapterContent} />}
               </section>
               {mode === 'Prouči' && !isFinalAssessment && <aside className="guide-card">
