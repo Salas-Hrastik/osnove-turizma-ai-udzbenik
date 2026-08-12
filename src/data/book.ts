@@ -21,8 +21,8 @@ export const chapters: ChapterSummary[] = [
   { id: 9, title: 'Otpornost, tehnologija i suvremeni trendovi', pages: '77–83', outcome: 'Vrednovati primjenu digitalnih tehnologija i planirati odgovor na krizu.', status: 'available' },
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '84–87', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'available' },
   ...specialInterestChapterSummaries,
-  { id: 17, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
-  { id: 18, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
+  { id: 18, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
+  { id: 19, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
 ]
 
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
@@ -1943,8 +1943,8 @@ export const chapterTen: ChapterContent = {
   },
 }
 
-export const chapterSeventeen: ChapterContent = {
-  ...chapters[16],
+export const chapterEighteen: ChapterContent = {
+  ...chapters[17],
   summary: 'Ovaj uredničko-stručni dodatak izvan kanonskog rukopisa analizira sezonalnost 61 mediteranske NUTS-2 regije. Jadranska Hrvatska izdvaja se najvišom koncentracijom noćenja u vršnom tromjesečju. Analiza pokazuje da klima objašnjava zajednički okvir, ali strukturne razlike snažnije oblikuju intenzitet sezonalnosti: smještajni miks, organizacija ponude, proizvodi izvan ljeta i koordinacija destinacije.',
   outcomes: ['razlikovati Gini koeficijent i udio trećega tromjesečja kao mjere sezonalnosti', 'protumačiti položaj Jadranske Hrvatske u uzorku 61 mediteranske regije', 'procijeniti utjecaj smještajnoga miksa i institucionalne koordinacije', 'predložiti mjere diversifikacije i profesionalizacije ponude'],
   keywords: [
@@ -1967,7 +1967,7 @@ export const chapterSeventeen: ChapterContent = {
   ],
   dataSnapshot: [{ label: 'Uspoređene regije', value: '61', change: 'mediteranske NUTS-2' }, { label: 'Jadranska Hrvatska — Gini', value: '0,664', change: 'najviša koncentracija' }, { label: 'Noćenja u Q3', value: '76,6 %', change: 'srpanj–rujan' }, { label: 'Ključne poluge', value: '4', change: 'miks · ponuda · diversifikacija · DMO' }],
   appliedActivity: { title: 'Dijagnoza sezonalnosti vlastite destinacije', intro: 'Upotrijebite mjesečna noćenja, strukturu kapaciteta i kalendar dostupnosti proizvoda.', tasks: ['Izračunajte Q3 udio i nacrtajte mjesečnu raspodjelu.', 'Usporedite rad hotela, kampova i obiteljskog smještaja kroz godinu.', 'Odredite tri uska grla izvan ljetne sezone.', 'Predložite paket mjera s nositeljima, rokovima i pokazateljima.'], note: 'Niži Q3 nije sam sebi cilj: provjerite raste li ukupna lokalno zadržana vrijednost i smanjuje li se opterećenje zajednice.' },
-  editorialUpdate: { title: 'Stručni dodatak izvan kanonskog rukopisa', checkedAt: '7. kolovoza 2026.', body: 'Ova cjelina temelji se na priloženom analitičkom radu o ranjivosti i konkurentnosti Jadranske Hrvatske. Brojke i zaključci nisu dio kanonskih stranica udžbenika, nego zasebna suvremena nadogradnja koja pokazuje kako se koncepti sezonalnosti, otpornosti i destinacijskog upravljanja primjenjuju na regionalne podatke.', implications: ['Kanonski sadržaj cjelina 1–16 ostaje jasno odvojen od ovoga dodatka.', 'Rezultate tumačiti na razini analiziranih NUTS-2 regija.', 'Za lokalne odluke dopuniti analizu podacima pojedine destinacije.'] },
+  editorialUpdate: { title: 'Stručni dodatak izvan kanonskog rukopisa', checkedAt: '7. kolovoza 2026.', body: 'Ova cjelina temelji se na priloženom analitičkom radu o ranjivosti i konkurentnosti Jadranske Hrvatske. Brojke i zaključci nisu dio kanonskih stranica udžbenika, nego zasebna suvremena nadogradnja koja pokazuje kako se koncepti sezonalnosti, otpornosti i destinacijskog upravljanja primjenjuju na regionalne podatke.', implications: ['Kanonski sadržaj cjelina 1–17 ostaje jasno odvojen od ovoga dodatka.', 'Rezultate tumačiti na razini analiziranih NUTS-2 regija.', 'Za lokalne odluke dopuniti analizu podacima pojedine destinacije.'] },
   sources: [{ label: 'Priloženi stručni rad', detail: 'Ranjivost i konkurentnost Jadranske Hrvatske u kontekstu sezonalnosti mediteranskih regija.' }],
   questions: [
     { question: 'Što pokazuje Q3 udio?', options: ['Udio hotelskih kreveta', 'Udio godišnjih noćenja od srpnja do rujna', 'Prosječnu cijenu u trećem kvartalu', 'Broj NUTS-2 regija'], correct: 1, explanation: 'Q3 je izravna mjera koncentracije noćenja u vršnom ljetnom tromjesečju.' },
@@ -2011,5 +2011,5 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   9: chapterNine,
   10: chapterTen,
   ...specialInterestChapterContents,
-  17: chapterSeventeen,
+  18: chapterEighteen,
 }

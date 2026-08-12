@@ -1,13 +1,15 @@
 import type { ChapterContent, ChapterSummary } from '../types'
 import { specialInterestMedia } from './specialInterestMedia'
+import { agrotourismChapterContent, agrotourismChapterSummary } from './agrotourismChapter'
 
 export const specialInterestChapterSummaries: ChapterSummary[] = [
   { id: 11, title: 'Vrste turizma posebnih interesa: Kulturni turizam', pages: '89–95', outcome: 'Objasniti kulturni turizam, oblikovati participativni kulturno-turistički proizvod i uravnotežiti tržišnu valorizaciju s očuvanjem baštine.', status: 'available' },
-  { id: 12, title: 'Vrste turizma posebnih interesa: Enogastronomski turizam', pages: '104–112', outcome: 'Segmentirati enogastronomsko tržište i oblikovati održiv proizvod koji povezuje lokalnu proizvodnju, ugostiteljstvo i identitet destinacije.', status: 'available' },
-  { id: 13, title: 'Vrste turizma posebnih interesa: Nautički turizam', pages: '113–119', outcome: 'Razlikovati oblike nautičkog turizma te procijeniti gospodarske, pravne i okolišne uvjete njegova održivog razvoja.', status: 'available' },
-  { id: 14, title: 'Vrste turizma posebnih interesa: City break turizam', pages: '120–124', outcome: 'Objasniti pokretače kratkih gradskih odmora i oblikovati integralni proizvod koji produljuje boravak i povezuje grad sa zaleđem.', status: 'available' },
-  { id: 15, title: 'Vrste turizma posebnih interesa: Zdravstveni turizam', pages: '125–130', outcome: 'Razgraničiti wellness, lječilišni i medicinski turizam te procijeniti resurse, tržište i sustave kvalitete zdravstveno-turističke ponude.', status: 'available' },
-  { id: 16, title: 'Vrste turizma posebnih interesa: MICE turizam', pages: '131–137', outcome: 'Razložiti MICE sektor, povezati njegove dionike i procijeniti infrastrukturne, tržišne i razvojne pretpostavke konkurentne destinacije događaja.', status: 'available' },
+  agrotourismChapterSummary,
+  { id: 13, title: 'Vrste turizma posebnih interesa: Enogastronomski turizam', pages: '104–112', outcome: 'Segmentirati enogastronomsko tržište i oblikovati održiv proizvod koji povezuje lokalnu proizvodnju, ugostiteljstvo i identitet destinacije.', status: 'available' },
+  { id: 14, title: 'Vrste turizma posebnih interesa: Nautički turizam', pages: '113–119', outcome: 'Razlikovati oblike nautičkog turizma te procijeniti gospodarske, pravne i okolišne uvjete njegova održivog razvoja.', status: 'available' },
+  { id: 15, title: 'Vrste turizma posebnih interesa: City break turizam', pages: '120–124', outcome: 'Objasniti pokretače kratkih gradskih odmora i oblikovati integralni proizvod koji produljuje boravak i povezuje grad sa zaleđem.', status: 'available' },
+  { id: 16, title: 'Vrste turizma posebnih interesa: Zdravstveni turizam', pages: '125–130', outcome: 'Razgraničiti wellness, lječilišni i medicinski turizam te procijeniti resurse, tržište i sustave kvalitete zdravstveno-turističke ponude.', status: 'available' },
+  { id: 17, title: 'Vrste turizma posebnih interesa: MICE turizam', pages: '131–137', outcome: 'Razložiti MICE sektor, povezati njegove dionike i procijeniti infrastrukturne, tržišne i razvojne pretpostavke konkurentne destinacije događaja.', status: 'available' },
 ]
 
 const checkedAt = '12. kolovoza 2026.'
@@ -48,9 +50,10 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
       { question: 'Koji je ključni rizik pretjerane komercijalizacije baštine?', options: ['Veća dostupnost', 'Profanizacija i gubitak autentičnosti', 'Dulja sezona', 'Bolja signalizacija'], correct: 1, explanation: 'Kada tržišna uporaba potisne značenje i identitet, baština gubi upravo onu vrijednost koja motivira posjet.' },
     ],
   },
-  12: {
-    ...specialInterestChapterSummaries[1],
-    media: specialInterestMedia[12],
+  12: agrotourismChapterContent,
+  13: {
+    ...specialInterestChapterSummaries[2],
+    media: specialInterestMedia[13],
     summary: 'Enogastronomski turizam obuhvaća putovanja i iskustva povezana s kušanjem, učenjem i uživanjem u lokalnoj hrani, piću i kulinarskoj tradiciji. Njegova vrijednost proizlazi iz povezivanja gastronomskog identiteta, poljoprivrede, ugostiteljstva, interpretacije i distribucije u održiv lanac lokalne vrijednosti.',
     outcomes: ['definirati enogastronomski turizam i razlikovati ga od običnog objedovanja', 'segmentirati gastroturiste prema motivaciji i stavovima', 'usporediti razvoj proizvoda u urbanoj, ruralnoj i obalnoj destinaciji', 'oblikovati enogastronomski itinerer povezan s lokalnim proizvođačima i održivošću'],
     keywords: [
@@ -83,9 +86,9 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
       { question: 'Što gastronomski identitet povezuje?', options: ['Samo cijene jelovnika', 'Okruženje i lokalnu kulturu', 'Samo međunarodne vodiče', 'Samo digitalne kampanje'], correct: 1, explanation: 'Geografija, klima i tlo povezuju se s poviješću, tradicijom i inovacijama u prepoznatljiv okus mjesta.' },
     ],
   },
-  13: {
-    ...specialInterestChapterSummaries[2],
-    media: specialInterestMedia[13],
+  14: {
+    ...specialInterestChapterSummaries[3],
+    media: specialInterestMedia[14],
     summary: 'Nautički turizam je sustav doživljaja plovidbe i višednevnog boravka na plovilu, lučke infrastrukture, čartera, kružnih putovanja i pratećih usluga. Hrvatski razvoj ovisi o ravnoteži javnog statusa pomorskog dobra, kvalitete usluge, profitabilnosti sektora i nosivog kapaciteta jadranskog ekosustava.',
     outcomes: ['razlikovati plovidbu kao transport od nautičkog turističkog doživljaja', 'objasniti status pomorskog dobra i posljedice za korištenje obale', 'usporediti jahting, čarter i različite oblike kruzinga', 'predložiti mjere razvoja usmjerene na kvalitetu i nosivi kapacitet'],
     keywords: [
@@ -118,9 +121,9 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
       { question: 'Zašto je zaštita livada Posidonia oceanica i ekonomsko pitanje?', options: ['Jer povećava broj automobila', 'Jer zdrav morski ekosustav čuva temeljnu kvalitetu i privlačnost nautičkog proizvoda', 'Jer ukida marine', 'Jer se odnosi samo na ribarstvo'], correct: 1, explanation: 'Degradacija mora izravno slabi resurs na kojem počiva buduća potražnja i vrijednost sektora.' },
     ],
   },
-  14: {
-    ...specialInterestChapterSummaries[3],
-    media: specialInterestMedia[14],
+  15: {
+    ...specialInterestChapterSummaries[4],
+    media: specialInterestMedia[15],
     summary: 'City break turizam obuhvaća kratka putovanja u gradska središta, najčešće od dva do četiri noćenja, motivirana kombinacijom kulture, događanja, gastronomije, zabave i rekreacije. Za kontinentalnu Hrvatsku predstavlja priliku za cjelogodišnju potražnju, ali traži dostupnost, prepoznatljiv događaj, kvalitetan smještaj i povezivanje grada sa zaleđem.',
     outcomes: ['definirati city break turizam i objasniti njegov rast', 'povezati resurse, manifestacije i motive urbanih gostiju', 'dijagnosticirati sindrom kratkog boravka i infrastrukturna ograničenja', 'oblikovati integralni gradski proizvod koji produljuje boravak i disperzira potrošnju'],
     keywords: [
@@ -153,9 +156,9 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
       { question: 'Koje je tipično ograničenje kontinentalnih city break destinacija?', options: ['Prevelik broj velikih hotela', 'Kratak boravak, ograničen hotelski kapacitet i slabo međunarodno brendiranje', 'Nedostatak autocesta u cijeloj Hrvatskoj', 'Potpuni izostanak kulture'], correct: 1, explanation: 'Ta ograničenja smanjuju kapacitet prihvata, produljenje boravka i tržišni doseg.' },
     ],
   },
-  15: {
-    ...specialInterestChapterSummaries[4],
-    media: specialInterestMedia[15],
+  16: {
+    ...specialInterestChapterSummaries[5],
+    media: specialInterestMedia[16],
     summary: 'Zdravstveni turizam povezuje turizam i zdravstvene usluge kroz wellness, lječilišni i medicinski turizam. Hrvatska raspolaže prirodnim ljekovitim činiteljima, stručnim kadrom i dostupnošću europskim tržištima, ali konkurentsku prednost može ostvariti tek uz modernizaciju, akreditaciju, koordinaciju sektora i izgradnju povjerenja korisnika.',
     outcomes: ['razlikovati wellness, lječilišni i medicinski turizam', 'objasniti povijesnu i resursnu osnovu zdravstvenog turizma u Hrvatskoj', 'segmentirati korisnike prema motivima, tržištu i očekivanoj kvaliteti', 'procijeniti ulogu akreditacije i predložiti razvojne mjere'],
     keywords: [
@@ -188,9 +191,9 @@ export const specialInterestChapterContents: Record<number, ChapterContent> = {
       { question: 'Koji pristup najbolje podržava razvoj Hrvatske kao zdravstvene destinacije?', options: ['Odvojeno oglašavanje bez standarda', 'Modernizacija, međunarodna kvaliteta i integrirano povezivanje zdravstvenih i turističkih dionika', 'Natjecanje samo niskom cijenom', 'Ukidanje stručnog nadzora'], correct: 1, explanation: 'Konkurentnost zahtijeva ulaganje, dokaz kvalitete i koordiniran put korisnika.' },
     ],
   },
-  16: {
-    ...specialInterestChapterSummaries[5],
-    media: specialInterestMedia[16],
+  17: {
+    ...specialInterestChapterSummaries[6],
+    media: specialInterestMedia[17],
     summary: 'MICE turizam obuhvaća sastanke, poticajna putovanja, kongrese i izložbe. Odlikuju ga profesionalni motiv, viša potrošnja, poslovanje izvan glavne sezone i složen lanac specijaliziranih dionika. Hrvatska može jačati konkurentnost ulaganjem u namjensku infrastrukturu, dostupnost, standarde kvalitete, kongresne urede i mjerljive održive događaje.',
     outcomes: ['razložiti kraticu MICE i razlikovati glavne kategorije događaja', 'usporediti poslovni i odmorišni turizam', 'objasniti uloge PCO-a, DMC-a i kongresnog ureda', 'procijeniti infrastrukturni jaz i oblikovati konkurentnu kandidaturu destinacije'],
     keywords: [

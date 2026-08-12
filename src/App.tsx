@@ -246,14 +246,14 @@ function Study({ content }: { content: ChapterContent }) {
               description: 'Pokazatelji sažimaju ciklus kriznog upravljanja, skupine primjene umjetne inteligencije te aktualne datume europskih obveza transparentnosti i visokorizičnih sustava.',
               appendComparison: false,
             }
-        : content.id >= 11 && content.id <= 16
+        : content.id >= 11 && content.id <= 17
           ? {
               eyebrow: 'KANONSKA SINTEZA',
               title: 'Četiri dimenzije za upravljanje turizmom posebnih interesa',
               description: 'Pokazatelji sažimaju definiciju, tržišnu strukturu, dionike i razvojne poluge obrađene vrste turizma.',
               appendComparison: false,
             }
-        : content.id === 17
+        : content.id === 18
           ? {
               eyebrow: 'ISTRAŽIVAČKI NALAZI',
               title: 'Sezonalnost Jadranske Hrvatske u mediteranskom kontekstu',

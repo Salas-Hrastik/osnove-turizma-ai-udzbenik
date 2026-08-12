@@ -114,27 +114,27 @@ export const specialInterestMedia: Record<number, ChapterMedia> = {
     video: { title: 'Kulturni turizam', fileName: 'Kulturni_turizam.mp4', url: publicObjectUrl('Kulturni turizam/Kulturni_turizam.mp4'), duration: '9:43', description: 'Video sažima motive, proizvode, dionike i razvojne izazove kulturnog turizma.', poster: '/media/posebni-interesi/kulturni/video-poster.webp' },
     presentation: { title: 'Kulturni turizam: od pasivne baštine do aktivnog doživljaja', fileName: 'Cultural_Tourism_Redefined.pptx', url: publicObjectUrl('Kulturni turizam/Cultural_Tourism_Redefined.pptx'), description: 'Dvanaest slajdova povezuje definicije, profil gosta, participaciju, model 3S, hrvatsku potražnju i održivu viziju razvoja.', slides: culturalSlides },
   },
-  12: {
+  13: {
     audio: { title: 'Od Michelinovih guma do vinskih bunkera', fileName: 'Od_Michelinovih_guma_do_vinskih_bunkera.m4a', url: publicObjectUrl('Enogastronomski turizam/Od_Michelinovih_guma_do_vinskih_bunkera.m4a'), duration: '17:53', description: 'Audio povezuje nastanak gastronomskih vodiča, vinske priče i suvremeno pozicioniranje destinacija hrane i pića.' },
     video: { title: 'Enogastronomski turizam', fileName: 'Enogastronomski_turizam.mp4', url: publicObjectUrl('Enogastronomski turizam/Enogastronomski_turizam.mp4'), duration: '8:10', description: 'Video objašnjava kako lokalna gastronomija postaje turistički motiv i održiv lanac vrijednosti.', poster: '/media/posebni-interesi/enogastronomski/video-poster.webp' },
     presentation: { title: 'Enogastronomski turizam: od lokalne baštine do globalnog fenomena', fileName: 'Strategic_Enogastronomic_Tourism_(2).pptx', url: publicObjectUrl('Enogastronomski turizam/Strategic_Enogastronomic_Tourism_(2).pptx'), description: 'Četrnaest slajdova obrađuje motive, segmente, destinacijske modele, hrvatske regije i održivi lanac enogastronomije.', slides: enogastronomicSlides },
   },
-  13: {
+  14: {
     audio: { title: 'Može li preživjeti nautički turizam?', fileName: 'Moze_li_prezivjeti_nauticki_turizam.m4a', url: publicObjectUrl('Nauticki turizam/Moze_li_prezivjeti_nauticki_turizam.m4a'), duration: '20:43', description: 'Audio propituje odnos rasta, javnog pomorskog dobra, nosivog kapaciteta i očuvanja Jadrana.' },
     video: { title: 'Paradoks nautičkog turizma', fileName: 'Paradoks_nautickog_turizma.mp4', url: publicObjectUrl('Nauticki turizam/Paradoks_nautickog_turizma.mp4'), duration: '7:57', description: 'Video prikazuje napetost između tržišne potražnje, lučkih kapaciteta i zaštite morskog prostora.', poster: '/media/posebni-interesi/nauticki/video-poster.webp' },
     presentation: { title: 'Nautički turizam Hrvatske: strategija, tržište i održivi razvoj', fileName: 'Croatia_Nautical_Strategy_(2).pptx', url: publicObjectUrl('Nauticki turizam/Croatia_Nautical_Strategy_(2).pptx'), description: 'Petnaest slajdova povezuje tržišne oblike, kapacitete, konkurenciju, nosivost prostora i strateške stupove razvoja.', slides: nauticalSlides },
   },
-  14: {
+  15: {
     audio: { title: 'Kako kontinentalni gradovi preotimaju goste Jadranu', fileName: 'Kako_kontinentalni_gradovi_preotimaju_goste_Jadranu.m4a', url: publicObjectUrl('City break turizam/Kako_kontinentalni_gradovi_preotimaju_goste_Jadranu.m4a'), duration: '25:43', description: 'Audio analizira kako kontinentalni gradovi mogu razviti kratke odmore i smanjiti prostornu i sezonsku neravnotežu hrvatskog turizma.' },
     video: { title: 'Kontinentalni City Break', fileName: 'Kontinentalni_City_Break.mp4', url: publicObjectUrl('City break turizam/Kontinentalni_City_Break.mp4'), duration: '9:30', description: 'Video povezuje gradske resurse, događanja, gastronomiju, dostupnost i produljenje kratkog boravka.', poster: '/media/posebni-interesi/city-break/video-poster.webp' },
     presentation: { title: 'City break turizam: strateški potencijal kontinentalne Hrvatske', fileName: 'Continental_Croatia_City_Break_Strategy_(2).pptx', url: publicObjectUrl('City break turizam/Continental_Croatia_City_Break_Strategy_(2).pptx'), description: 'Trinaest slajdova analizira resurse kontinentalnih gradova, događanja, kratki boravak i integralno pametno upravljanje.', slides: cityBreakSlides },
   },
-  15: {
+  16: {
     audio: { title: 'Hrvatska na rudniku zdravstvenog turizma', fileName: 'Hrvatska_na_rudniku_zdravstvenog_turizma.m4a', url: publicObjectUrl('Zdravstveni turizam/Hrvatska_na_rudniku_zdravstvenog_turizma.m4a'), duration: '15:45', description: 'Audio procjenjuje neiskorištene resurse, tržišne prilike i uvjete pretvaranja Hrvatske u konkurentnu destinaciju zdravlja.' },
     video: { title: 'Zdravstveni turizam', fileName: 'Zdravstveni_turizam.mp4', url: publicObjectUrl('Zdravstveni turizam/Zdravstveni_turizam.mp4'), duration: '7:16', description: 'Video razgraničuje wellness, lječilišni i medicinski turizam te objašnjava važnost kvalitete i povjerenja.', poster: '/media/posebni-interesi/zdravstveni/video-poster.webp' },
     presentation: { title: 'Zdravstveni turizam u Hrvatskoj', fileName: 'Croatia_Health_Tourism_Strategy.pptx', url: publicObjectUrl('Zdravstveni turizam/Croatia_Health_Tourism_Strategy.pptx'), description: 'Jedanaest slajdova povezuje resurse, korisnike, internacionalizaciju, akreditaciju i put od fragmentacije prema prepoznatljivosti.', slides: healthSlides },
   },
-  16: {
+  17: {
     audio: { title: 'Od proteinskog soka do spektakala', fileName: 'Od_proteinskog_soka_do_spektakala.mp3', url: publicObjectUrl('MICE turizam/Od_proteinskog_soka_do_spektakala.mp3'), duration: '32:40', description: 'Audio prati razvoj industrije događaja i načine na koje okupljanje stvara ekonomsku, društvenu i komunikacijsku vrijednost.' },
     video: { title: 'Menadžment događaja', fileName: 'Menadzment_dogadjaja.mp4', url: publicObjectUrl('MICE turizam/Menadzment_dogadjaja.mp4'), duration: '7:24', description: 'Video sažima planiranje, izvedbu i prilagodbu događaja suvremenim formatima i rizicima.', poster: '/media/posebni-interesi/mice/video-poster.webp' },
     presentation: { title: 'Evolucija i otpornost upravljanja događajima', fileName: 'Event_Management_Evolution_and_Resilience.pptx', url: publicObjectUrl('MICE turizam/Event_Management_Evolution_and_Resilience.pptx'), description: 'Deset slajdova prati razvoj događaja od rituala do hibridne industrije te izdvaja društvenu potrebu, format i otpornost.', slides: miceSlides },
