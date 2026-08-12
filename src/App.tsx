@@ -16,15 +16,36 @@ type CanonicalGuideItem = {
   label: string
   page: number
   meta: string
+  targetText?: string
   chapter?: number
+}
+
+const canonicalChapterTargets: Record<number, string> = {
+  1: 'POGLAVLJE 1: UVOD U TURIZAM I UGOSTITELJSTVO',
+  2: 'POGLAVLJE 2: POVIJESNI RAZVOJ TURIZMA',
+  3: 'POGLAVLJE 3: TURISTIČKI MOTIVI I PONAŠANJE POTRAŽNJE',
+  4: 'POGLAVLJE 4: OBLICI I VRSTE TURIZMA',
+  5: 'POGLAVLJE 5: TURISTIČKO TRŽIŠTE I POSLOVNO POSREDOVANJE',
+  6: 'POGLAVLJE 6: UGOSTITELJSTVO — OPERACIJE I POSLOVNI MODELI',
+  7: 'POGLAVLJE 7: UČINCI TURIZMA — GOSPODARSKI, DRUŠTVENO-KULTURNI I EKOLOŠKI',
+  8: 'POGLAVLJE 8: ODRŽIVI RAZVOJ I STRATEŠKO UPRAVLJANJE DESTINACIJOM',
+  9: 'POGLAVLJE 9: OTPORNOST, TEHNOLOGIJA I SUVREMENI TRENDOVI',
+  10: 'POGLAVLJE 10: ZAKLJUČNA SINTEZA — INTEGRACIJA, ETIKA I BUDUĆNOST',
+  11: '11.1 Kulturni turizam',
+  12: '11.2 Agroturizam u sustavu suvremenog turizma i ugostiteljstva',
+  13: '11.3 Enogastronomski turizam',
+  14: '11.4 Nautički turizam: strategija, tržište i održivi razvoj',
+  15: '11.5 City break turizam',
+  16: '11.6 Zdravstveni turizam u Hrvatskoj',
+  17: '11.7 Poslovni i incentive turizam',
 }
 
 const canonicalGuideItems: CanonicalGuideItem[] = [
   { id: 'cover', label: 'Naslovnica', page: 1, meta: 'Početak dokumenta' },
-  { id: 'contents', label: 'Sadržaj', page: 3, meta: 'Pregled rukopisa' },
-  { id: 'foreword', label: 'Predgovor', page: 9, meta: 'Urednički okvir' },
-  { id: 'sources', label: 'Napomena o izvorima', page: 10, meta: 'Podaci i citiranje' },
-  { id: 'outcomes', label: 'Mapiranje ishoda učenja', page: 12, meta: 'Ishodi po poglavljima' },
+  { id: 'contents', label: 'Sadržaj', page: 3, meta: 'Pregled rukopisa', targetText: 'Sadržaj:' },
+  { id: 'foreword', label: 'Predgovor', page: 9, meta: 'Urednički okvir', targetText: 'PREDGOVOR' },
+  { id: 'sources', label: 'Napomena o izvorima', page: 10, meta: 'Podaci i citiranje', targetText: 'NAPOMENA O IZVORIMA, PODACIMA I CITIRANJU' },
+  { id: 'outcomes', label: 'Mapiranje ishoda učenja', page: 12, meta: 'Ishodi po poglavljima', targetText: 'MAPIRANJE ISHODA UČENJA' },
   ...chapters.flatMap((chapter): CanonicalGuideItem[] => {
     const printedPage = Number.parseInt(chapter.pages, 10)
     if (!Number.isFinite(printedPage)) return []
@@ -34,14 +55,19 @@ const canonicalGuideItems: CanonicalGuideItem[] = [
       label: chapter.title,
       page: printedPage + 1,
       meta: `Cjelina ${chapter.id} · tiskana str. ${printedPage}`,
+      targetText: canonicalChapterTargets[chapter.id],
       chapter: chapter.id,
     }
 
     return chapter.id === 11
-      ? [{ id: 'selective-tourism', label: 'Selektivne vrste turizma', page: 89, meta: 'Poglavlje 11 · uvod' }, chapterItem]
+      ? [{ id: 'selective-tourism', label: 'Selektivne vrste turizma', page: 89, meta: 'Poglavlje 11 · uvod', targetText: 'POGLAVLJE 11: SELEKTIVNE VRSTE TURIZMA' }, chapterItem]
       : [chapterItem]
   }),
 ]
+
+function normalizeCanonicalText(value: string) {
+  return value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim().toLocaleLowerCase('hr')
+}
 
 const modes: Array<{ name: Mode; label: string; icon: typeof MessageCircle }> = [
   { name: 'Prouči', label: 'Prouči', icon: BookOpen },
@@ -923,14 +949,26 @@ function CanonicalTextModal({ onClose }: { onClose: () => void }) {
     return () => { active = false }
   }, [])
 
-  const navigateToPage = (page: number) => {
+  const navigateToItem = (item: CanonicalGuideItem) => {
     const viewer = documentViewerRef.current
     const pages = documentContainerRef.current?.querySelectorAll<HTMLElement>('section.docx')
-    const target = pages?.[page - 1]
-    if (!viewer || !target) return
+    const fallbackPage = pages?.[item.page - 1]
+    if (!viewer || !pages?.length || !fallbackPage) return
 
-    viewer.scrollTo({ top: Math.max(0, target.offsetTop - 18), behavior: 'smooth' })
-    setCurrentPage(page)
+    let target: HTMLElement = fallbackPage
+    if (item.targetText) {
+      const expectedText = normalizeCanonicalText(item.targetText)
+      const nearbyPages = Array.from(pages).slice(Math.max(0, item.page - 2), Math.min(pages.length, item.page + 2))
+      const matchingElement = nearbyPages
+        .flatMap((page) => Array.from(page.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6, p')))
+        .find((element) => normalizeCanonicalText(element.textContent ?? '') === expectedText)
+      if (matchingElement) target = matchingElement
+    }
+
+    const viewerTop = viewer.getBoundingClientRect().top
+    const targetTop = target.getBoundingClientRect().top
+    viewer.scrollTo({ top: Math.max(0, viewer.scrollTop + targetTop - viewerTop - 18), behavior: 'smooth' })
+    setCurrentPage(item.page)
   }
 
   const trackCurrentPage = () => {
@@ -938,10 +976,10 @@ function CanonicalTextModal({ onClose }: { onClose: () => void }) {
     const pages = documentContainerRef.current?.querySelectorAll<HTMLElement>('section.docx')
     if (!viewer || !pages?.length) return
 
-    const readingLine = viewer.scrollTop + Math.min(150, viewer.clientHeight * 0.24)
+    const readingLine = viewer.getBoundingClientRect().top + Math.min(150, viewer.clientHeight * 0.24)
     let visiblePage = 1
     pages.forEach((page, index) => {
-      if (page.offsetTop <= readingLine) visiblePage = index + 1
+      if (page.getBoundingClientRect().top <= readingLine) visiblePage = index + 1
     })
     setCurrentPage(visiblePage)
   }
@@ -954,14 +992,14 @@ function CanonicalTextModal({ onClose }: { onClose: () => void }) {
         <div className="canonical-guide-heading">
           <span className="eyebrow">VODIČ KROZ UDŽBENIK</span>
           <h3>Odaberite cjelinu</h3>
-          <p>Kliknite naslov za izravan prijelaz na odgovarajuću stranicu.</p>
+          <p>Kliknite naslov za izravan prijelaz na početak odabrane cjeline.</p>
         </div>
         <nav aria-label="Sadržaj kanonskog dokumenta">
           {canonicalGuideItems.map((item) => <button
             key={item.id}
             type="button"
             className={activeGuideItem.id === item.id ? 'active' : ''}
-            onClick={() => navigateToPage(item.page)}
+            onClick={() => navigateToItem(item)}
             disabled={documentState !== 'ready'}
             aria-current={activeGuideItem.id === item.id ? 'location' : undefined}
           >
