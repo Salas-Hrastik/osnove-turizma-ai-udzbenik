@@ -410,6 +410,15 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .chapter-pager svg { width:17px; }
 .icon-button { border:0; background:transparent; color:inherit; display:grid; place-items:center; cursor:pointer; padding:6px; }
 .mobile-only { display:none; }
+
+/* Gumbi za cijeli zaslon i autorska prava — u topbaru i na naslovnici */
+.fullscreen-badge, .copyright-badge { width:36px; height:36px; border-radius:10px; border:1px solid #ffffff22; transition:background-color .16s ease,border-color .16s ease,transform .16s ease; }
+.fullscreen-badge:hover, .copyright-badge:hover { background:#ffffff0d; border-color:#ffffff46; transform:translateY(-1px); }
+.fullscreen-badge svg, .copyright-badge svg { width:18px; }
+.copyright-badge span { font-family:Georgia,'Times New Roman',serif; font-size:17px; line-height:1; }
+.book-cover-chrome { position:absolute; top:14px; right:14px; z-index:5; display:flex; gap:8px; }
+.book-cover-chrome .fullscreen-badge, .book-cover-chrome .copyright-badge { background:#ffffff1a; border-color:#ffffff33; color:#fff; backdrop-filter:blur(4px); }
+.book-cover-chrome .fullscreen-badge:hover, .book-cover-chrome .copyright-badge:hover { background:#ffffff33; }
 .modal-backdrop { position:fixed; inset:0; background:#082f2b99; backdrop-filter:blur(5px); display:grid; place-items:center; z-index:50; padding:20px; }
 .summary-modal { position:relative; width:min(620px,100%); background:var(--cream); border-radius:20px; padding:38px; box-shadow:0 30px 80px #001b1755; }
 .summary-modal h2 { font:700 31px Georgia, 'Times New Roman', serif; margin:7px 0 12px; }
@@ -418,6 +427,14 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .modal-outcomes li { display:flex; gap:8px; color:#526468; font-size:12px; line-height:1.4; }
 .modal-outcomes svg { flex:0 0 auto; width:16px; color:var(--green); }
 .modal-close { position:absolute; top:16px; right:16px; color:var(--muted); }
+.copyright-modal { max-width:720px; max-height:85vh; overflow-y:auto; }
+.copyright-modal p { margin:0 0 12px; color:#3d4e51; line-height:1.6; font-size:15px; }
+.copyright-modal ul { margin:0 0 12px; padding-left:20px; color:#3d4e51; line-height:1.6; font-size:15px; }
+.copyright-modal li { margin:5px 0; }
+.copyright-modal h3 { margin:18px 0 8px; font-size:17px; color:var(--green-dark); }
+.copyright-modal h3:first-of-type { margin-top:4px; }
+.copyright-modal code { background:var(--mint); border-radius:4px; padding:1px 5px; font-size:0.92em; }
+.copyright-version { margin-top:16px !important; padding-top:12px; border-top:1px solid var(--line); font-size:13px !important; font-weight:700; color:var(--muted); }
 .modal-meta { display:flex; align-items:center; gap:12px; padding:16px; margin-top:24px; background:#edf3ef; border-radius:11px; color:var(--green); }
 .modal-meta span { display:flex; flex-direction:column; color:var(--muted); font-size:12px; }
 .modal-meta strong { color:var(--green); }

@@ -5,6 +5,8 @@ import { ArrowUpRight, BookOpen, Bot, CheckCircle2, ChevronLeft, ChevronRight, C
 import { baltazarHeaderArtwork } from './assets/baltazarHeaderArtwork'
 import { book, chapterContents, chapters } from './data/book'
 import { FinalOralExam } from './FinalOralExam'
+import { CopyrightNotice } from './CopyrightNotice'
+import { FullscreenToggle } from './FullscreenToggle'
 import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
 type MediaKind = 'audio' | 'video' | 'presentation'
@@ -157,6 +159,8 @@ function App() {
         >
           <span>Kanonski izvor</span><strong>v{book.canonicalVersion}</strong>
         </button>
+        <FullscreenToggle />
+        <CopyrightNotice />
       </header>
 
       <div className="workspace">
@@ -234,6 +238,10 @@ function App() {
 function BookCover({ onOpen }: { onOpen: () => void }) {
   return <main className="book-cover-page" id="glavni-sadrzaj">
     <section className="book-cover" aria-labelledby="book-cover-title">
+      <div className="book-cover-chrome">
+        <FullscreenToggle />
+        <CopyrightNotice />
+      </div>
       <div className="book-cover-brand">
         <span className="book-cover-logo" aria-hidden="true"><img src={baltazarHeaderArtwork} alt="" /></span>
         <span><strong>Veleučilište Baltazar</strong><small>AI udžbenik</small></span>
