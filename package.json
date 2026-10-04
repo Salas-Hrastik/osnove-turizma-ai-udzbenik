@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/functions": "^3.9.11",
     "@vitejs/plugin-react": "latest",
     "docx-preview": "^0.4.0",
     "lucide-react": "latest",
