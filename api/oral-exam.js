@@ -1,3 +1,5 @@
+import { hasValidAiedukaAccess } from './_aieduka-access.js'
+
 const DEFAULT_MODEL = 'claude-haiku-4-5'
 const MAX_ANSWER = 7000
 const MAX_RECORDS = 5
@@ -40,6 +42,9 @@ async function callAnthropic(apiKey, model, system, prompt, maxTokens) {
 }
 
 export default async function handler(request, response) {
+  if (!hasValidAiedukaAccess(request)) {
+    return response.status(401).json({ error: 'Za korištenje platforme potreban je aktivan pristup.' })
+  }
   if (request.method !== 'POST') {
     response.setHeader('allow', 'POST')
     return response.status(405).json({ error: 'Dopušten je samo POST zahtjev.' })
