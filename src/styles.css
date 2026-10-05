@@ -488,6 +488,37 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .canonical-document-status.error { color:#8a382f; }
 .scrim { display:none; }
 
+.cover-open-button:disabled { opacity:.65; cursor:default; transform:none; }
+
+/* --- Aktivacija pristupa (zastor i puna stranica) ------------------------ */
+.activation-form { display:flex; flex-direction:column; gap:10px; margin-top:4px; text-align:left; }
+.activation-form-icon { display:grid; place-items:center; width:40px; height:40px; border-radius:12px; background:var(--mint); color:var(--green-dark); }
+.activation-form-icon svg { width:20px; }
+.activation-form h2 { margin:10px 0 0; font-size:19px; color:var(--ink); }
+.activation-form-opis { margin:0 0 4px; font-size:13.5px; color:var(--muted); line-height:1.5; }
+.activation-form label { display:flex; flex-direction:column; gap:5px; font-size:12.5px; font-weight:700; color:var(--muted); }
+.activation-form input { padding:10px 12px; border:1px solid var(--line); border-radius:9px; font-size:14px; color:var(--ink); background:var(--cream); }
+.activation-form input:focus { outline:2px solid var(--green-dark); outline-offset:1px; }
+.activation-form-greska { margin:0; padding:9px 11px; border-radius:8px; background:#fbe3e3; color:#8a382f; font-size:13px; }
+.activation-form button[type='submit'] { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:4px; padding:11px; border:0; border-radius:10px; background:var(--green-dark); color:#fff; font-weight:800; cursor:pointer; }
+.activation-form button[type='submit']:hover { background:#07372f; }
+.activation-form button[type='submit']:disabled { opacity:.6; cursor:default; }
+
+.access-gate { width:min(460px,100%); padding:34px; text-align:left; }
+.access-gate > p { margin:4px 0 2px; color:var(--muted); font-size:14px; line-height:1.55; }
+.access-gate-kupi { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; padding:11px; border:1px solid var(--line); border-radius:10px; color:var(--green-dark); font-weight:700; font-size:13.5px; text-decoration:none; }
+.access-gate-kupi:hover { background:var(--mint); }
+
+.activation-page { display:grid; place-items:center; min-height:100dvh; padding:24px; background:radial-gradient(circle at 70% 18%,#f7e6bd 0,transparent 22%),radial-gradient(circle at 18% 82%,#c5ded3 0,transparent 27%),#edf3ef; }
+.activation-page-card { width:min(420px,100%); padding:32px; border-radius:18px; background:var(--cream); box-shadow:0 24px 60px #0a393424; text-align:left; }
+.activation-page-brand { display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+.activation-page-logo { width:44px; height:44px; overflow:hidden; border-radius:10px; background:#f7f9fa; box-shadow:0 0 0 1px #0000000f; }
+.activation-page-logo img { display:block; width:auto; height:58px; max-width:none; transform:translate(-8px,-6px); }
+.activation-page-brand strong { display:block; font-size:14px; color:var(--ink); }
+.activation-page-brand small { color:var(--muted); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+.activation-page-natrag { display:block; margin-top:16px; color:var(--green-dark); font-size:13px; font-weight:700; text-decoration:none; text-align:center; }
+.activation-page-natrag:hover { text-decoration:underline; }
+
 @media (max-width: 1050px) {
   .workspace { grid-template-columns:1fr; }
   .sidebar { position:fixed; left:0; top:0; height:100vh; width:min(340px,88vw); transform:translateX(-105%); transition:.2s ease; box-shadow:14px 0 40px #092d2840; }

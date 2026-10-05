@@ -7,6 +7,8 @@ import { book, chapterContents, chapters } from './data/book'
 import { FinalOralExam } from './FinalOralExam'
 import { CopyrightNotice } from './CopyrightNotice'
 import { FullscreenToggle } from './FullscreenToggle'
+import ActivationPage from './ActivationPage'
+import AccessGate from './AccessGate'
 import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
 
 type MediaKind = 'audio' | 'video' | 'presentation'
@@ -88,7 +90,29 @@ function App() {
   const [canonicalTextOpen, setCanonicalTextOpen] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState<MediaKind | null>(null)
   const [slideIndex, setSlideIndex] = useState(0)
+  const [access, setAccess] = useState<'checking' | 'granted' | 'denied'>('checking')
+  const [accessGateOpen, setAccessGateOpen] = useState(false)
+
+  // Provjera pristupa: čita HttpOnly kolačić postavljen nakon uspješne
+  // aktivacije (api/activate.js) i potvrđuje ga server-side (api/session.js).
+  useEffect(() => {
+    let active = true
+    fetch('/api/session')
+      .then((response) => response.json())
+      .then((data) => {
+        if (active) setAccess(data?.authenticated ? 'granted' : 'denied')
+      })
+      .catch(() => {
+        if (active) setAccess('denied')
+      })
+    return () => {
+      active = false
+    }
+  }, [])
   const mainBodyRef = useRef<HTMLDivElement>(null)
+
+  if (window.location.pathname === '/aktivacija') return <ActivationPage />
+
   const chapter = chapters.find((item) => item.id === chapterId) ?? chapters[0]
   const chapterContent = chapterContents[chapterId]
   const hasContent = Boolean(chapterContent)
@@ -115,7 +139,7 @@ function App() {
     setSelectedMedia(media)
   }
 
-  const openBook = () => {
+  const revealBook = () => {
     setShowCover(false)
     setChapterId(1)
     setMode('Prouči')
@@ -127,6 +151,14 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const openBook = () => {
+    if (access !== 'granted') {
+      setAccessGateOpen(true)
+      return
+    }
+    revealBook()
+  }
+
   const goToCover = () => {
     setShowCover(true)
     setSelectedMedia(null)
@@ -135,7 +167,23 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  if (showCover) return <BookCover onOpen={openBook} />
+  if (showCover) {
+    return (
+      <>
+        <BookCover onOpen={openBook} accessChecking={access === 'checking'} />
+        {accessGateOpen && (
+          <AccessGate
+            onClose={() => setAccessGateOpen(false)}
+            onActivated={() => {
+              setAccess('granted')
+              setAccessGateOpen(false)
+              revealBook()
+            }}
+          />
+        )}
+      </>
+    )
+  }
 
   return (
     <div className="app-shell">
@@ -235,7 +283,7 @@ function App() {
   )
 }
 
-function BookCover({ onOpen }: { onOpen: () => void }) {
+function BookCover({ onOpen, accessChecking }: { onOpen: () => void; accessChecking: boolean }) {
   return <main className="book-cover-page" id="glavni-sadrzaj">
     <section className="book-cover" aria-labelledby="book-cover-title">
       <div className="book-cover-chrome">
@@ -255,7 +303,9 @@ function BookCover({ onOpen }: { onOpen: () => void }) {
         <div><span>Autor</span><strong>{book.author}</strong></div>
         <div><span>Autorski istraživački dodatak</span><strong>Ivan Ružić, Tanja Gavrić</strong></div>
         <div><span>Izdavač</span><strong>{book.publisher}</strong></div>
-        <button type="button" className="cover-open-button" onClick={onOpen}><BookOpen /> Otvori udžbenik</button>
+        <button type="button" className="cover-open-button" onClick={onOpen} disabled={accessChecking}>
+          <BookOpen /> {accessChecking ? 'Provjera pristupa…' : 'Otvori udžbenik'}
+        </button>
       </div>
     </section>
   </main>
