@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/aktivacija",
-      "destination": "/index.html"
+      "destination": "/aktivacija.html"
     }
   ],
   "headers": [
