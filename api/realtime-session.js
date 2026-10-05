@@ -1,3 +1,5 @@
+import { hasValidAiedukaAccess } from './_aieduka-access.js'
+
 const MAX_CONTEXT = 60000
 const MAX_SDP = 200000
 const DEFAULT_MODEL = 'gpt-realtime-2.1'
@@ -56,6 +58,9 @@ function openAiError(status) {
 }
 
 export default async function handler(request, response) {
+  if (!hasValidAiedukaAccess(request)) {
+    return response.status(401).json({ error: 'Za korištenje platforme potreban je aktivan pristup.' })
+  }
   const apiKey = process.env.OPENAI_API_KEY
   const model = process.env.OPENAI_REALTIME_MODEL || DEFAULT_MODEL
   const voice = process.env.OPENAI_REALTIME_VOICE || DEFAULT_VOICE
