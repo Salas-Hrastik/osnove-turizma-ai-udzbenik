@@ -1,3 +1,5 @@
+import { hasValidAiedukaAccess } from './_aieduka-access.js'
+
 const MAX_QUESTION = 700
 const MAX_CONTEXT = 28000
 const DEFAULT_MODEL = 'claude-haiku-4-5'
@@ -35,6 +37,9 @@ function plainText(value) {
 }
 
 export default async function handler(request, response) {
+  if (!hasValidAiedukaAccess(request)) {
+    return response.status(401).json({ error: 'Za korištenje platforme potreban je aktivan pristup.' })
+  }
   const apiKey = process.env.ANTHROPIC_API_KEY
   const model = process.env.ANTHROPIC_MODEL || DEFAULT_MODEL
 
