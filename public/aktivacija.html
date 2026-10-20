@@ -5,25 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aktivacija pristupa | Osnove turizma i ugostiteljstva</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f3f7f7;color:#173b46;font-family:system-ui,sans-serif}.card{width:min(560px,100%);padding:32px 28px;border:1px solid #c9dada;border-radius:20px;background:#fff;box-shadow:0 20px 55px rgba(13,58,67,.12)}.eyebrow{margin:0;color:#a56b00;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}h1{margin:8px 0 10px;font-size:clamp(28px,6vw,40px);line-height:1.1}.lead{margin:0 0 22px;line-height:1.55;color:#506970}.error{display:none;padding:11px 13px;border-radius:10px;background:#fff0ee;color:#9b2c20;font-weight:700}form,label{display:grid;gap:6px}form{gap:15px}label{font-weight:750}input{min-height:46px;padding:10px 12px;border:1px solid #aec5c8;border-radius:10px;font:inherit}input[name=token]{text-transform:uppercase}button{min-height:48px;border:0;border-radius:999px;background:#0b5968;color:#fff;font:inherit;font-weight:850;cursor:pointer}.note{margin:20px 0 0;font-size:13px;line-height:1.5;color:#60777d}.note a{color:#0b5968;font-weight:800}
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 20px; background: #f4f6f9; color: #1a1f29; font-family: system-ui, sans-serif; }
+    .auth-form { background: #ffffff; border: 1px solid #dfe4ec; border-radius: 18px; padding: 36px; width: min(760px, calc(100vw - 32px)); box-shadow: 0 20px 55px rgba(7, 43, 73, .13); }
+    .auth-form h1 { margin: 0 0 4px; font-size: clamp(1.75rem, 4vw, 2.2rem); }
+    .auth-podnaslov { color: #5a6472; font-size: 1rem; line-height: 1.55; margin: 0 0 20px; }
+    .auth-form label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; margin-bottom: 12px; font-weight: 750; }
+    .auth-form input { min-height: 44px; padding: 9px 12px; border: 1px solid #dfe4ec; border-radius: 8px; font-size: 0.95rem; font: inherit; }
+    .auth-form input[name="token"] { text-transform: uppercase; }
+    .auth-form button { width: 100%; min-height: 46px; border: 0; border-radius: 8px; background: #1a3c6e; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+    .auth-eyebrow { display: block; color: #9a6700; font-size: .76rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+    .auth-magic { background: transparent; border: 1px solid #dfe4ec; color: #1a3c6e; }
+    .auth-greska { display: none; padding: 11px 13px; border-radius: 10px; background: #fff0ee; color: #9b2c20; font-weight: 700; }
+    .auth-poruka { display: none; padding: 11px 13px; border-radius: 10px; background: #e4f4ea; color: #1e7d4f; font-weight: 700; }
+    .access-option { margin-top: 16px; padding: 20px; border: 1px solid #dfe4ec; border-radius: 14px; }
+    .access-option h2 { margin: 0 0 8px; font-size: 1.3rem; line-height: 1.25; color: #1a3c6e; }
+    .access-option p { margin: 0 0 16px; padding: 12px 14px; border-radius: 10px; color: #35445a; font-size: 1rem; line-height: 1.58; }
+    .access-option-paid { background: linear-gradient(145deg, #e2edff 0%, #f1f6ff 100%); border-color: #8eafe0; }
+    .access-option-paid p { background: #d5e5fb; border-left: 4px solid #315f9f; }
+    .access-option-trial { background: linear-gradient(145deg, #e3f5e9 0%, #f2faf5 100%); border-color: #91c7a4; }
+    .access-option-trial p { background: #d5eedf; border-left: 4px solid #2f7b53; }
+    .access-option-contract { background: linear-gradient(145deg, #fff0cf 0%, #fff8e9 100%); border-color: #ddb75e; }
+    .access-option-contract p { background: #f9e3ad; border-left: 4px solid #a86e00; }
+    .contract-open { display: inline-block; width: 100%; padding: 10px 13px; border: 1px solid #a86e00; border-radius: 8px; background: #bd7b00; color: #fff; font: inherit; font-weight: 800; text-decoration: none; text-align: center; box-sizing: border-box; }
+    .contract-open:hover { background: #9d6500; }
+    .auth-session-note { margin: 16px 0 0; color: #5a6472; font-size: .8rem; text-align: center; }
+    @media (min-width: 720px) {
+      .access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+      .access-option { margin-top: 0; }
+      .access-option-contract { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 18px; }
+      .access-option-contract h2, .access-option-contract p { grid-column: 1; }
+      .access-option-contract p { margin-bottom: 0; }
+      .access-option-contract .contract-open { grid-column: 2; min-width: 210px; }
+    }
+    @media (min-width: 1080px) {
+      .auth-form { width: min(1120px, calc(100vw - 32px)); }
+      .access-grid { grid-template-columns: repeat(3, 1fr); }
+      .access-option-contract { grid-column: auto; display: block; }
+      .access-option-contract p { margin-bottom: 16px; }
+      .access-option-contract .contract-open { min-width: 0; }
+    }
   </style>
 </head>
 <body>
-  <main class="card">
-    <p class="eyebrow">AIEduka · siguran pristup</p>
-    <h1>Aktivacija pristupa</h1>
-    <p class="lead">Osnove turizma i ugostiteljstva — AI udžbenik. Unesite adresu e-pošte korištenu pri kupnji i pristupni kod koji ste primili nakon potvrđenog plaćanja.</p>
-    <p id="error" class="error" role="alert"></p>
-    <form action="/api/aieduka-activate" method="post">
-      <input id="next" type="hidden" name="next" value="/" />
-      <label>E-pošta<input type="email" name="email" required autocomplete="email" /></label>
-      <label>Pristupni kod<input name="token" required minlength="12" autocomplete="one-time-code" placeholder="AIED-XXXXXX-XXXXXX-XXXXXX" /></label>
-      <button type="submit">Aktiviraj i otvori platformu</button>
-    </form>
-    <p class="note">Nemate pristupni kod? <a href="https://www.aieduka.hr/platforme/osnove-turizma#licenciranje">Kupite pristup na AIEduka webu</a>.</p>
+  <main class="auth-form">
+    <h1>Pristup platformi</h1>
+    <p class="auth-podnaslov">Osnove turizma i ugostiteljstva — AI udžbenik. Unesite postojeći kod, isprobajte platformu ili pregledajte mogućnosti ugovaranja pristupa.</p>
+    <p id="error" class="auth-greska" role="alert"></p>
+    <p id="message" class="auth-poruka" role="status"></p>
+
+    <div class="access-grid">
+      <div class="access-option access-option-paid">
+        <span class="auth-eyebrow">Ugovoreni pristup</span>
+        <h2>Imam pristupni kod</h2>
+        <p>Unesite adresu e-pošte korištenu pri kupnji i pristupni kod koji ste primili nakon potvrđenog plaćanja.</p>
+        <form action="/api/aieduka-activate" method="post" style="display:grid;gap:12px">
+          <input id="next-activate" type="hidden" name="next" value="/" />
+          <label>E-pošta<input type="email" name="email" required autocomplete="email" /></label>
+          <label>Pristupni kod<input name="token" required minlength="12" autocomplete="one-time-code" placeholder="AIED-XXXXXX-XXXXXX-XXXXXX" /></label>
+          <button type="submit">Aktiviraj i otvori platformu</button>
+        </form>
+      </div>
+
+      <div class="access-option access-option-trial">
+        <span class="auth-eyebrow">Probno korištenje</span>
+        <h2>Želim isprobati platformu</h2>
+        <p>Ako vam je vlasnik već odobrio probu, vrijedit će njegov zadani rok. U protivnom dobivate probno razdoblje od 72 sata. Pristupni kod stiže na navedenu e-poštu — unesite ga u polje lijevo da otvorite platformu.</p>
+        <form action="/api/aieduka-trial" method="post" style="display:grid;gap:12px">
+          <input id="next-trial" type="hidden" name="next" value="/" />
+          <label>E-pošta<input type="email" name="email" required autocomplete="email" /></label>
+          <button type="submit" class="auth-magic">Pošalji kod za probno korištenje</button>
+        </form>
+      </div>
+
+      <div class="access-option access-option-contract">
+        <span class="auth-eyebrow">Novi pristup</span>
+        <h2>Ugovaranje pristupa</h2>
+        <p>Nemate pristupni kod? Pregledajte dostupna razdoblja korištenja i način sigurne aktivacije pristupa.</p>
+        <a class="contract-open" href="https://www.aieduka.hr/platforme/osnove-turizma#licenciranje">Pregledaj mogućnosti</a>
+      </div>
+    </div>
+
+    <p class="auth-session-note">Kod se šalje isključivo na unesenu adresu. Tijekom aktivnog probnog razdoblja možete se prijaviti više puta istim kodom.</p>
   </main>
   <script>
-    const params=new URLSearchParams(location.search);const next=params.get('next');if(next&&next.startsWith('/')&&!next.startsWith('//'))document.getElementById('next').value=next;const error=params.get('greska');if(error){const el=document.getElementById('error');el.textContent=error;el.style.display='block'}
+    const params = new URLSearchParams(location.search)
+    const next = params.get('next')
+    if (next && next.startsWith('/') && !next.startsWith('//')) {
+      document.getElementById('next-activate').value = next
+      document.getElementById('next-trial').value = next
+    }
+    const greska = params.get('greska')
+    if (greska) { const el = document.getElementById('error'); el.textContent = greska; el.style.display = 'block' }
+    const poruka = params.get('poruka')
+    if (poruka) { const el = document.getElementById('message'); el.textContent = poruka; el.style.display = 'block' }
   </script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import { next } from "@vercel/functions";
 
 const PLATFORM_SLUG = "osnove-turizma";
 const COOKIE_NAME = "aieduka_access";
-const PUBLIC_PATHS = ["/aktivacija", "/aktivacija.html", "/api/aieduka-activate", "/robots.txt", "/favicon.ico", "/.well-known/"];
+const PUBLIC_PATHS = ["/aktivacija", "/aktivacija.html", "/api/aieduka-activate", "/api/aieduka-trial", "/robots.txt", "/favicon.ico", "/.well-known/"];
 
 function readCookie(request: Request, name: string) {
   const cookieHeader = request.headers.get("cookie") || "";
