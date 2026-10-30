@@ -1,5 +1,6 @@
 import type { ChapterContent, ChapterSummary } from '../types'
 import { specialInterestChapterContents, specialInterestChapterSummaries } from './specialInterestChapters'
+import { tomasChapterContent, tomasChapterSummary } from './tomasChapter'
 
 export const book = {
   title: 'Osnove turizma i ugostiteljstva',
@@ -22,7 +23,8 @@ export const chapters: ChapterSummary[] = [
   { id: 10, title: 'Zaključna sinteza — integracija, etika i budućnost', pages: '84–87', outcome: 'Integrirati koncepte i argumentirati etičke dileme razvoja turizma.', status: 'available' },
   ...specialInterestChapterSummaries,
   { id: 18, title: 'Ranjivost i konkurentnost Jadranske Hrvatske', pages: 'stručni dodatak', outcome: 'Protumačiti uzroke sezonalnosti i predložiti strukturne mjere za otporniji turistički model.', status: 'available' },
-  { id: 19, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
+  tomasChapterSummary,
+  { id: 20, title: 'Završni razgovor — provjera usvojenoga znanja', pages: 'završna provjera', outcome: 'Usmeno povezati i argumentirano primijeniti usvojene informacije iz prethodnih cjelina u simulaciji završnoga ispita.', status: 'assessment' },
 ]
 
 const mediaBaseUrlOne = 'https://oltrjqqkczqkzxuqwxcr.supabase.co/storage/v1/object/public/otu-aiu-media/cjelina-01'
@@ -2012,4 +2014,5 @@ export const chapterContents: Partial<Record<number, ChapterContent>> = {
   10: chapterTen,
   ...specialInterestChapterContents,
   18: chapterEighteen,
+  19: tomasChapterContent,
 }

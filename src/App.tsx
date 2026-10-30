@@ -7,9 +7,9 @@ import { book, chapterContents, chapters } from './data/book'
 import { FinalOralExam } from './FinalOralExam'
 import { CopyrightNotice } from './CopyrightNotice'
 import { FullscreenToggle } from './FullscreenToggle'
-import type { ChapterContent, Mode, PresentationFile, PresentationSlide } from './types'
+import type { ChapterContent, ChapterMedia, Mode, PresentationFile, PresentationSlide } from './types'
 
-type MediaKind = 'audio' | 'video' | 'presentation'
+type MediaKind = 'audio' | `video-${number}` | `presentation-${number}`
 
 const canonicalDocumentPath = '/dokumenti/osnove-turizma-i-ugostiteljstva-kanonski-tekst-v1.1.docx'
 
@@ -112,7 +112,7 @@ function App() {
   }
 
   const openMedia = (media: MediaKind) => {
-    if (media === 'presentation') setSlideIndex(0)
+    if (media.startsWith('presentation')) setSlideIndex(0)
     setSelectedMedia(media)
   }
 
@@ -331,6 +331,13 @@ function Study({ content }: { content: ChapterContent }) {
               description: 'Pokazatelji izdvajaju opseg usporedbe, koncentraciju noćenja i ključne strukturne poluge promjene.',
               appendComparison: false,
             }
+        : content.id === 19
+          ? {
+              eyebrow: 'ISTRAŽIVAČKI NALAZI · TOMAS 2025./2026.',
+              title: 'Obala i kontinent u brojkama',
+              description: 'Pokazatelji izdvajaju veličinu uzorka, dnevnu potrošnju, duljinu boravka i namjeru preporuke za Jadransku i Kontinentalnu Hrvatsku.',
+              appendComparison: false,
+            }
       : {
           eyebrow: 'SLUŽBENI PODACI · HRVATSKA 2025.',
           title: 'Veličina prometa nije cijela slika',
@@ -495,6 +502,12 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
               'Izradi matricu rizika i predloži mjeru za svaki njezin kvadrant.',
               'Kako hotel treba uvesti virtualnog asistenta uz transparentnost i prijelaz na djelatnika?',
               'Zašto pametna destinacija ovisi više o upravljanju podacima nego o broju senzora?',
+            ]
+        : content.id === 19
+          ? [
+              'Usporedi profil i motive gostiju Jadranske i Kontinentalne Hrvatske prema TOMAS-u 2025./2026.',
+              'Zašto gosti ostaju kraće, a troše više, i što to znači za turističku ponudu?',
+              'Kako stratificirani uzorak i utežavanje podacima iz eVisitora osiguravaju reprezentativnost?',
             ]
       : [
           'Objasni razliku između turista i izletnika na novom primjeru.',
@@ -860,17 +873,38 @@ function MediaViewer({ content }: { content: ChapterContent }) {
   return null
 }
 
+function mediaHeading(media: ChapterMedia | undefined) {
+  if (!media) return 'Audio, video i prezentacija'
+  const videoCount = 1 + (media.extraVideos?.length ?? 0)
+  const presentationCount = 1 + (media.extraPresentations?.length ?? 0)
+  const parts = [
+    media.audio ? 'Audio' : null,
+    videoCount > 1 ? 'videozapisi' : 'video',
+    presentationCount > 1 ? 'prezentacije' : 'prezentacija',
+  ].filter(Boolean) as string[]
+  const text = parts.length > 2 ? `${parts.slice(0, -1).join(', ')} i ${parts.at(-1)}` : parts.join(' i ')
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
 function MediaOverview({ content }: { content: ChapterContent }) {
-  return <div className="section-heading media-overview"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>Audio, video i prezentacija</h2><p>Odaberite medij u podizborniku ispod i otvorit će se pripadajući skočni prozor.</p></div>
+  return <div className="section-heading media-overview"><span className="eyebrow">GLEDAJ I SLUŠAJ · CJELINA {content.id}</span><h2>{mediaHeading(content.media)}</h2><p>Odaberite medij u podizborniku ispod i otvorit će se pripadajući skočni prozor.</p></div>
+}
+
+function chapterVideos(media: ChapterMedia) {
+  return [media.video, ...(media.extraVideos ?? [])]
+}
+
+function chapterPresentations(media: ChapterMedia) {
+  return [media.presentation, ...(media.extraPresentations ?? [])]
 }
 
 function MediaSubmenu({ content, onSelect }: { content: ChapterContent; onSelect: (media: MediaKind) => void }) {
   if (!content.media) return null
-  const { audio, video, presentation } = content.media
+  const { audio } = content.media
   const media = [
-    { key: 'audio' as const, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration },
-    { key: 'video' as const, icon: FileVideo, title: 'Video', detail: video.title, meta: video.duration },
-    { key: 'presentation' as const, icon: Presentation, title: 'Prezentacija', detail: presentation.title, meta: `${presentation.slides.length} slajdova` },
+    ...(audio ? [{ key: 'audio' as MediaKind, icon: FileAudio, title: 'Audio', detail: audio.title, meta: audio.duration }] : []),
+    ...chapterVideos(content.media).map((video, index) => ({ key: `video-${index}` as MediaKind, icon: FileVideo, title: 'Video', detail: video.title, meta: video.duration })),
+    ...chapterPresentations(content.media).map((presentation, index) => ({ key: `presentation-${index}` as MediaKind, icon: Presentation, title: 'Prezentacija', detail: presentation.title, meta: `${presentation.slides.length} slajdova` })),
   ]
 
   return <nav className="media-submenu" aria-label="Mediji cjeline">
@@ -884,13 +918,23 @@ function MediaSubmenu({ content, onSelect }: { content: ChapterContent; onSelect
 
 function SelectedMediaModal({ media, content, slideIndex, onSlideChange, onClose }: { media: MediaKind; content: ChapterContent; slideIndex: number; onSlideChange: (index: number) => void; onClose: () => void }) {
   if (!content.media) return null
-  const { audio, video, presentation } = content.media
-  if (media === 'audio') return <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={onClose}>
+  const { audio } = content.media
+  if (media === 'audio') {
+    if (!audio) return null
+    return <MediaModal title={audio.title} label={`AUDIO · ${audio.duration}`} onClose={onClose}>
       <div className="expanded-audio"><p>{audio.description}</p><audio controls autoPlay preload="metadata" src={audio.url}>Vaš preglednik ne podržava reprodukciju zvuka.</audio><a className="source-link" href={audio.url} target="_blank" rel="noreferrer">Otvori izvornu audiodatoteku <ArrowUpRight /></a></div>
     </MediaModal>
-  if (media === 'video') return <MediaModal title={video.title} label={`VIDEO · ${video.duration}`} onClose={onClose}>
+  }
+  const index = Number(media.split('-')[1]) || 0
+  if (media.startsWith('video')) {
+    const video = chapterVideos(content.media)[index]
+    if (!video) return null
+    return <MediaModal title={video.title} label={`VIDEO · ${video.duration}`} onClose={onClose}>
       <div className="expanded-video"><p>{video.description}</p><video controls autoPlay preload="metadata" poster={video.poster} src={video.url}>Vaš preglednik ne podržava reprodukciju videa.</video><a className="source-link" href={video.url} target="_blank" rel="noreferrer">Otvori izvornu videodatoteku <ArrowUpRight /></a></div>
     </MediaModal>
+  }
+  const presentation = chapterPresentations(content.media)[index]
+  if (!presentation) return null
   return <PresentationModal presentation={presentation} slideIndex={slideIndex} onSlideChange={onSlideChange} onClose={onClose} />
 }
 
@@ -1053,7 +1097,7 @@ function PresentationModal({ presentation, slideIndex, onSlideChange, onClose }:
   return <MediaModal title={presentation.title} label={`PREZENTACIJA · ${presentation.slides.length} SLAJDOVA`} onClose={onClose}>
     <div className="expanded-presentation">
       <div className="expanded-slide-column"><SlideStage slide={slide} slideCount={presentation.slides.length} /><SlideControls slideIndex={slideIndex} slideCount={presentation.slides.length} onChange={onSlideChange} /></div>
-      <article className="slide-interpretation expanded-interpretation"><span className="eyebrow">STRUČNA INTERPRETACIJA SLAJDA {slide.number}</span><h4>{slide.title}</h4><p>{slide.interpretation}</p><a className="source-link" href={presentation.url} target="_blank" rel="noreferrer">Otvori izvorni PPTX <ArrowUpRight /></a></article>
+      <article className="slide-interpretation expanded-interpretation"><span className="eyebrow">STRUČNA INTERPRETACIJA SLAJDA {slide.number}</span><h4>{slide.title}</h4><p>{slide.interpretation}</p><a className="source-link" href={presentation.url} target="_blank" rel="noreferrer">Otvori izvorni {presentation.fileName.toLowerCase().endsWith('.pdf') ? 'PDF' : 'PPTX'} <ArrowUpRight /></a></article>
     </div>
   </MediaModal>
 }

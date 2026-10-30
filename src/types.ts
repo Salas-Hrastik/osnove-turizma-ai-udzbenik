@@ -78,9 +78,12 @@ export interface PresentationFile {
 }
 
 export interface ChapterMedia {
-  audio: MediaFile
+  audio?: MediaFile
   video: MediaFile & { poster: string }
   presentation: PresentationFile
+  /** Dodatni videozapisi i prezentacije, prikazuju se nakon glavnih. */
+  extraVideos?: Array<MediaFile & { poster: string }>
+  extraPresentations?: PresentationFile[]
 }
 
 export interface ChapterContent extends ChapterSummary {

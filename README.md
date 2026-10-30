@@ -5,6 +5,7 @@ Samostalna studentska platforma temeljena na kanonskom izvoru 1.0 autora prof. d
 ## Trenutačni opseg
 
 - konfigurabilni profil knjige s 11 sadržajnih cjelina i 12. cjelinom za završni usmeni razgovor
+- stručni dodatak u cjelini 19: stanje turizma u Hrvatskoj prema istraživanju TOMAS Hrvatska 2025./2026. (Institut za turizam), s dva videa i tri prezentacije s tumačenjima slajdova (`src/data/tomasChapter.ts`, mediji u `public/media/tomas`)
 - generičko sučelje cjeline s načinima rada Razgovaraj, Prouči, Gledaj i slušaj, Vježbaj i Provjeri
 - puna obrada cjeline 1 kroz četiri proširena nastavna koraka, ishode, službene pokazatelje, primijenjeni zadatak i urednički dodatak
 - deset istodobno vidljivih kartica te funkcionalna provjera s pet pitanja i objašnjenjima
