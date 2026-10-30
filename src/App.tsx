@@ -779,11 +779,11 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
   const voiceActive = ['ready', 'listening', 'thinking', 'speaking'].includes(voiceStatus)
 
   return <>
-    <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pismeni ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
+    <div className="section-heading"><span className="eyebrow">RAZGOVARAJ · ODABERITE NAČIN</span><h2>Pisani ili usmeni razgovor</h2><p>Oba načina poštuju istu hijerarhiju provjerenih izvora. U usmenom razgovoru možete proširiti opseg od odabrane teme do cijeloga udžbenika.</p></div>
 
     <div className="conversation-mode-selector" role="group" aria-label="Odaberite način razgovora">
-      <button type="button" onClick={() => setConversationType('written')} aria-haspopup="dialog" aria-label="Otvori pismeni razgovor u skočnom prozoru">
-        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pismeni razgovor</strong><small>Postavite pitanje i nastavite razgovor</small></span>
+      <button type="button" onClick={() => setConversationType('written')} aria-haspopup="dialog" aria-label="Otvori pisani razgovor u skočnom prozoru">
+        <span className="conversation-mode-icon"><Keyboard /></span><span><strong>Pisani razgovor</strong><small>Postavite pitanje i nastavite razgovor</small></span>
       </button>
       <button type="button" onClick={() => setConversationType('voice')} aria-haspopup="dialog" aria-label="Otvori usmeni razgovor u skočnom prozoru">
         <span className="conversation-mode-icon"><Mic /></span><span><strong>Usmeni razgovor</strong><small>Govorite i poslušajte odgovor</small></span>
@@ -792,7 +792,7 @@ function ConversationPreview({ content }: { content: ChapterContent }) {
 
     {conversationType && <ConversationModal type={conversationType} onClose={closeConversation}>
       {conversationType === 'written' ? <div className="conversation-layout" id="written-conversation">
-        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISMENI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora {book.canonicalVersion}.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
+        <section className="conversation-rules"><div className="conversation-icon"><Bot /></div><span className="eyebrow">PISANI RAZGOVOR · PRAVILA</span><h3>Vodič neće nagađati</h3><ul><li><CheckCircle2 />Najprije odgovara iz kanonskog izvora {book.canonicalVersion}.</li><li><CheckCircle2 />Urednički sloj označava datumom i izvorom.</li><li><CheckCircle2 />Kada nema pouzdane osnove, to jasno kaže.</li></ul><div className="conversation-source-summary"><BookOpen /><span><small>Početni opseg</small><strong>Cijela cjelina {content.id}</strong></span></div></section>
         <section className="prompt-preview"><span className="eyebrow">PRIMJERI PITANJA</span><div>{prompts.map((prompt) => <button key={prompt} onClick={() => void askQuestion(prompt)} disabled={isAnswering}><MessageCircle />{prompt}</button>)}</div><ConversationHistory messages={messages} />{isAnswering && <div className="conversation-empty"><Bot /><span>AI vodič oblikuje odgovor iz odabranih izvora…</span></div>}{conversationError && <p className="conversation-boundary"><LockKeyhole /><span><strong>Razgovor nije dovršen.</strong> {conversationError}</span></p>}<form className="conversation-composer" onSubmit={(event) => { event.preventDefault(); void askQuestion(question) }}><label htmlFor="chapter-question">Vaše pitanje</label><div><input id="chapter-question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Upišite pitanje o ovoj cjelini…" autoComplete="off" disabled={isAnswering} /><button type="submit" disabled={!question.trim() || isAnswering} aria-label="Pošalji pitanje"><Send /></button></div></form><small>Odgovor oblikuje AI isključivo iz sadržaja odabranog opsega. Vanjski izvori nisu automatski uključeni.</small></section>
       </div> : <section className="voice-conversation" id="voice-conversation">
         <div className="voice-heading"><div><span className="eyebrow">USMENI RAZGOVOR · IZRAVNI DIJALOG</span><h3>Razgovarajte prirodno s AI vodičem</h3><p>Odaberite opseg i pokrenite razgovor. Vodič vas sluša, odgovara prirodnim glasom i automatski prepušta riječ kada ponovno progovorite.</p></div><div className={`voice-status ${voiceStatus !== 'idle' ? 'active' : ''}`}><Mic /><span><small>Status razgovora</small><strong>{voiceStatusText[voiceStatus]}</strong></span></div></div>
@@ -860,7 +860,7 @@ function ConversationModal({ type, onClose, children }: { type: 'written' | 'voi
   return createPortal(<div className="modal-backdrop conversation-modal-backdrop" role="presentation" onMouseDown={onClose}>
     <section className="conversation-modal" role="dialog" aria-modal="true" aria-labelledby="conversation-modal-title" onMouseDown={(event) => event.stopPropagation()}>
       <header className="conversation-modal-header">
-        <div><span className="eyebrow">RAZGOVARAJ · {isWritten ? 'PISMENI NAČIN' : 'USMENI NAČIN'}</span><h2 id="conversation-modal-title">{isWritten ? 'Pismeni razgovor' : 'Usmeni razgovor'}</h2></div>
+        <div><span className="eyebrow">RAZGOVARAJ · {isWritten ? 'PISANI NAČIN' : 'USMENI NAČIN'}</span><h2 id="conversation-modal-title">{isWritten ? 'Pisani razgovor' : 'Usmeni razgovor'}</h2></div>
         <button className="icon-button conversation-modal-close" onClick={onClose} aria-label="Zatvori objašnjenje razgovora" autoFocus><X /></button>
       </header>
       <div className="conversation-modal-content">{children}</div>

@@ -10,7 +10,7 @@ Samostalna studentska platforma temeljena na kanonskom izvoru 1.0 autora prof. d
 - puna obrada cjeline 1 kroz četiri proširena nastavna koraka, ishode, službene pokazatelje, primijenjeni zadatak i urednički dodatak
 - deset istodobno vidljivih kartica te funkcionalna provjera s pet pitanja i objašnjenjima
 - aktivan zasebni multimedijski paket cjeline 1: audio, video i prezentacija s 11 interpretiranih slajdova
-- aktivan pismeni razgovor i prirodni OpenAI Realtime usmeni razgovor s izborom opsega od teme do cijeloga udžbenika
+- aktivan pisani razgovor i prirodni OpenAI Realtime usmeni razgovor s izborom opsega od teme do cijeloga udžbenika
 - završna usmena provjera s pet nasumičnih pitanja iz različitih prethodnih cjelina, sugestivnom pomoći, nevidljivim zapisnikom i neobvezujućim algoritamskim prijedlogom ocjene
 - jasna razlika između kanonskog teksta i budućih izvedenih ili uredničkih slojeva
 - bez ovisnosti o drugim projektima, bazama i medijskim spremnicima
